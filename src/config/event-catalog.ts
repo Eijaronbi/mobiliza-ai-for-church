@@ -22,6 +22,15 @@ export const eventSchemas = {
   "report.overdue": z.object({ report_id: id, unit_id: id, due_at: z.string() }),
   "escalation.created": z.object({ escalation_id: id, category: z.string(), priority: z.string() }),
   "escalation.resolved": z.object({ escalation_id: id, resolved_by: z.string() }),
+  "service.broadcast": z.object({
+    broadcast_id: id, service_id: id,
+    channels: z.array(z.enum(["sms", "whatsapp"])).min(1),
+    message: z.string().min(5).max(1000),
+    member_ids: z.array(id), unit_ids: z.array(id),
+    external_recipients: z.array(z.object({ name: z.string().min(1), phone: z.string().regex(/^\+?[1-9]\d{7,14}$/) })),
+    whatsapp_groups: z.array(z.object({ name: z.string().min(1), groupId: id })),
+    recipient_count: z.number().int().min(0), skipped_no_consent: z.number().int().min(0),
+  }),
 } satisfies Record<EventName, z.ZodTypeAny>;
 
 export const eventDescriptions: Record<EventName, string> = {
@@ -41,6 +50,7 @@ export const eventDescriptions: Record<EventName, string> = {
   "report.overdue": "A report passed its deadline.",
   "escalation.created": "An issue was escalated to leadership.",
   "escalation.resolved": "An escalated issue was resolved.",
+  "service.broadcast": "A service schedule was broadcast by SMS and/or WhatsApp to people and groups.",
 };
 
 export const eventNames = Object.keys(eventSchemas) as EventName[];
@@ -63,6 +73,7 @@ export function samplePayload(event: EventName): Record<string, unknown> {
     "report.overdue": { report_id: "rep_demo_002", unit_id: "cell_demo_02", due_at: "2026-11-01T18:00:00Z" },
     "escalation.created": { escalation_id: "esc_demo_001", category: "transport", priority: "high" },
     "escalation.resolved": { escalation_id: "esc_demo_001", resolved_by: "Pastor" },
+    "service.broadcast": { broadcast_id: "bc_demo_001", service_id: "service_demo_001", channels: ["sms", "whatsapp"], message: "You're invited to Sunday Service at 9:00 AM.", member_ids: ["member_demo_001"], unit_ids: ["cell_demo_01"], external_recipients: [{ name: "Guest Speaker", phone: "+2348000000000" }], whatsapp_groups: [{ name: "Youth Fellowship", groupId: "wa_group_demo_01" }], recipient_count: 2, skipped_no_consent: 0 },
   };
   return samples[event];
 }

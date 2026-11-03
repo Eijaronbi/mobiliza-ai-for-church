@@ -26,6 +26,7 @@ export const actions = {
   reportOverdue: { id: "reportOverdue", label: "Send report reminder", event: "report.overdue", workflow: "reporting", defaultEndpointName: "Send report reminder", requiresConfirmation: false },
   createEscalation: { id: "createEscalation", label: "Create escalation", event: "escalation.created", workflow: "leadership", defaultEndpointName: "Create escalation", requiresConfirmation: false },
   resolveEscalation: { id: "resolveEscalation", label: "Resolve issue", event: "escalation.resolved", workflow: "leadership", defaultEndpointName: "Resolve issue", requiresConfirmation: true },
+  broadcastService: { id: "broadcastService", label: "Schedule broadcast sent", event: "service.broadcast", workflow: "mobilization", defaultEndpointName: "Broadcast service schedule", requiresConfirmation: false },
   createMember: { id: "createMember", label: "Member created", event: "member.created", workflow: "general", defaultEndpointName: "Member events", requiresConfirmation: false },
   updateMember: { id: "updateMember", label: "Member updated", event: "member.updated", workflow: "general", defaultEndpointName: "Member events", requiresConfirmation: false },
 } as const satisfies Record<string, ActionDefinition>;
