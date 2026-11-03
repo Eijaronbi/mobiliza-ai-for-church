@@ -19,7 +19,7 @@ interface Msg { role: "user" | "ai"; text: string; kind?: Kind; action?: { id: A
 const suggestions = ["How many members have confirmed?", "Who needs transportation?", "Which cell leaders have outstanding responsibilities?", "Show first timers awaiting follow-up", "Which reports are overdue?", "Generate the weekly evangelism summary", "Show unresolved member issues", "Start the mobilization workflow"];
 
 /** AgentRuntime contract: today a rule-based matcher over demo data; later an AI Gateway call with tool use. */
-function Assistant() {
+export function Assistant() {
   const mob = useListData("mobilization");
   const services = useListData("services");
   const members = useListData("members");
