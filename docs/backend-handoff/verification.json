@@ -1,0 +1,146 @@
+{
+  "routes": [
+    {
+      "route": "/",
+      "title": "Mobilizer \u2014 Your AI-Powered Church Operations Team",
+      "h1": [
+        "Every Member Matters."
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app",
+      "title": "Command Centre \u2014 Mobilizer",
+      "h1": [
+        "Good afternoon, Church Administrator"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/members",
+      "title": "Members \u2014 Mobilizer",
+      "h1": [
+        "Members"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/structure",
+      "title": "Church Structure \u2014 Mobilizer",
+      "h1": [
+        "Church Structure"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/mobilization",
+      "title": "Mobilization \u2014 Mobilizer",
+      "h1": [
+        "Mobilization"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/attendance",
+      "title": "Attendance \u2014 Mobilizer",
+      "h1": [
+        "Attendance"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/transport",
+      "title": "Transportation \u2014 Mobilizer",
+      "h1": [
+        "Transportation"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/followup",
+      "title": "First Timers & Follow-up \u2014 Mobilizer",
+      "h1": [
+        "First Timers & Follow-up"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/reports",
+      "title": "Evangelism & Reports \u2014 Mobilizer",
+      "h1": [
+        "Evangelism & Reports"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/agents",
+      "title": "AI Agents \u2014 Mobilizer",
+      "h1": [
+        "AI Agents"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/assistant",
+      "title": "AI Command Centre \u2014 Mobilizer",
+      "h1": [
+        "AI Command Centre"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/leadership",
+      "title": "Leadership & Escalations \u2014 Mobilizer",
+      "h1": [
+        "Leadership & Escalations"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/services",
+      "title": "Services & Events \u2014 Mobilizer",
+      "h1": [
+        "Services & Events"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/integrations",
+      "title": "Integration Hub \u2014 Mobilizer",
+      "h1": [
+        "Integration Hub"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/settings",
+      "title": "Settings \u2014 Mobilizer",
+      "h1": [
+        "Settings"
+      ],
+      "main": 1,
+      "error": 0
+    },
+    {
+      "route": "/app/members/t_grace_m001",
+      "h1": [
+        "Adaeze Afolabi"
+      ]
+    }
+  ],
+  "errors": []
+}
