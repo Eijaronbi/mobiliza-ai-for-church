@@ -98,7 +98,7 @@ function FollowUpPage() {
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {list.filter(buckets[bucket]).map((x) => (
-          <Button variant="outline" key={x.id} onClick={() => setSel(x)} className="cursor-pointer p-4 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
+          <Button variant="outline" key={x.id} onClick={() => setSel(x)} className="h-auto w-full whitespace-normal block text-left cursor-pointer p-4 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
             <div className="flex items-start justify-between"><div><div className="font-semibold">{x.name}</div><div className="text-xs text-muted-foreground">{x.kind === "new_convert" ? "New convert" : "First timer"} · {fmtDate(x.encounteredAt)} · via {x.referrer}</div></div><StatusBadge status={overdue(x) ? "overdue" : x.status} /></div>
             <div className="mt-3 text-xs text-muted-foreground">Leader: {members.find((m) => m.id === x.assignedLeaderId)?.name ?? "Unassigned"}{x.nextContactAt && ` · next ${fmtDateTime(x.nextContactAt)}`}</div>
           </Button>

@@ -41,7 +41,7 @@ function AgentsPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-2">
           {agents.map((x) => (
-            <Button variant="outline" key={x.id} aria-pressed={x.id === a.id} onClick={() => setSid(x.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", x.id === a.id && "ring-2 ring-ring")}>
+            <Button variant="outline" key={x.id} aria-pressed={x.id === a.id} onClick={() => setSid(x.id)} className={cn("h-auto w-full whitespace-normal block text-left cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", x.id === a.id && "ring-2 ring-ring")}>
               <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-accent-foreground"><Bot className="h-4 w-4" /></span><span className="font-semibold">{x.name}</span><span className="ml-auto"><StatusBadge status={x.status} /></span></div>
               <p className="mt-2 text-xs text-muted-foreground">{x.description}</p>
             </Button>

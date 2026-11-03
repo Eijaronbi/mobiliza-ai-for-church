@@ -85,7 +85,7 @@ function TransportPage() {
               const pax = requests.filter((r) => r.vehicleId === v.id && r.status !== "rejected");
               const moving = movingIds.has(v.id);
               return (
-                <Button variant="outline" key={v.id} aria-pressed={sel === v.id} onClick={() => setSel(v.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", sel === v.id && "ring-2 ring-ring")}>
+                <Button variant="outline" key={v.id} aria-pressed={sel === v.id} onClick={() => setSel(v.id)} className={cn("h-auto w-full whitespace-normal block text-left cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", sel === v.id && "ring-2 ring-ring")}>
                   <div className="flex flex-wrap items-center gap-2">{v.capacity > 6 ? <Bus className="h-4 w-4 text-brand" /> : <Car className="h-4 w-4 text-brand" />}<span className="min-w-0 break-words font-semibold">{v.label}</span><span className="ml-auto"><StatusBadge status={moving ? "en_route" : pax.length ? "scheduled" : "registered"} /></span></div>
                   {v.locationPending && <p className="mt-2 text-xs text-muted-foreground">Location not available</p>}
                   <div className="mt-1 text-xs text-muted-foreground">{v.plate} · {v.driverName} · <Phone className="inline h-3 w-3" /> {v.driverPhone}</div>
@@ -94,7 +94,7 @@ function TransportPage() {
               );
             })}
             <Section title="Pickup points">
-              <div className="space-y-1.5">{points.map((p) => <button key={p.id} onClick={() => setSel(p.id)} className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm hover:bg-muted"><MapPin className="h-3.5 w-3.5 text-warning" />{p.name}<span className="ml-auto text-xs text-muted-foreground">{requests.filter((r) => r.pickupPointId === p.id).length}</span></button>)}</div>
+              <div className="space-y-1.5">{points.map((p) => <Button key={p.id} variant="ghost" aria-pressed={sel === p.id} onClick={() => setSel(p.id)} className="flex h-auto min-h-11 w-full items-center justify-start gap-2 whitespace-normal px-2 py-1.5 text-left text-sm"><MapPin className="h-3.5 w-3.5 text-warning" />{p.name}<span className="ml-auto text-xs text-muted-foreground">{requests.filter((r) => r.pickupPointId === p.id).length}</span></Button>)}</div>
             </Section>
           </div>
         </TabsContent>

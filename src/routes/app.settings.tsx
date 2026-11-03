@@ -36,7 +36,7 @@ function SettingsPage() {
     <div>
       <PageHeader title="Settings" description={`Configuration for ${t.name}. Nothing here is hardcoded to one church.`} />
       <div className="grid gap-4 lg:grid-cols-4">
-        <Button variant="outline" className="h-auto w-full whitespace-normal block text-left h-fit p-2 shadow-card">{sections.map((x) => <button key={x} onClick={() => setS(x)} className={cn("block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-muted", s === x && "bg-accent font-medium text-accent-foreground")}>{x}</button>)}</Button>
+        <nav aria-label="Settings sections" className="h-fit border-r pr-3">{sections.map((x) => <Button key={x} variant="ghost" aria-pressed={s === x} onClick={() => setS(x)} className={cn("h-auto min-h-11 w-full justify-start whitespace-normal px-3 py-2 text-left text-sm", s === x && "bg-accent font-medium text-accent-foreground")}>{x}</Button>)}</nav>
         <Card className="p-5 shadow-card lg:col-span-3">
           <h2 className="mb-4 text-lg font-bold">{s}</h2>
           {s === "Church profile" && <form className="grid gap-3 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); toast.success("Church profile saved"); }}>
