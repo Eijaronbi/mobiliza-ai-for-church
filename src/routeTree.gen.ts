@@ -10,33 +10,192 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppAgentsRouteImport } from './routes/app.agents'
+import { Route as AppAttendanceRouteImport } from './routes/app.attendance'
+import { Route as AppFollowupRouteImport } from './routes/app.followup'
+import { Route as AppLeadershipRouteImport } from './routes/app.leadership'
+import { Route as AppMobilizationRouteImport } from './routes/app.mobilization'
+import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppServicesRouteImport } from './routes/app.services'
+import { Route as AppStructureRouteImport } from './routes/app.structure'
+import { Route as AppTransportRouteImport } from './routes/app.transport'
+import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
+import { Route as AppMembersMemberIdRouteImport } from './routes/app.members.$memberId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgentsRoute = AppAgentsRouteImport.update({
+  id: '/agents',
+  path: '/agents',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAttendanceRoute = AppAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFollowupRoute = AppFollowupRouteImport.update({
+  id: '/followup',
+  path: '/followup',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLeadershipRoute = AppLeadershipRouteImport.update({
+  id: '/leadership',
+  path: '/leadership',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMobilizationRoute = AppMobilizationRouteImport.update({
+  id: '/mobilization',
+  path: '/mobilization',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppServicesRoute = AppServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStructureRoute = AppStructureRouteImport.update({
+  id: '/structure',
+  path: '/structure',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTransportRoute = AppTransportRouteImport.update({
+  id: '/transport',
+  path: '/transport',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
+  id: '/members/',
+  path: '/members/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMembersMemberIdRoute = AppMembersMemberIdRouteImport.update({
+  id: '/members/$memberId',
+  path: '/members/$memberId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/agents': typeof AppAgentsRoute
+  '/app/attendance': typeof AppAttendanceRoute
+  '/app/followup': typeof AppFollowupRoute
+  '/app/leadership': typeof AppLeadershipRoute
+  '/app/mobilization': typeof AppMobilizationRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/services': typeof AppServicesRoute
+  '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
+  '/app/': typeof AppIndexRoute
+  '/app/members/$memberId': typeof AppMembersMemberIdRoute
+  '/app/members/': typeof AppMembersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/agents': typeof AppAgentsRoute
+  '/app/attendance': typeof AppAttendanceRoute
+  '/app/followup': typeof AppFollowupRoute
+  '/app/leadership': typeof AppLeadershipRoute
+  '/app/mobilization': typeof AppMobilizationRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/services': typeof AppServicesRoute
+  '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
+  '/app': typeof AppIndexRoute
+  '/app/members/$memberId': typeof AppMembersMemberIdRoute
+  '/app/members': typeof AppMembersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/app/agents': typeof AppAgentsRoute
+  '/app/attendance': typeof AppAttendanceRoute
+  '/app/followup': typeof AppFollowupRoute
+  '/app/leadership': typeof AppLeadershipRoute
+  '/app/mobilization': typeof AppMobilizationRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/services': typeof AppServicesRoute
+  '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
+  '/app/': typeof AppIndexRoute
+  '/app/members/$memberId': typeof AppMembersMemberIdRoute
+  '/app/members/': typeof AppMembersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/app/agents'
+    | '/app/attendance'
+    | '/app/followup'
+    | '/app/leadership'
+    | '/app/mobilization'
+    | '/app/reports'
+    | '/app/services'
+    | '/app/structure'
+    | '/app/transport'
+    | '/app/'
+    | '/app/members/$memberId'
+    | '/app/members/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/app/agents'
+    | '/app/attendance'
+    | '/app/followup'
+    | '/app/leadership'
+    | '/app/mobilization'
+    | '/app/reports'
+    | '/app/services'
+    | '/app/structure'
+    | '/app/transport'
+    | '/app'
+    | '/app/members/$memberId'
+    | '/app/members'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/app/agents'
+    | '/app/attendance'
+    | '/app/followup'
+    | '/app/leadership'
+    | '/app/mobilization'
+    | '/app/reports'
+    | '/app/services'
+    | '/app/structure'
+    | '/app/transport'
+    | '/app/'
+    | '/app/members/$memberId'
+    | '/app/members/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +207,135 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/agents': {
+      id: '/app/agents'
+      path: '/agents'
+      fullPath: '/app/agents'
+      preLoaderRoute: typeof AppAgentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/attendance': {
+      id: '/app/attendance'
+      path: '/attendance'
+      fullPath: '/app/attendance'
+      preLoaderRoute: typeof AppAttendanceRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/followup': {
+      id: '/app/followup'
+      path: '/followup'
+      fullPath: '/app/followup'
+      preLoaderRoute: typeof AppFollowupRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/leadership': {
+      id: '/app/leadership'
+      path: '/leadership'
+      fullPath: '/app/leadership'
+      preLoaderRoute: typeof AppLeadershipRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/mobilization': {
+      id: '/app/mobilization'
+      path: '/mobilization'
+      fullPath: '/app/mobilization'
+      preLoaderRoute: typeof AppMobilizationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/services': {
+      id: '/app/services'
+      path: '/services'
+      fullPath: '/app/services'
+      preLoaderRoute: typeof AppServicesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/structure': {
+      id: '/app/structure'
+      path: '/structure'
+      fullPath: '/app/structure'
+      preLoaderRoute: typeof AppStructureRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/transport': {
+      id: '/app/transport'
+      path: '/transport'
+      fullPath: '/app/transport'
+      preLoaderRoute: typeof AppTransportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/members/': {
+      id: '/app/members/'
+      path: '/members'
+      fullPath: '/app/members/'
+      preLoaderRoute: typeof AppMembersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/members/$memberId': {
+      id: '/app/members/$memberId'
+      path: '/members/$memberId'
+      fullPath: '/app/members/$memberId'
+      preLoaderRoute: typeof AppMembersMemberIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAgentsRoute: typeof AppAgentsRoute
+  AppAttendanceRoute: typeof AppAttendanceRoute
+  AppFollowupRoute: typeof AppFollowupRoute
+  AppLeadershipRoute: typeof AppLeadershipRoute
+  AppMobilizationRoute: typeof AppMobilizationRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppServicesRoute: typeof AppServicesRoute
+  AppStructureRoute: typeof AppStructureRoute
+  AppTransportRoute: typeof AppTransportRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppMembersMemberIdRoute: typeof AppMembersMemberIdRoute
+  AppMembersIndexRoute: typeof AppMembersIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAgentsRoute: AppAgentsRoute,
+  AppAttendanceRoute: AppAttendanceRoute,
+  AppFollowupRoute: AppFollowupRoute,
+  AppLeadershipRoute: AppLeadershipRoute,
+  AppMobilizationRoute: AppMobilizationRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppServicesRoute: AppServicesRoute,
+  AppStructureRoute: AppStructureRoute,
+  AppTransportRoute: AppTransportRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppMembersMemberIdRoute: AppMembersMemberIdRoute,
+  AppMembersIndexRoute: AppMembersIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
