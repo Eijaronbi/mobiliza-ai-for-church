@@ -66,7 +66,7 @@ export function BusRegistration({ onRegistered }: { onRegistered: () => void }) 
             ))}
           </div>
           <DialogFooter className="gap-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={form.formState.isSubmitting}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => { setOpen(false); form.reset(); }} disabled={form.formState.isSubmitting}>Cancel</Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Bus className="h-4 w-4" />}Register bus</Button>
           </DialogFooter>
         </form>

@@ -1,5 +1,5 @@
 # Mobilizer roadmap
-- [ ] Bus registration in Transportation, workflow event, and verification
+- [x] Bus registration in Transportation, workflow event, and verification
 - [x] Design system, core types, config, event catalogue, action map
 - [x] Data layer (mock + cloud stubs), transport, dispatcher, adapters
 - [x] App shell (sidebar, top bar, role/tenant switcher)
