@@ -13,12 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAgentsRouteImport } from './routes/app.agents'
+import { Route as AppAssistantRouteImport } from './routes/app.assistant'
 import { Route as AppAttendanceRouteImport } from './routes/app.attendance'
 import { Route as AppFollowupRouteImport } from './routes/app.followup'
+import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
 import { Route as AppLeadershipRouteImport } from './routes/app.leadership'
 import { Route as AppMobilizationRouteImport } from './routes/app.mobilization'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppServicesRouteImport } from './routes/app.services'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppStructureRouteImport } from './routes/app.structure'
 import { Route as AppTransportRouteImport } from './routes/app.transport'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
@@ -44,6 +47,11 @@ const AppAgentsRoute = AppAgentsRouteImport.update({
   path: '/agents',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAssistantRoute = AppAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAttendanceRoute = AppAttendanceRouteImport.update({
   id: '/attendance',
   path: '/attendance',
@@ -52,6 +60,11 @@ const AppAttendanceRoute = AppAttendanceRouteImport.update({
 const AppFollowupRoute = AppFollowupRouteImport.update({
   id: '/followup',
   path: '/followup',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLeadershipRoute = AppLeadershipRouteImport.update({
@@ -72,6 +85,11 @@ const AppReportsRoute = AppReportsRouteImport.update({
 const AppServicesRoute = AppServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppStructureRoute = AppStructureRouteImport.update({
@@ -99,12 +117,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/agents': typeof AppAgentsRoute
+  '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/structure': typeof AppStructureRoute
   '/app/transport': typeof AppTransportRoute
   '/app/': typeof AppIndexRoute
@@ -114,12 +135,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app/agents': typeof AppAgentsRoute
+  '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/structure': typeof AppStructureRoute
   '/app/transport': typeof AppTransportRoute
   '/app': typeof AppIndexRoute
@@ -131,12 +155,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/app/agents': typeof AppAgentsRoute
+  '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/structure': typeof AppStructureRoute
   '/app/transport': typeof AppTransportRoute
   '/app/': typeof AppIndexRoute
@@ -149,12 +176,15 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/agents'
+    | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
     | '/app/services'
+    | '/app/settings'
     | '/app/structure'
     | '/app/transport'
     | '/app/'
@@ -164,12 +194,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/app/agents'
+    | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
     | '/app/services'
+    | '/app/settings'
     | '/app/structure'
     | '/app/transport'
     | '/app'
@@ -180,12 +213,15 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/app/agents'
+    | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
     | '/app/services'
+    | '/app/settings'
     | '/app/structure'
     | '/app/transport'
     | '/app/'
@@ -228,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAgentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/assistant': {
+      id: '/app/assistant'
+      path: '/assistant'
+      fullPath: '/app/assistant'
+      preLoaderRoute: typeof AppAssistantRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/attendance': {
       id: '/app/attendance'
       path: '/attendance'
@@ -240,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/followup'
       fullPath: '/app/followup'
       preLoaderRoute: typeof AppFollowupRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/integrations': {
+      id: '/app/integrations'
+      path: '/integrations'
+      fullPath: '/app/integrations'
+      preLoaderRoute: typeof AppIntegrationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/leadership': {
@@ -268,6 +318,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/app/services'
       preLoaderRoute: typeof AppServicesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/structure': {
@@ -303,12 +360,15 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppAgentsRoute: typeof AppAgentsRoute
+  AppAssistantRoute: typeof AppAssistantRoute
   AppAttendanceRoute: typeof AppAttendanceRoute
   AppFollowupRoute: typeof AppFollowupRoute
+  AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppLeadershipRoute: typeof AppLeadershipRoute
   AppMobilizationRoute: typeof AppMobilizationRoute
   AppReportsRoute: typeof AppReportsRoute
   AppServicesRoute: typeof AppServicesRoute
+  AppSettingsRoute: typeof AppSettingsRoute
   AppStructureRoute: typeof AppStructureRoute
   AppTransportRoute: typeof AppTransportRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -318,12 +378,15 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppAgentsRoute: AppAgentsRoute,
+  AppAssistantRoute: AppAssistantRoute,
   AppAttendanceRoute: AppAttendanceRoute,
   AppFollowupRoute: AppFollowupRoute,
+  AppIntegrationsRoute: AppIntegrationsRoute,
   AppLeadershipRoute: AppLeadershipRoute,
   AppMobilizationRoute: AppMobilizationRoute,
   AppReportsRoute: AppReportsRoute,
   AppServicesRoute: AppServicesRoute,
+  AppSettingsRoute: AppSettingsRoute,
   AppStructureRoute: AppStructureRoute,
   AppTransportRoute: AppTransportRoute,
   AppIndexRoute: AppIndexRoute,

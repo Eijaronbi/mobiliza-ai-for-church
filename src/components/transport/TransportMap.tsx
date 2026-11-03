@@ -88,7 +88,7 @@ export function TransportMap({ points, selectedId, onSelect }: { points: MapPoin
     <div className="relative h-[420px] overflow-hidden rounded-xl border bg-muted">
       <div ref={el} className="absolute inset-0" style={{ display: mode === "fallback" ? "none" : "block" }} />
       {mode === "fallback" && (
-        <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+        <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice">
           <defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="var(--border)" strokeWidth="0.3" /></pattern></defs>
           <rect width="100" height="100" fill="url(#grid)" />
           <circle cx="50" cy="55" r="2.6" fill="var(--primary)" />
