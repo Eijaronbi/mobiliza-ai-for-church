@@ -23,3 +23,6 @@ Actual church profile, verified users/role assignments, consented member import,
 
 ## First deployment milestone
 Enable Lovable Cloud, implement authenticated persistence for members/services/vehicles, and demonstrate a create → reload → read-back flow with two test tenants. Then implement signed orchestration; then AI; then pilot live communications and tracking. Publishing a demo does not complete these gates.
+
+## Update — schedule broadcasts
+Services & Events now has a **Broadcast** button on every service (and on the "Service saved" toast for new ones). It sends the schedule by SMS and/or WhatsApp to church groups, picked members, typed-in name+number contacts and WhatsApp groups. Delivery is simulated until wired — read `09-BROADCASTS-SMS-WHATSAPP.md`.

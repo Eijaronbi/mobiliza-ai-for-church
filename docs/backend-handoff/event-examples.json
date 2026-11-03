@@ -383,5 +383,34 @@
         "resolved_by": "Pastor"
       }
     }
+  },
+  "service.broadcast": {
+    "broadcast_id": "bc_demo_001",
+    "service_id": "service_demo_001",
+    "channels": [
+      "sms",
+      "whatsapp"
+    ],
+    "message": "You are invited to Sunday Service.",
+    "member_ids": [
+      "member_demo_001"
+    ],
+    "unit_ids": [
+      "cell_demo_01"
+    ],
+    "external_recipients": [
+      {
+        "name": "Guest Speaker",
+        "phone": "+2348000000000"
+      }
+    ],
+    "whatsapp_groups": [
+      {
+        "name": "Youth Fellowship",
+        "groupId": "wa_group_demo_01"
+      }
+    ],
+    "recipient_count": 2,
+    "skipped_no_consent": 0
   }
 }

@@ -1,7 +1,7 @@
 # n8n and webhook implementation contract
 
 ## Current code, not assumptions
-src/config/action-map.ts registers 16 actions; event-catalog.ts validates 16 event payloads. Current eventEnvelope source is "mobilizer". Both files are included under contracts/. Keep this identifier stable despite display branding.
+src/config/action-map.ts registers 17 actions; event-catalog.ts validates 17 event payloads (incl. service.broadcast — see 09-BROADCASTS-SMS-WHATSAPP.md). Current eventEnvelope source is "mobilizer". Both files are included under contracts/. Keep this identifier stable despite display branding.
 Dispatcher uses retries:0. Tests, logs and deliveries are simulated. No inbound n8n/Voicebip routes exist; no importable n8n workflow JSON is delivered. The prior contract's backoff sequence is an intended design, not current behavior.
 
 ## Outbound wire format
