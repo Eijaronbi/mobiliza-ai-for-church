@@ -271,7 +271,8 @@ export type EventName =
   | "vehicle.registered"
   | "followup.created" | "followup.completed"
   | "report.submitted" | "report.overdue"
-  | "escalation.created" | "escalation.resolved";
+  | "escalation.created" | "escalation.resolved"
+  | "service.broadcast";
 
 export interface EventEnvelope<T = Record<string, unknown>> {
   event: EventName;

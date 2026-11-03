@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, MapPin, Users, CalendarDays } from "lucide-react";
+import { Megaphone, Plus, MapPin, Users, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { PageHeader } from "@/components/app/kit";
 import { useListData, useRepoMutations } from "@/hooks/use-data";
 import { useApp } from "@/hooks/use-app";
 import { fmtDateTime } from "@/lib/format";
+import { BroadcastDialog } from "@/components/services/BroadcastDialog";
 import type { Service, ServiceKind } from "@/types";
 
 export const Route = createFileRoute("/app/services")({
@@ -31,14 +32,17 @@ function ServicesPage() {
   const members = useListData("members");
   const sm = useRepoMutations("services");
   const [edit, setEdit] = useState<Service | null>(null);
+  const [broadcast, setBroadcast] = useState<Service | null>(null);
   const local = (iso: string) => new Date(new Date(iso).getTime() + 3600_000).toISOString().slice(0, 16);
 
   const save = async () => {
     if (!edit) return;
     const p = schema.safeParse(edit);
     if (!p.success) return toast.error("Check the name, location, date and expected attendance");
-    if (services.some((s) => s.id === edit.id)) await sm.update.mutateAsync({ id: edit.id, patch: edit }); else await sm.create.mutateAsync(edit);
-    toast.success("Service saved"); setEdit(null);
+    const existed = services.some((s) => s.id === edit.id);
+    if (existed) await sm.update.mutateAsync({ id: edit.id, patch: edit }); else await sm.create.mutateAsync(edit);
+    const isNew = !existed;
+    toast.success("Service saved", isNew ? { action: { label: "Broadcast", onClick: () => setBroadcast(edit) } } : undefined); setEdit(null);
   };
   const blank = (): Service => ({ id: `${tenantId}_svc${Date.now()}`, tenantId, name: "", kind: "special", date: new Date(Date.now() + 7 * 864e5).toISOString(), location: "", expected: 50, leaderIds: [], workflowId: workflows[0]?.id ?? "", contactSchedule: ["-1d 10:00"] });
 
@@ -56,7 +60,7 @@ function ServicesPage() {
               <div className="flex items-center gap-1.5"><Users className="h-3.5 w-3.5" />Expected {s.expected} · Leaders: {s.leaderIds.map((l) => members.find((m) => m.id === l)?.name.split(" ")[0]).join(", ") || "—"}</div>
             </div>
             <div className="mt-3 text-xs">Contact schedule: {s.contactSchedule.join(" · ")}</div>
-            <Button size="sm" variant="outline" className="mt-4" onClick={() => setEdit(s)}>Edit</Button>
+            <div className="mt-4 flex gap-2"><Button size="sm" variant="outline" onClick={() => setEdit(s)} aria-label={`Edit ${s.name}`}>Edit</Button><Button size="sm" onClick={() => setBroadcast(s)} aria-label={`Broadcast ${s.name}`}><Megaphone className="mr-1 h-4 w-4" />Broadcast</Button></div>
           </Card>
         ))}
       </div>
@@ -76,6 +80,7 @@ function ServicesPage() {
           <DialogFooter><Button onClick={save}>Save</Button></DialogFooter>
         </DialogContent>
       </Dialog>
+      <BroadcastDialog service={broadcast} onClose={() => setBroadcast(null)} />
     </div>
   );
 }
