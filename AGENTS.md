@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 # Mobilizer architecture rules
+- Bus registration uses the vehicle repository and registered vehicle event; vehicles without location data are excluded from map markers. Why: fleet registration must not fabricate tracking locations.
 - Components never contain endpoint URLs or provider calls; they call hooks in `src/hooks/use-data.ts` (repositories + `useAction`). Why: integrations stay swappable by configuration.
 - All data access goes through `src/services/data` repositories; mock vs cloud is chosen in `src/config/app.config.ts`. Why: demo data can be replaced by Lovable Cloud without UI changes.
 - Every consequential action is registered in `src/config/action-map.ts` and validated against `src/config/event-catalog.ts` before dispatch. Why: n8n and other receivers get one predictable JSON contract.
