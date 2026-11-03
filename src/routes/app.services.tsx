@@ -17,7 +17,7 @@ import { fmtDateTime } from "@/lib/format";
 import type { Service, ServiceKind } from "@/types";
 
 export const Route = createFileRoute("/app/services")({
-  head: () => ({ meta: [{ title: "Services & Events — Mobilizer" }, { name: "description", content: "Schedule services, conferences and outreach." }] }),
+  head: () => ({ meta: [{ title: "Services & Events — Mobilizer" }, { name: "description", content: "Schedule services, conferences and outreach." }, { property: "og:title", content: "Services & Events — Mobilizer" }, { property: "og:description", content: "Schedule services, conferences and outreach." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: ServicesPage,
 });
 
@@ -64,14 +64,14 @@ function ServicesPage() {
         <DialogContent className="max-w-lg">
           <DialogHeader><DialogTitle>Service details</DialogTitle></DialogHeader>
           {edit && <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1 sm:col-span-2"><Label>Name</Label><Input value={edit.name} onChange={(e) => setEdit({ ...edit, name: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Type</Label><Select value={edit.kind} onValueChange={(v) => setEdit({ ...edit, kind: v as ServiceKind })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{kinds.map((k) => <SelectItem key={k} value={k} className="capitalize">{k}</SelectItem>)}</SelectContent></Select></div>
-            <div className="space-y-1"><Label>Date & time</Label><Input type="datetime-local" value={local(edit.date)} onChange={(e) => e.target.value && setEdit({ ...edit, date: new Date(e.target.value + "+01:00").toISOString() })} /></div>
-            <div className="space-y-1"><Label>Location</Label><Input value={edit.location} onChange={(e) => setEdit({ ...edit, location: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Expected attendance</Label><Input type="number" value={edit.expected} onChange={(e) => setEdit({ ...edit, expected: Number(e.target.value) })} /></div>
-            <div className="space-y-1"><Label>Mobilization workflow</Label><Select value={edit.workflowId} onValueChange={(v) => setEdit({ ...edit, workflowId: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{workflows.map((w) => <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>)}</SelectContent></Select></div>
-            <div className="space-y-1"><Label>Responsible leader</Label><Select value={edit.leaderIds[0] ?? ""} onValueChange={(v) => setEdit({ ...edit, leaderIds: [v, ...edit.leaderIds.slice(1)] })}><SelectTrigger><SelectValue placeholder="Choose" /></SelectTrigger><SelectContent>{members.slice(0, 60).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent></Select></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Contact schedule (comma separated, relative to start)</Label><Input value={edit.contactSchedule.join(", ")} onChange={(e) => setEdit({ ...edit, contactSchedule: e.target.value.split(",").map((x) => x.trim()).filter(Boolean) })} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Name</Label><Input aria-label="Name" value={edit.name} onChange={(e) => setEdit({ ...edit, name: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Type</Label><Select value={edit.kind} onValueChange={(v) => setEdit({ ...edit, kind: v as ServiceKind })}><SelectTrigger aria-label="Type"><SelectValue /></SelectTrigger><SelectContent>{kinds.map((k) => <SelectItem key={k} value={k} className="capitalize">{k}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1"><Label>Date & time</Label><Input aria-label="Date & time" type="datetime-local" value={local(edit.date)} onChange={(e) => e.target.value && setEdit({ ...edit, date: new Date(e.target.value + "+01:00").toISOString() })} /></div>
+            <div className="space-y-1"><Label>Location</Label><Input aria-label="Location" value={edit.location} onChange={(e) => setEdit({ ...edit, location: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Expected attendance</Label><Input aria-label="Expected attendance" type="number" value={edit.expected} onChange={(e) => setEdit({ ...edit, expected: Number(e.target.value) })} /></div>
+            <div className="space-y-1"><Label>Mobilization workflow</Label><Select value={edit.workflowId} onValueChange={(v) => setEdit({ ...edit, workflowId: v })}><SelectTrigger aria-label="Mobilization workflow"><SelectValue /></SelectTrigger><SelectContent>{workflows.map((w) => <SelectItem key={w.id} value={w.id}>{w.name}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1"><Label>Responsible leader</Label><Select value={edit.leaderIds[0] ?? ""} onValueChange={(v) => setEdit({ ...edit, leaderIds: [v, ...edit.leaderIds.slice(1)] })}><SelectTrigger aria-label="Responsible leader"><SelectValue placeholder="Choose" /></SelectTrigger><SelectContent>{members.slice(0, 60).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Contact schedule (comma separated, relative to start)</Label><Input aria-label="Contact schedule (comma separated, relative to start)" value={edit.contactSchedule.join(", ")} onChange={(e) => setEdit({ ...edit, contactSchedule: e.target.value.split(",").map((x) => x.trim()).filter(Boolean) })} /></div>
           </div>}
           <DialogFooter><Button onClick={save}>Save</Button></DialogFooter>
         </DialogContent>

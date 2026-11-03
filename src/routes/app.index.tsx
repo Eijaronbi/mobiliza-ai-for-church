@@ -9,7 +9,7 @@ import { fmtDateTime, pct, timeAgo, fmtDate } from "@/lib/format";
 import banner from "@/assets/hero-worship.jpg";
 
 export const Route = createFileRoute("/app/")({
-  head: () => ({ meta: [{ title: "Command Centre — Mobilizer" }, { name: "description", content: "Live operational overview of your church." }] }),
+  head: () => ({ meta: [{ title: "Command Centre — Mobilizer" }, { name: "description", content: "Live operational overview of your church." }, { property: "og:title", content: "Command Centre — Mobilizer" }, { property: "og:description", content: "Live operational overview of your church." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: CommandCentre,
 });
 

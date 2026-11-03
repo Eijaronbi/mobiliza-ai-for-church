@@ -85,12 +85,12 @@ function TransportPage() {
               const pax = requests.filter((r) => r.vehicleId === v.id && r.status !== "rejected");
               const moving = movingIds.has(v.id);
               return (
-                <Card key={v.id} onClick={() => setSel(v.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", sel === v.id && "ring-2 ring-ring")}>
+                <Button variant="outline" key={v.id} aria-pressed={sel === v.id} onClick={() => setSel(v.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", sel === v.id && "ring-2 ring-ring")}>
                   <div className="flex flex-wrap items-center gap-2">{v.capacity > 6 ? <Bus className="h-4 w-4 text-brand" /> : <Car className="h-4 w-4 text-brand" />}<span className="min-w-0 break-words font-semibold">{v.label}</span><span className="ml-auto"><StatusBadge status={moving ? "en_route" : pax.length ? "scheduled" : "registered"} /></span></div>
                   {v.locationPending && <p className="mt-2 text-xs text-muted-foreground">Location not available</p>}
                   <div className="mt-1 text-xs text-muted-foreground">{v.plate} · {v.driverName} · <Phone className="inline h-3 w-3" /> {v.driverPhone}</div>
                   <div className="mt-2 text-xs"><span className="font-medium">{pax.length}/{v.capacity} passengers</span> {pax.slice(0, 3).map((p) => name(p.memberId).split(" ")[0]).join(", ")}{pax.length > 3 && "…"}</div>
-                </Card>
+                </Button>
               );
             })}
             <Section title="Pickup points">
@@ -101,7 +101,7 @@ function TransportPage() {
 
         <TabsContent value="requests">
           <div className="mb-3 flex justify-end">
-            <Select value={filter} onValueChange={setFilter}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent>{[["open", "Open"], ["all", "All"], ...flow.map((f) => [f, stepLabels[f]]), ["rejected", "Rejected"]].map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>
+            <Select value={filter} onValueChange={setFilter}><SelectTrigger aria-label="Filter transport requests" className="w-44"><SelectValue /></SelectTrigger><SelectContent>{[["open", "Open"], ["all", "All"], ...flow.map((f) => [f, stepLabels[f]]), ["rejected", "Rejected"]].map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
             {rows.map((r) => {
@@ -121,7 +121,7 @@ function TransportPage() {
                       <Button size="sm" variant="ghost" onClick={() => advance(r, "rejected")}>Reject</Button>
                     </>}
                     {r.status === "approved" && r.kind === "pickup" && (
-                      <Select onValueChange={(v) => advance(r, "scheduled", v)}><SelectTrigger className="h-8 w-44 text-xs"><SelectValue placeholder="Assign vehicle" /></SelectTrigger><SelectContent>{vehicles.map((v) => <SelectItem key={v.id} value={v.id}>{v.label}</SelectItem>)}</SelectContent></Select>
+                      <Select onValueChange={(v) => advance(r, "scheduled", v)}><SelectTrigger aria-label={`Assign vehicle for ${name(r.memberId)}`} className="h-8 w-44 text-xs"><SelectValue placeholder="Assign vehicle" /></SelectTrigger><SelectContent>{vehicles.map((v) => <SelectItem key={v.id} value={v.id}>{v.label}</SelectItem>)}</SelectContent></Select>
                     )}
                     {r.status === "approved" && r.kind === "financial" && <Button size="sm" variant="outline" onClick={() => advance(r, "arrived")}>Mark support disbursed & arrived</Button>}
                     {r.status === "scheduled" && <Button size="sm" onClick={() => advance(r, "departed")}>Confirm departure</Button>}
@@ -145,7 +145,7 @@ function TransportPage() {
                 <div className="flex justify-between"><dt className="text-muted-foreground">Phone</dt><dd>{v.driverPhone}</dd></div>
               </dl>
               {v.locationPending && <p className="mt-3 text-xs text-muted-foreground">Location not available</p>}
-              <h4 className="mt-4 text-xs font-semibold uppercase text-muted-foreground">Passengers</h4>
+              <h2 className="mt-4 text-xs font-semibold uppercase text-muted-foreground">Passengers</h2>
               <ul className="mt-1 space-y-1 text-sm">{requests.filter((r) => r.vehicleId === v.id).map((r) => <li key={r.id} className="flex justify-between">{name(r.memberId)}<StatusBadge status={r.status} /></li>)}</ul>
               {!requests.some((r) => r.vehicleId === v.id) && <p className="mt-1 text-sm text-muted-foreground">No passengers assigned</p>}
             </Card>

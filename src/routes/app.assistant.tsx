@@ -10,7 +10,7 @@ import type { ActionId } from "@/config/action-map";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/assistant")({
-  head: () => ({ meta: [{ title: "AI Command Centre — Mobilizer" }, { name: "description", content: "Ask questions and run operations in plain language." }] }),
+  head: () => ({ meta: [{ title: "AI Command Centre — Mobilizer" }, { name: "description", content: "Ask questions and run operations in plain language." }, { property: "og:title", content: "AI Command Centre — Mobilizer" }, { property: "og:description", content: "Ask questions and run operations in plain language." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: Assistant,
 });
 

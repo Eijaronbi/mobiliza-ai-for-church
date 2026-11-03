@@ -17,7 +17,7 @@ import { fmtDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/settings")({
-  head: () => ({ meta: [{ title: "Settings — Mobilizer" }, { name: "description", content: "Church configuration, permissions and audit logs." }] }),
+  head: () => ({ meta: [{ title: "Settings — Mobilizer" }, { name: "description", content: "Church configuration, permissions and audit logs." }, { property: "og:title", content: "Settings — Mobilizer" }, { property: "og:description", content: "Church configuration, permissions and audit logs." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: SettingsPage,
 });
 
@@ -36,14 +36,14 @@ function SettingsPage() {
     <div>
       <PageHeader title="Settings" description={`Configuration for ${t.name}. Nothing here is hardcoded to one church.`} />
       <div className="grid gap-4 lg:grid-cols-4">
-        <Card className="h-fit p-2 shadow-card">{sections.map((x) => <button key={x} onClick={() => setS(x)} className={cn("block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-muted", s === x && "bg-accent font-medium text-accent-foreground")}>{x}</button>)}</Card>
+        <Button variant="outline" className="h-auto w-full whitespace-normal block text-left h-fit p-2 shadow-card">{sections.map((x) => <button key={x} onClick={() => setS(x)} className={cn("block w-full rounded-md px-3 py-2 text-left text-sm hover:bg-muted", s === x && "bg-accent font-medium text-accent-foreground")}>{x}</button>)}</Button>
         <Card className="p-5 shadow-card lg:col-span-3">
           <h2 className="mb-4 text-lg font-bold">{s}</h2>
           {s === "Church profile" && <form className="grid gap-3 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); toast.success("Church profile saved"); }}>
-            <div className="space-y-1"><Label>Church name</Label><Input defaultValue={t.name} required minLength={2} /></div>
-            <div className="space-y-1"><Label>City</Label><Input defaultValue={t.city} required /></div>
-            <div className="space-y-1"><Label>Senior pastor</Label><Input defaultValue={t.pastor} /></div>
-            <div className="space-y-1"><Label>Time zone</Label><Input defaultValue={t.timezone} /></div>
+            <div className="space-y-1"><Label>Church name</Label><Input aria-label="Church name" defaultValue={t.name} required minLength={2} /></div>
+            <div className="space-y-1"><Label>City</Label><Input aria-label="City" defaultValue={t.city} required /></div>
+            <div className="space-y-1"><Label>Senior pastor</Label><Input aria-label="Senior pastor" defaultValue={t.pastor} /></div>
+            <div className="space-y-1"><Label>Time zone</Label><Input aria-label="Time zone" defaultValue={t.timezone} /></div>
             <div className="sm:col-span-2"><Button type="submit">Save</Button></div>
           </form>}
           {s === "Organizational configuration" && link("/app/structure", "Open Church Structure")}

@@ -88,19 +88,19 @@ export function TransportMap({ points, selectedId, onSelect }: { points: MapPoin
     <div className="relative h-[420px] overflow-hidden rounded-xl border bg-muted">
       <div ref={el} className="absolute inset-0" style={{ display: mode === "fallback" ? "none" : "block" }} />
       {mode === "fallback" && (
-        <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice">
+        <svg aria-hidden="true" viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice">
           <defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M10 0H0V10" fill="none" stroke="var(--border)" strokeWidth="0.3" /></pattern></defs>
           <rect width="100" height="100" fill="url(#grid)" />
           <circle cx="50" cy="55" r="2.6" fill="var(--primary)" />
-          {points.map((p) => <circle key={p.id} cx={p.x} cy={p.y} r={p.kind === "vehicle" ? 2 : 1.4} fill={p.kind === "vehicle" ? "var(--brand)" : "var(--warning)"} className="cursor-pointer transition-all duration-1000" onClick={() => onSelect?.(p.id)} />)}
+          {points.map((p) => <circle key={p.id} cx={p.x} cy={p.y} r={p.kind === "vehicle" ? 2 : 1.4} fill={p.kind === "vehicle" ? "var(--brand)" : "var(--warning)"} className="transition-all duration-1000" />)}
         </svg>
       )}
-      <div className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1.5">
+      <div aria-live="polite" className="pointer-events-none absolute left-3 top-3 flex flex-col gap-1.5">
         <SimBadge label={mode === "google" ? "Google Maps · vehicle GPS simulated" : "Map preview · GPS simulated"} />
         {gps && <span className="rounded-md bg-card/95 px-2 py-1 text-[11px] font-medium shadow-card">{gps}</span>}
       </div>
-      <Button size="sm" variant="secondary" className="absolute bottom-3 right-3 shadow-card" onClick={shareGps}><LocateFixed className="mr-1 h-4 w-4" />Share my live location</Button>
-      <div className="absolute bottom-3 left-3 flex gap-3 rounded-md bg-card/95 px-2.5 py-1.5 text-[11px] shadow-card">
+      <Button size="sm" variant="secondary" className="absolute bottom-12 right-3 shadow-card sm:bottom-3" onClick={shareGps}><LocateFixed className="mr-1 h-4 w-4" />Share my live location</Button>
+      <div className="absolute bottom-3 left-3 flex flex-wrap gap-3 rounded-md bg-card/95 px-2.5 py-1.5 text-[11px] shadow-card">
         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-brand" />Moving vehicle</span>
         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-info" />Parked</span>
         <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-warning" />Pickup point</span>

@@ -20,7 +20,7 @@ import { useApp } from "@/hooks/use-app";
 import type { Member } from "@/types";
 
 export const Route = createFileRoute("/app/members/")({
-  head: () => ({ meta: [{ title: "Members — Mobilizer" }, { name: "description", content: "Member directory and management." }] }),
+  head: () => ({ meta: [{ title: "Members — Mobilizer" }, { name: "description", content: "Member directory and management." }, { property: "og:title", content: "Members — Mobilizer" }, { property: "og:description", content: "Member directory and management." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: MembersPage,
 });
 
@@ -43,14 +43,14 @@ export function MemberForm({ initial, onSubmit, submitLabel }: { initial?: Parti
   const err = f.formState.errors;
   const sel = (name: "status" | "departmentId" | "groupId" | "contactPreference", opts: [string, string][]) => (
     <Select value={f.watch(name) ?? ""} onValueChange={(v) => f.setValue(name, v as never)}>
-      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+      <SelectTrigger aria-label={{ status: "Membership status", departmentId: "Department", groupId: "Cell or group", contactPreference: "Contact preference" }[name]}><SelectValue placeholder="Select" /></SelectTrigger>
       <SelectContent>{opts.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent>
     </Select>
   );
   return (
     <form onSubmit={f.handleSubmit(onSubmit)} className="grid gap-3 sm:grid-cols-2">
       {(["name", "phone", "email", "location"] as const).map((k) => (
-        <div key={k} className="space-y-1"><Label className="capitalize">{k === "name" ? "Full name" : k}</Label><Input {...f.register(k)} />{err[k] && <p className="text-xs text-destructive">{err[k]?.message}</p>}</div>
+        <div key={k} className="space-y-1"><Label className="capitalize">{k === "name" ? "Full name" : k}</Label><Input aria-label={k === "name" ? "Full name" : k} {...f.register(k)} />{err[k] && <p className="text-xs text-destructive">{err[k]?.message}</p>}</div>
       ))}
       <div className="space-y-1"><Label>Membership status</Label>{sel("status", [["active", "Active"], ["new", "New"], ["inactive", "Inactive"], ["visitor", "Visitor"]])}</div>
       <div className="space-y-1"><Label>Contact preference</Label>{sel("contactPreference", [["call", "Call"], ["sms", "SMS"], ["whatsapp", "WhatsApp"], ["email", "Email"]])}</div>
@@ -119,9 +119,9 @@ function MembersPage() {
       </>} />
       <Card className="p-4 shadow-card">
         <div className="mb-4 flex flex-col gap-2 sm:flex-row">
-          <div className="relative flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input className="pl-9" placeholder="Search name, phone, location" value={q} onChange={(e) => setQ(e.target.value)} /></div>
-          <Select value={status} onValueChange={setStatus}><SelectTrigger className="sm:w-40"><SelectValue /></SelectTrigger><SelectContent>{["all", "active", "new", "inactive", "visitor"].map((s) => <SelectItem key={s} value={s} className="capitalize">{s === "all" ? "All statuses" : s}</SelectItem>)}</SelectContent></Select>
-          <Select value={dept} onValueChange={setDept}><SelectTrigger className="sm:w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All departments</SelectItem>{units.filter((u) => u.type === "department").map((u) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent></Select>
+          <div className="relative flex-1"><Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input aria-label="Search members" className="pl-9" placeholder="Search name, phone, location" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+          <Select value={status} onValueChange={setStatus}><SelectTrigger aria-label="Filter member status" className="sm:w-40"><SelectValue /></SelectTrigger><SelectContent>{["all", "active", "new", "inactive", "visitor"].map((s) => <SelectItem key={s} value={s} className="capitalize">{s === "all" ? "All statuses" : s}</SelectItem>)}</SelectContent></Select>
+          <Select value={dept} onValueChange={setDept}><SelectTrigger aria-label="Filter department" className="sm:w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All departments</SelectItem>{units.filter((u) => u.type === "department").map((u) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent></Select>
         </div>
         <div className="overflow-x-auto">
           <Table>

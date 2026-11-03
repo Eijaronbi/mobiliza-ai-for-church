@@ -16,7 +16,7 @@ import type { OrgUnit, UnitType } from "@/types";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/structure")({
-  head: () => ({ meta: [{ title: "Church Structure — Mobilizer" }, { name: "description", content: "Configure branches, departments, cells and leaders." }] }),
+  head: () => ({ meta: [{ title: "Church Structure — Mobilizer" }, { name: "description", content: "Configure branches, departments, cells and leaders." }, { property: "og:title", content: "Church Structure — Mobilizer" }, { property: "og:description", content: "Configure branches, departments, cells and leaders." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: StructurePage,
 });
 
@@ -62,9 +62,9 @@ function StructurePage() {
           <DialogContent>
             <DialogHeader><DialogTitle>Create organisational unit</DialogTitle></DialogHeader>
             <div className="space-y-3">
-              <div className="space-y-1"><Label>Name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Grace Cell" /></div>
-              <div className="space-y-1"><Label>Type</Label><Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v as UnitType })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{types.map((t) => <SelectItem key={t} value={t} className="capitalize">{t.replace("_", " ")}</SelectItem>)}</SelectContent></Select></div>
-              <div className="space-y-1"><Label>Parent</Label><Select value={form.parentId} onValueChange={(v) => setForm({ ...form, parentId: v })}><SelectTrigger><SelectValue placeholder="Top level" /></SelectTrigger><SelectContent>{units.map((u) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-1"><Label>Name</Label><Input aria-label="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Grace Cell" /></div>
+              <div className="space-y-1"><Label>Type</Label><Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v as UnitType })}><SelectTrigger aria-label="Type"><SelectValue /></SelectTrigger><SelectContent>{types.map((t) => <SelectItem key={t} value={t} className="capitalize">{t.replace("_", " ")}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-1"><Label>Parent</Label><Select value={form.parentId} onValueChange={(v) => setForm({ ...form, parentId: v })}><SelectTrigger aria-label="Parent"><SelectValue placeholder="Top level" /></SelectTrigger><SelectContent>{units.map((u) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent></Select></div>
             </div>
             <DialogFooter><Button onClick={create}>Create</Button></DialogFooter>
           </DialogContent>
@@ -80,13 +80,13 @@ function StructurePage() {
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <div className="space-y-1"><Label className="flex items-center gap-1"><UserCog className="h-3.5 w-3.5" />Leader</Label>
                 <Select value={selected.leaderId ?? ""} onValueChange={async (v) => { await um.update.mutateAsync({ id: selected.id, patch: { leaderId: v } }); toast.success("Leader assigned"); }}>
-                  <SelectTrigger><SelectValue placeholder="Assign leader" /></SelectTrigger>
+                  <SelectTrigger aria-label="Assign unit leader"><SelectValue placeholder="Assign leader" /></SelectTrigger>
                   <SelectContent>{members.slice(0, 80).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
               <div className="space-y-1"><Label className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />Add member</Label>
                 <Select value="" onValueChange={async (v) => { const m = members.find((x) => x.id === v)!; await mm.update.mutateAsync({ id: v, patch: { groupIds: [...new Set([...m.groupIds, selected.id])] } }); toast.success(`${m.name} added to ${selected.name}`); }}>
-                  <SelectTrigger><SelectValue placeholder="Select member" /></SelectTrigger>
+                  <SelectTrigger aria-label="Add member to unit"><SelectValue placeholder="Select member" /></SelectTrigger>
                   <SelectContent>{members.filter((m) => !m.groupIds.includes(selected.id)).slice(0, 80).map((m) => <SelectItem key={m.id} value={m.id}>{m.name}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
@@ -97,7 +97,7 @@ function StructurePage() {
                 <div key={m.id} className="flex items-center gap-2 p-2.5 text-sm">
                   <span className="flex-1">{m.name}{m.groupIds.length > 1 && <span className="ml-2 text-xs text-muted-foreground">· {m.groupIds.length} groups</span>}</span>
                   <Select value="" onValueChange={async (v) => { await mm.update.mutateAsync({ id: m.id, patch: { groupIds: m.groupIds.map((g) => (g === selected.id ? v : g)) } }); toast.success(`Moved ${m.name}`); }}>
-                    <SelectTrigger className="h-8 w-[130px] text-xs"><ArrowRightLeft className="h-3 w-3" /><SelectValue placeholder="Move to" /></SelectTrigger>
+                    <SelectTrigger aria-label={`Move ${m.name} to group`} className="h-8 w-[130px] text-xs"><ArrowRightLeft className="h-3 w-3" /><SelectValue placeholder="Move to" /></SelectTrigger>
                     <SelectContent>{units.filter((u) => u.id !== selected.id && (u.type === "cell" || u.type === "home_group" || u.type === "team")).map((u) => <SelectItem key={u.id} value={u.id}>{u.name}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>

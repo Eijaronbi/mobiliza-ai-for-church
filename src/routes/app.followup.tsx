@@ -20,7 +20,7 @@ import { fmtDate, fmtDateTime, demoNow } from "@/lib/format";
 import type { FollowUp, FollowUpStatus } from "@/types";
 
 export const Route = createFileRoute("/app/followup")({
-  head: () => ({ meta: [{ title: "First Timers & Follow-up — Mobilizer" }, { name: "description", content: "Follow-up journeys for first timers and new converts." }] }),
+  head: () => ({ meta: [{ title: "First Timers & Follow-up — Mobilizer" }, { name: "description", content: "Follow-up journeys for first timers and new converts." }, { property: "og:title", content: "First Timers & Follow-up — Mobilizer" }, { property: "og:description", content: "Follow-up journeys for first timers and new converts." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: FollowUpPage,
 });
 
@@ -76,9 +76,9 @@ function FollowUpPage() {
           <DialogContent className="max-w-xl">
             <DialogHeader><DialogTitle>Record first timer or new convert</DialogTitle></DialogHeader>
             <form onSubmit={f.handleSubmit(save)} className="grid gap-3 sm:grid-cols-2">
-              {(["name", "phone", "location", "referrer"] as const).map((k) => <div key={k} className="space-y-1"><Label>{{ name: "Full name", phone: "Phone", location: "Location", referrer: "Evangelist / referring member" }[k]}</Label><Input {...f.register(k)} />{f.formState.errors[k] && <p className="text-xs text-destructive">{f.formState.errors[k]?.message}</p>}</div>)}
-              <div className="space-y-1"><Label>Type</Label><Select value={f.watch("kind")} onValueChange={(v) => f.setValue("kind", v as V["kind"])}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="first_timer">First timer</SelectItem><SelectItem value="new_convert">New convert</SelectItem></SelectContent></Select></div>
-              <div className="space-y-1"><Label>Preferred channel</Label><Select value={f.watch("channel")} onValueChange={(v) => f.setValue("channel", v as V["channel"])}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["call", "whatsapp", "sms", "email"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent></Select></div>
+              {(["name", "phone", "location", "referrer"] as const).map((k) => <div key={k} className="space-y-1"><Label>{{ name: "Full name", phone: "Phone", location: "Location", referrer: "Evangelist / referring member" }[k]}</Label><Input aria-label={{ name: "Full name", phone: "Phone", location: "Location", referrer: "Evangelist / referring member" }[k]} {...f.register(k)} />{f.formState.errors[k] && <p className="text-xs text-destructive">{f.formState.errors[k]?.message}</p>}</div>)}
+              <div className="space-y-1"><Label>Type</Label><Select value={f.watch("kind")} onValueChange={(v) => f.setValue("kind", v as V["kind"])}><SelectTrigger aria-label="Type"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="first_timer">First timer</SelectItem><SelectItem value="new_convert">New convert</SelectItem></SelectContent></Select></div>
+              <div className="space-y-1"><Label>Preferred channel</Label><Select value={f.watch("channel")} onValueChange={(v) => f.setValue("channel", v as V["channel"])}><SelectTrigger aria-label="Preferred channel"><SelectValue /></SelectTrigger><SelectContent>{["call", "whatsapp", "sms", "email"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent></Select></div>
               <label className="flex items-center gap-2 text-sm sm:col-span-2"><Switch checked={f.watch("consent")} onCheckedChange={(v) => f.setValue("consent", v)} />They agreed to be contacted</label>
               <DialogFooter className="sm:col-span-2"><Button type="submit">Save & start follow-up</Button></DialogFooter>
             </form>
@@ -98,10 +98,10 @@ function FollowUpPage() {
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {list.filter(buckets[bucket]).map((x) => (
-          <Card key={x.id} onClick={() => setSel(x)} className="cursor-pointer p-4 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
+          <Button variant="outline" key={x.id} onClick={() => setSel(x)} className="cursor-pointer p-4 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
             <div className="flex items-start justify-between"><div><div className="font-semibold">{x.name}</div><div className="text-xs text-muted-foreground">{x.kind === "new_convert" ? "New convert" : "First timer"} · {fmtDate(x.encounteredAt)} · via {x.referrer}</div></div><StatusBadge status={overdue(x) ? "overdue" : x.status} /></div>
             <div className="mt-3 text-xs text-muted-foreground">Leader: {members.find((m) => m.id === x.assignedLeaderId)?.name ?? "Unassigned"}{x.nextContactAt && ` · next ${fmtDateTime(x.nextContactAt)}`}</div>
-          </Card>
+          </Button>
         ))}
       </div>
 
@@ -115,16 +115,16 @@ function FollowUpPage() {
                 {steps.map((s, i) => <li key={s} className="flex items-center gap-2 text-sm"><span className={i <= stepIdx[sel.status] ? "flex h-5 w-5 items-center justify-center rounded-full bg-gradient-brand text-[10px] text-brand-foreground" : "flex h-5 w-5 items-center justify-center rounded-full bg-muted text-[10px]"}>{i + 1}</span>{s}</li>)}
               </ol>
               <div className="mt-5 grid gap-3">
-                <div className="space-y-1"><Label>Assign follow-up leader</Label><Select value={sel.assignedLeaderId ?? ""} onValueChange={(v) => patch(sel, { assignedLeaderId: v, status: sel.status === "new" ? "assigned" : sel.status })}><SelectTrigger><SelectValue placeholder="Choose leader" /></SelectTrigger><SelectContent>{leaders.map((l) => <SelectItem key={l.id + l.label} value={l.id}>{l.label}</SelectItem>)}</SelectContent></Select></div>
-                <div className="space-y-1"><Label>Schedule contact</Label><Input type="datetime-local" onChange={(e) => e.target.value && patch(sel, { nextContactAt: new Date(e.target.value).toISOString(), status: "scheduled" })} /></div>
+                <div className="space-y-1"><Label>Assign follow-up leader</Label><Select value={sel.assignedLeaderId ?? ""} onValueChange={(v) => patch(sel, { assignedLeaderId: v, status: sel.status === "new" ? "assigned" : sel.status })}><SelectTrigger aria-label="Assign follow-up leader"><SelectValue placeholder="Choose leader" /></SelectTrigger><SelectContent>{leaders.map((l) => <SelectItem key={l.id + l.label} value={l.id}>{l.label}</SelectItem>)}</SelectContent></Select></div>
+                <div className="space-y-1"><Label>Schedule contact</Label><Input aria-label="Schedule contact" type="datetime-local" onChange={(e) => e.target.value && patch(sel, { nextContactAt: new Date(e.target.value).toISOString(), status: "scheduled" })} /></div>
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={() => simulateCall(sel)}><PhoneCall className="mr-1 h-4 w-4" />AI call now</Button>
                   <Button variant="outline" onClick={async () => { await patch(sel, { status: "escalated" }); await em.create.mutateAsync({ id: `${tenantId}_esc${Date.now()}`, tenantId, title: `Follow-up needs a human: ${sel.name}`, detail: sel.notes || "Escalated from follow-up.", category: "followup", priority: "high", ownerName: "Pastoral team", status: "open", createdAt: new Date().toISOString() }); await run("createEscalation", { escalation_id: sel.id, category: "followup", priority: "high" }); }}><AlertTriangle className="mr-1 h-4 w-4" />Escalate to human</Button>
                   <Button variant="outline" onClick={async () => { await patch(sel, { status: "completed" }); await run("completeFollowUp", { followup_id: sel.id, outcome: "completed" }); }}><CheckCircle2 className="mr-1 h-4 w-4" />Complete</Button>
                 </div>
-                <div className="space-y-1"><Label>Needs, questions & notes</Label><Textarea defaultValue={sel.notes} onBlur={(e) => patch(sel, { notes: e.target.value.slice(0, 1000) })} /></div>
+                <div className="space-y-1"><Label>Needs, questions & notes</Label><Textarea aria-label="Needs, questions & notes" defaultValue={sel.notes} onBlur={(e) => patch(sel, { notes: e.target.value.slice(0, 1000) })} /></div>
               </div>
-              <h3 className="mb-2 mt-6 flex items-center gap-2 text-sm font-semibold">Communication history <SimBadge /></h3>
+              <h2 className="mb-2 mt-6 flex items-center gap-2 text-sm font-semibold">Communication history <SimBadge /></h2>
               <div className="space-y-2">{sel.log.length ? sel.log.map((c) => <div key={c.id} className="rounded-lg border p-3 text-sm"><div className="flex justify-between text-xs text-muted-foreground"><span className="capitalize">{c.channel} · {c.by === "ai_agent" ? "Follow-up Agent" : "Leader"}</span>{fmtDateTime(c.at)}</div><div className="mt-1">{c.summary}</div><StatusBadge status={c.outcome === "success" ? "success" : c.outcome === "escalated" ? "escalated" : "failed"} className="mt-2" /></div>) : <p className="text-sm text-muted-foreground">No contact yet.</p>}</div>
             </>
           )}

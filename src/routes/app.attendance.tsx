@@ -11,7 +11,7 @@ import { fmtDateTime, pct } from "@/lib/format";
 import { CheckCircle2, UserCheck, UserX, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/app/attendance")({
-  head: () => ({ meta: [{ title: "Attendance — Mobilizer" }, { name: "description", content: "Confirmed vs actual attendance and analytics." }] }),
+  head: () => ({ meta: [{ title: "Attendance — Mobilizer" }, { name: "description", content: "Confirmed vs actual attendance and analytics." }, { property: "og:title", content: "Attendance — Mobilizer" }, { property: "og:description", content: "Confirmed vs actual attendance and analytics." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: AttendancePage,
 });
 
@@ -40,7 +40,7 @@ function AttendancePage() {
   return (
     <div>
       <PageHeader title="Attendance" description="Confirmed attendance is what members told us. Actual attendance is who was marked present." actions={
-        <Select value={svc?.id} onValueChange={setSid}><SelectTrigger className="w-[280px]"><SelectValue /></SelectTrigger><SelectContent>{services.map((s) => <SelectItem key={s.id} value={s.id}>{s.name} · {fmtDateTime(s.date)}</SelectItem>)}</SelectContent></Select>
+        <Select value={svc?.id} onValueChange={setSid}><SelectTrigger aria-label="Select attendance service" className="w-[280px]"><SelectValue /></SelectTrigger><SelectContent>{services.map((s) => <SelectItem key={s.id} value={s.id}>{s.name} · {fmtDateTime(s.date)}</SelectItem>)}</SelectContent></Select>
       } />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Confirmed" value={confirmed} icon={CheckCircle2} tone="info" />
@@ -49,7 +49,7 @@ function AttendancePage() {
         <StatCard label="First-time visitors" value={visitors} icon={Sparkles} tone="brand" />
       </div>
       <div className="mt-4 grid gap-4 lg:grid-cols-5">
-        <Section title="Mark attendance" className="lg:col-span-2" action={<Input className="h-8 w-40" placeholder="Search" value={q} onChange={(e) => setQ(e.target.value)} />}>
+        <Section title="Mark attendance" className="lg:col-span-2" action={<Input aria-label="Search attendance members" className="h-8 w-40" placeholder="Search" value={q} onChange={(e) => setQ(e.target.value)} />}>
           <div className="max-h-[460px] divide-y overflow-auto">
             {rec.filter((r) => name(r.memberId).toLowerCase().includes(q.toLowerCase())).slice(0, 80).map((r) => (
               <label key={r.id} className="flex cursor-pointer items-center gap-3 py-2 text-sm">

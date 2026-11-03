@@ -16,7 +16,7 @@ import { timeAgo, pct } from "@/lib/format";
 import type { Escalation, EscalationStatus, Priority } from "@/types";
 
 export const Route = createFileRoute("/app/leadership")({
-  head: () => ({ meta: [{ title: "Leadership & Escalations — Mobilizer" }, { name: "description", content: "Escalations and leadership accountability." }] }),
+  head: () => ({ meta: [{ title: "Leadership & Escalations — Mobilizer" }, { name: "description", content: "Escalations and leadership accountability." }, { property: "og:title", content: "Leadership & Escalations — Mobilizer" }, { property: "og:description", content: "Escalations and leadership accountability." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: LeadershipPage,
 });
 
@@ -60,13 +60,13 @@ function LeadershipPage() {
           <DialogContent>
             <DialogHeader><DialogTitle>Create escalation</DialogTitle></DialogHeader>
             <div className="space-y-3">
-              <div className="space-y-1"><Label>Title</Label><Input value={f.title} onChange={(e) => setF({ ...f, title: e.target.value })} /></div>
-              <div className="space-y-1"><Label>Details</Label><Textarea value={f.detail} onChange={(e) => setF({ ...f, detail: e.target.value })} /></div>
+              <div className="space-y-1"><Label>Title</Label><Input aria-label="Title" value={f.title} onChange={(e) => setF({ ...f, title: e.target.value })} /></div>
+              <div className="space-y-1"><Label>Details</Label><Textarea aria-label="Details" value={f.detail} onChange={(e) => setF({ ...f, detail: e.target.value })} /></div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1"><Label>Category</Label><Select value={f.category} onValueChange={(v) => setF({ ...f, category: v as Escalation["category"] })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["transport", "mobilization", "followup", "report", "member_issue"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c.replace("_", " ")}</SelectItem>)}</SelectContent></Select></div>
-                <div className="space-y-1"><Label>Priority</Label><Select value={f.priority} onValueChange={(v) => setF({ ...f, priority: v as Priority })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["low", "medium", "high", "urgent"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent></Select></div>
+                <div className="space-y-1"><Label>Category</Label><Select value={f.category} onValueChange={(v) => setF({ ...f, category: v as Escalation["category"] })}><SelectTrigger aria-label="Category"><SelectValue /></SelectTrigger><SelectContent>{["transport", "mobilization", "followup", "report", "member_issue"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c.replace("_", " ")}</SelectItem>)}</SelectContent></Select></div>
+                <div className="space-y-1"><Label>Priority</Label><Select value={f.priority} onValueChange={(v) => setF({ ...f, priority: v as Priority })}><SelectTrigger aria-label="Priority"><SelectValue /></SelectTrigger><SelectContent>{["low", "medium", "high", "urgent"].map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent></Select></div>
               </div>
-              <div className="space-y-1"><Label>Assign to</Label><Input value={f.ownerName} onChange={(e) => setF({ ...f, ownerName: e.target.value })} placeholder="Leader or team" /></div>
+              <div className="space-y-1"><Label>Assign to</Label><Input aria-label="Assign to" value={f.ownerName} onChange={(e) => setF({ ...f, ownerName: e.target.value })} placeholder="Leader or team" /></div>
             </div>
             <DialogFooter><Button onClick={create}>Create</Button></DialogFooter>
           </DialogContent>

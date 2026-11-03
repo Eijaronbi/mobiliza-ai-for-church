@@ -19,7 +19,7 @@ import type { Report, ReportTemplate, ReportType } from "@/types";
 import { FileCheck2, FileClock, FileWarning, Heart } from "lucide-react";
 
 export const Route = createFileRoute("/app/reports")({
-  head: () => ({ meta: [{ title: "Evangelism & Reports — Mobilizer" }, { name: "description", content: "Configurable reporting templates, deadlines and analytics." }] }),
+  head: () => ({ meta: [{ title: "Evangelism & Reports — Mobilizer" }, { name: "description", content: "Configurable reporting templates, deadlines and analytics." }, { property: "og:title", content: "Evangelism & Reports — Mobilizer" }, { property: "og:description", content: "Configurable reporting templates, deadlines and analytics." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: ReportsPage,
 });
 const tip = { contentStyle: { background: "var(--popover)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12 } };
@@ -76,7 +76,7 @@ function ReportsPage() {
                     <TableCell><StatusBadge status={r.status} /></TableCell>
                     <TableCell className="text-right">
                       {(r.status === "pending" || r.status === "overdue") && <div className="flex justify-end gap-1">
-                        <Button size="sm" variant="ghost" onClick={() => run("reportOverdue", { report_id: r.id, unit_id: r.unitId, due_at: r.dueAt })}><BellRing className="h-3.5 w-3.5" /></Button>
+                        <Button aria-label={`Send reminder for ${uname(r.unitId)}`} size="sm" variant="ghost" onClick={() => run("reportOverdue", { report_id: r.id, unit_id: r.unitId, due_at: r.dueAt })}><BellRing className="h-3.5 w-3.5" /></Button>
                         <Button size="sm" variant="outline" onClick={() => { setSubmit(r); setVals({}); }}>Submit</Button>
                       </div>}
                       {r.status === "submitted" && can("approve_reports") && <Button size="sm" variant="outline" onClick={async () => { await rm.update.mutateAsync({ id: r.id, patch: { status: "approved" } }); toast.success("Report approved"); }}><Check className="mr-1 h-3.5 w-3.5" />Approve</Button>}
@@ -95,7 +95,7 @@ function ReportsPage() {
               <Button size="sm" variant="outline" className="mt-4" onClick={() => setTpl(t)}>Edit template</Button>
             </Card>
           ))}
-          <Card className="flex items-center justify-center border-dashed p-5"><Button variant="ghost" onClick={() => setTpl({ id: `${tenantId}_tpl${Date.now()}`, tenantId, name: "New template", type: "outreach", deadline: "Sunday 18:00", reminder: "Saturday 17:00", fields: [{ key: "reached", label: "People reached", kind: "number" }] })}><Plus className="mr-1 h-4 w-4" />New template</Button></Card>
+          <Button variant="outline" className="h-auto w-full whitespace-normal block text-left flex items-center justify-center border-dashed p-5"><Button variant="ghost" onClick={() => setTpl({ id: `${tenantId}_tpl${Date.now()}`, tenantId, name: "New template", type: "outreach", deadline: "Sunday 18:00", reminder: "Saturday 17:00", fields: [{ key: "reached", label: "People reached", kind: "number" }] })}><Plus className="mr-1 h-4 w-4" />New template</Button></Button>
         </TabsContent>
         <TabsContent value="analytics">
           <Section title="Department & cell performance (reports submitted, 4 weeks)">
@@ -107,7 +107,7 @@ function ReportsPage() {
       <Dialog open={!!submit} onOpenChange={(o) => !o && setSubmit(null)}>
         <DialogContent>
           <DialogHeader><DialogTitle>{submit && `${tname(submit.templateId)} — ${uname(submit.unitId)}`}</DialogTitle></DialogHeader>
-          <div className="space-y-3">{submit && templates.find((t) => t.id === submit.templateId)?.fields.map((f) => <div key={f.key} className="space-y-1"><Label>{f.label}</Label><Input type={f.kind === "number" ? "number" : "text"} min={0} value={vals[f.key] ?? ""} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value })} /></div>)}</div>
+          <div className="space-y-3">{submit && templates.find((t) => t.id === submit.templateId)?.fields.map((f) => <div key={f.key} className="space-y-1"><Label>{f.label}</Label><Input aria-label={f.label} type={f.kind === "number" ? "number" : "text"} min={0} value={vals[f.key] ?? ""} onChange={(e) => setVals({ ...vals, [f.key]: e.target.value })} /></div>)}</div>
           <DialogFooter><Button onClick={doSubmit}>Submit report</Button></DialogFooter>
         </DialogContent>
       </Dialog>
@@ -117,13 +117,13 @@ function ReportsPage() {
           <DialogHeader><DialogTitle>Report template</DialogTitle></DialogHeader>
           {tpl && <div className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
-              <div className="space-y-1"><Label>Name</Label><Input value={tpl.name} onChange={(e) => setTpl({ ...tpl, name: e.target.value })} /></div>
-              <div className="space-y-1"><Label>Type</Label><Select value={tpl.type} onValueChange={(v) => setTpl({ ...tpl, type: v as ReportType })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{["individual", "cell", "department", "outreach", "weekly", "monthly"].map((t) => <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>)}</SelectContent></Select></div>
-              <div className="space-y-1"><Label>Deadline</Label><Input value={tpl.deadline} onChange={(e) => setTpl({ ...tpl, deadline: e.target.value })} /></div>
-              <div className="space-y-1"><Label>Automatic reminder</Label><Input value={tpl.reminder} onChange={(e) => setTpl({ ...tpl, reminder: e.target.value })} /></div>
+              <div className="space-y-1"><Label>Name</Label><Input aria-label="Name" value={tpl.name} onChange={(e) => setTpl({ ...tpl, name: e.target.value })} /></div>
+              <div className="space-y-1"><Label>Type</Label><Select value={tpl.type} onValueChange={(v) => setTpl({ ...tpl, type: v as ReportType })}><SelectTrigger aria-label="Type"><SelectValue /></SelectTrigger><SelectContent>{["individual", "cell", "department", "outreach", "weekly", "monthly"].map((t) => <SelectItem key={t} value={t} className="capitalize">{t}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-1"><Label>Deadline</Label><Input aria-label="Deadline" value={tpl.deadline} onChange={(e) => setTpl({ ...tpl, deadline: e.target.value })} /></div>
+              <div className="space-y-1"><Label>Automatic reminder</Label><Input aria-label="Automatic reminder" value={tpl.reminder} onChange={(e) => setTpl({ ...tpl, reminder: e.target.value })} /></div>
             </div>
             <Label>Fields</Label>
-            {tpl.fields.map((f, i) => <div key={i} className="flex gap-2"><Input value={f.label} onChange={(e) => setTpl({ ...tpl, fields: tpl.fields.map((x, k) => (k === i ? { ...x, label: e.target.value, key: x.key || e.target.value.toLowerCase().replace(/\W+/g, "_") } : x)) })} /><Select value={f.kind} onValueChange={(v) => setTpl({ ...tpl, fields: tpl.fields.map((x, k) => (k === i ? { ...x, kind: v as "number" | "text" } : x)) })}><SelectTrigger className="w-28"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="number">Number</SelectItem><SelectItem value="text">Text</SelectItem></SelectContent></Select><Button size="icon" variant="ghost" onClick={() => setTpl({ ...tpl, fields: tpl.fields.filter((_, k) => k !== i) })}><Trash2 className="h-4 w-4" /></Button></div>)}
+            {tpl.fields.map((f, i) => <div key={i} className="flex gap-2"><Input aria-label="Fields" value={f.label} onChange={(e) => setTpl({ ...tpl, fields: tpl.fields.map((x, k) => (k === i ? { ...x, label: e.target.value, key: x.key || e.target.value.toLowerCase().replace(/\W+/g, "_") } : x)) })} /><Select value={f.kind} onValueChange={(v) => setTpl({ ...tpl, fields: tpl.fields.map((x, k) => (k === i ? { ...x, kind: v as "number" | "text" } : x)) })}><SelectTrigger aria-label={`Field ${i + 1} type`} className="w-28"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="number">Number</SelectItem><SelectItem value="text">Text</SelectItem></SelectContent></Select><Button aria-label={`Remove field ${i + 1}`} size="icon" variant="ghost" onClick={() => setTpl({ ...tpl, fields: tpl.fields.filter((_, k) => k !== i) })}><Trash2 className="h-4 w-4" /></Button></div>)}
             <Button size="sm" variant="outline" onClick={() => setTpl({ ...tpl, fields: [...tpl.fields, { key: `field_${tpl.fields.length + 1}`, label: "New field", kind: "number" }] })}><Plus className="mr-1 h-4 w-4" />Add field</Button>
           </div>}
           <DialogFooter><Button onClick={async () => { if (!tpl) return; const exists = templates.some((t) => t.id === tpl.id); if (exists) await tm.update.mutateAsync({ id: tpl.id, patch: tpl }); else await tm.create.mutateAsync(tpl); toast.success("Template saved"); setTpl(null); }}>Save template</Button></DialogFooter>
