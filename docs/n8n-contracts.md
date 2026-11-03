@@ -26,6 +26,7 @@ Payload schemas: `src/config/event-catalog.ts` (zod). Payloads carry IDs only â€
 | Start mobilization | mobilization.started | mobilization/start-mobilization |
 | Attendance response | attendance.confirmed / attendance.declined | mobilization/receive-attendance-response |
 | New transport request | transport.requested | transport/new-transport-request |
+| Register bus | vehicle.registered | transport/register-bus |
 | Approve transport | transport.approved | transport/approve-transport-assistance |
 | Departure / arrival | transport.departed / transport.arrived | transport/record-departure, record-arrival |
 | New first timer | followup.created | followup/new-first-timer |

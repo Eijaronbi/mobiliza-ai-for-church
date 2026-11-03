@@ -118,7 +118,7 @@ export interface TransportRequest {
   history: { status: TransportStatus; at: ISODate; by: string }[];
 }
 export interface PickupPoint { id: ID; tenantId: ID; name: string; x: number; y: number }
-export interface Vehicle { id: ID; tenantId: ID; label: string; plate: string; capacity: number; driverName: string; driverPhone: string; position: { x: number; y: number } }
+export interface Vehicle { id: ID; tenantId: ID; label: string; plate: string; capacity: number; driverName: string; driverPhone: string; position: { x: number; y: number }; locationPending?: boolean }
 
 export type FollowUpStatus = "new" | "assigned" | "scheduled" | "contacted" | "failed" | "escalated" | "completed";
 export interface FollowUp {
@@ -268,6 +268,7 @@ export type EventName =
   | "mobilization.started"
   | "attendance.confirmed" | "attendance.declined"
   | "transport.requested" | "transport.approved" | "transport.departed" | "transport.arrived"
+  | "vehicle.registered"
   | "followup.created" | "followup.completed"
   | "report.submitted" | "report.overdue"
   | "escalation.created" | "escalation.resolved";

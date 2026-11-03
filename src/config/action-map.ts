@@ -12,6 +12,7 @@ export interface ActionDefinition {
 }
 
 export const actions = {
+  registerVehicle: { id: "registerVehicle", label: "Bus registration recorded", event: "vehicle.registered", workflow: "transport", defaultEndpointName: "Register bus", requiresConfirmation: false },
   startMobilization: { id: "startMobilization", label: "Start mobilization", event: "mobilization.started", workflow: "mobilization", defaultEndpointName: "Start mobilization", requiresConfirmation: true },
   confirmAttendance: { id: "confirmAttendance", label: "Receive attendance response", event: "attendance.confirmed", workflow: "mobilization", defaultEndpointName: "Receive attendance response", requiresConfirmation: false },
   declineAttendance: { id: "declineAttendance", label: "Record unavailable", event: "attendance.declined", workflow: "mobilization", defaultEndpointName: "Receive attendance response", requiresConfirmation: false },

@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Confirm, PageHeader, Section, StatCard, StatusBadge } from "@/components/app/kit";
 import { TransportMap } from "@/components/transport/TransportMap";
+import { BusRegistration } from "@/components/transport/BusRegistration";
 import { stepToward, type MapPoint } from "@/components/transport/geo";
 import { useAction, useListData, useRepoMutations } from "@/hooks/use-data";
 import { useApp } from "@/hooks/use-app";
@@ -15,7 +16,7 @@ import type { TransportRequest, TransportStatus } from "@/types";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/transport")({
-  head: () => ({ meta: [{ title: "Transportation — Mobilizer" }, { name: "description", content: "Transport requests, drivers, vehicles and live journey tracking." }] }),
+  head: () => ({ meta: [{ title: "Transportation — Mobilizer" }, { name: "description", content: "Register buses, manage drivers and transport requests, and track journeys." }, { property: "og:title", content: "Transportation — Mobilizer" }, { property: "og:description", content: "Bus registration, drivers, pickup requests and journey tracking." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: TransportPage,
 });
 
@@ -33,6 +34,7 @@ function TransportPage() {
   const [sel, setSel] = useState<string | undefined>();
   const [pos, setPos] = useState<Record<string, { x: number; y: number }>>({});
   const [filter, setFilter] = useState("open");
+  const [tab, setTab] = useState("live");
 
   useEffect(() => { setPos(Object.fromEntries(vehicles.map((v) => [v.id, v.position]))); }, [vehicles]);
   const movingIds = useMemo(() => new Set(requests.filter((r) => r.status === "departed" || r.status === "en_route").map((r) => r.vehicleId)), [requests]);
@@ -48,7 +50,7 @@ function TransportPage() {
 
   const mapPoints: MapPoint[] = useMemo(() => [
     ...points.map((p) => ({ id: p.id, kind: "pickup" as const, label: p.name, x: p.x, y: p.y })),
-    ...vehicles.map((v) => ({ id: v.id, kind: "vehicle" as const, label: v.label, ...(pos[v.id] ?? v.position), moving: movingIds.has(v.id) })),
+    ...vehicles.filter((v) => !v.locationPending).map((v) => ({ id: v.id, kind: "vehicle" as const, label: v.label, ...(pos[v.id] ?? v.position), moving: movingIds.has(v.id) })),
   ], [points, vehicles, pos, movingIds]);
 
   const name = (id: string) => members.find((m) => m.id === id)?.name ?? "";
@@ -65,7 +67,7 @@ function TransportPage() {
 
   return (
     <div>
-      <PageHeader title="Transportation" description="From request to arrival: approvals, pickups, drivers and live journey tracking." />
+      <PageHeader title="Transportation" description="From request to arrival: approvals, pickups, drivers and live journey tracking." actions={<BusRegistration onRegistered={() => setTab("fleet")} />} />
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Open requests" value={requests.filter((r) => ["requested", "leader_review"].includes(r.status)).length} icon={Clock} tone="warning" />
         <StatCard label="Approved & scheduled" value={requests.filter((r) => ["approved", "scheduled"].includes(r.status)).length} icon={CheckCircle2} tone="info" />
@@ -73,7 +75,7 @@ function TransportPage() {
         <StatCard label="Financial support" value={requests.filter((r) => r.kind === "financial").reduce((a, r) => a + (r.amount ?? 0), 0)} icon={Wallet} tone="success" hint="Naira requested" />
       </div>
 
-      <Tabs defaultValue="live" className="mt-4">
+      <Tabs value={tab} onValueChange={setTab} className="mt-4">
         <TabsList><TabsTrigger value="live">Live map</TabsTrigger><TabsTrigger value="requests">Requests</TabsTrigger><TabsTrigger value="fleet">Drivers & vehicles</TabsTrigger></TabsList>
 
         <TabsContent value="live" className="grid gap-4 lg:grid-cols-3">
@@ -84,7 +86,8 @@ function TransportPage() {
               const moving = movingIds.has(v.id);
               return (
                 <Card key={v.id} onClick={() => setSel(v.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", sel === v.id && "ring-2 ring-ring")}>
-                  <div className="flex items-center gap-2">{v.capacity > 6 ? <Bus className="h-4 w-4 text-brand" /> : <Car className="h-4 w-4 text-brand" />}<span className="font-semibold">{v.label}</span><span className="ml-auto"><StatusBadge status={moving ? "en_route" : "scheduled"} /></span></div>
+                  <div className="flex flex-wrap items-center gap-2">{v.capacity > 6 ? <Bus className="h-4 w-4 text-brand" /> : <Car className="h-4 w-4 text-brand" />}<span className="min-w-0 break-words font-semibold">{v.label}</span><span className="ml-auto"><StatusBadge status={moving ? "en_route" : pax.length ? "scheduled" : "registered"} /></span></div>
+                  {v.locationPending && <p className="mt-2 text-xs text-muted-foreground">Location not available</p>}
                   <div className="mt-1 text-xs text-muted-foreground">{v.plate} · {v.driverName} · <Phone className="inline h-3 w-3" /> {v.driverPhone}</div>
                   <div className="mt-2 text-xs"><span className="font-medium">{pax.length}/{v.capacity} passengers</span> {pax.slice(0, 3).map((p) => name(p.memberId).split(" ")[0]).join(", ")}{pax.length > 3 && "…"}</div>
                 </Card>
@@ -134,15 +137,17 @@ function TransportPage() {
         <TabsContent value="fleet" className="grid gap-3 md:grid-cols-3">
           {vehicles.map((v) => (
             <Card key={v.id} className="p-5 shadow-card">
-              <div className="flex items-center gap-2 font-semibold"><Bus className="h-4 w-4 text-brand" />{v.label}</div>
-              <dl className="mt-3 space-y-1 text-sm">
+              <div className="flex items-center gap-2 break-words font-semibold"><Bus className="h-4 w-4 shrink-0 text-brand" />{v.label}</div>
+              <dl className="mt-3 space-y-1 text-sm [&>div]:gap-3 [&_dd]:min-w-0 [&_dd]:break-words [&_dd]:text-right">
                 <div className="flex justify-between"><dt className="text-muted-foreground">Plate</dt><dd>{v.plate}</dd></div>
                 <div className="flex justify-between"><dt className="text-muted-foreground">Capacity</dt><dd>{v.capacity}</dd></div>
                 <div className="flex justify-between"><dt className="text-muted-foreground">Driver</dt><dd>{v.driverName}</dd></div>
                 <div className="flex justify-between"><dt className="text-muted-foreground">Phone</dt><dd>{v.driverPhone}</dd></div>
               </dl>
+              {v.locationPending && <p className="mt-3 text-xs text-muted-foreground">Location not available</p>}
               <h4 className="mt-4 text-xs font-semibold uppercase text-muted-foreground">Passengers</h4>
               <ul className="mt-1 space-y-1 text-sm">{requests.filter((r) => r.vehicleId === v.id).map((r) => <li key={r.id} className="flex justify-between">{name(r.memberId)}<StatusBadge status={r.status} /></li>)}</ul>
+              {!requests.some((r) => r.vehicleId === v.id) && <p className="mt-1 text-sm text-muted-foreground">No passengers assigned</p>}
             </Card>
           ))}
         </TabsContent>

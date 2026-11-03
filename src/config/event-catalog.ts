@@ -6,6 +6,7 @@ import type { EventName } from "@/types";
 const id = z.string().min(1);
 
 export const eventSchemas = {
+  "vehicle.registered": z.object({ vehicle_id: id }),
   "member.created": z.object({ member_id: id, group_ids: z.array(id) }),
   "member.updated": z.object({ member_id: id, fields: z.array(z.string()) }),
   "mobilization.started": z.object({ service_id: id, workflow_id: id, member_count: z.number() }),
@@ -24,6 +25,7 @@ export const eventSchemas = {
 } satisfies Record<EventName, z.ZodTypeAny>;
 
 export const eventDescriptions: Record<EventName, string> = {
+  "vehicle.registered": "A bus was registered in the transport fleet.",
   "member.created": "A new member record was added.",
   "member.updated": "Member details changed.",
   "mobilization.started": "Mobilization began for a service.",
@@ -45,6 +47,7 @@ export const eventNames = Object.keys(eventSchemas) as EventName[];
 
 export function samplePayload(event: EventName): Record<string, unknown> {
   const samples: Record<EventName, Record<string, unknown>> = {
+    "vehicle.registered": { vehicle_id: "veh_demo_01" },
     "member.created": { member_id: "member_demo_001", group_ids: ["cell_demo_01"] },
     "member.updated": { member_id: "member_demo_001", fields: ["phone"] },
     "mobilization.started": { service_id: "service_demo_001", workflow_id: "wf_sunday", member_count: 120 },
