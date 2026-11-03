@@ -1,4 +1,5 @@
 # Mobilizer roadmap
+- [ ] Match daylybread.build.host/event colors and background; improve fonts and appearance
 - [ ] Repair and verify Ask AI navigation and conversation
 - [ ] Audit every page and fix accessibility blockers
 - [ ] Deliver backend, AI, n8n and go-live handoff files
