@@ -1,4 +1,7 @@
 # Mobilizer roadmap
+- [ ] Repair and verify Ask AI navigation and conversation
+- [ ] Audit every page and fix accessibility blockers
+- [ ] Deliver backend, AI, n8n and go-live handoff files
 - [x] Bus registration in Transportation, workflow event, and verification
 - [x] Design system, core types, config, event catalogue, action map
 - [x] Data layer (mock + cloud stubs), transport, dispatcher, adapters
@@ -6,5 +9,5 @@
 - [x] Landing page with hero carousel
 - [x] All 13 modules + AI Command Centre
 - [x] Integration Hub (n8n, webhooks, Voicebip, custom API, logs, developer)
-- [x] Google Maps on Transportation (connector)
+- [x] Google Maps display integration scaffold (live rendering and driver feeds unverified)
 - [x] Docs: n8n contracts, database schema; AGENTS.md; tests

@@ -31,13 +31,13 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b bg-background/85 px-3 backdrop-blur md:px-5">
       <SidebarTrigger />
-      <button onClick={() => setOpen(true)} className="flex h-9 flex-1 items-center gap-2 rounded-lg border bg-card px-3 text-sm text-muted-foreground transition-colors hover:bg-muted md:max-w-sm">
+      <Button variant="outline" aria-label="Search members and pages" onClick={() => setOpen(true)} className="flex min-w-0 flex-1 items-center justify-start gap-2 px-3 text-sm text-muted-foreground md:max-w-sm">
         <Search className="h-4 w-4" /><span className="truncate">Search members, pages…</span>
         <kbd className="ml-auto hidden rounded border bg-muted px-1.5 text-[10px] md:inline">⌘K</kbd>
-      </button>
+      </Button>
       <div className="ml-auto flex items-center gap-1">
         <Select value={tenantId} onValueChange={setTenantId}>
-          <SelectTrigger className="hidden h-9 w-[200px] lg:flex"><Building2 className="h-4 w-4 text-muted-foreground" /><SelectValue /></SelectTrigger>
+          <SelectTrigger aria-label="Choose church" className="hidden h-9 w-[200px] lg:flex"><Building2 className="h-4 w-4 text-muted-foreground" /><SelectValue /></SelectTrigger>
           <SelectContent>{tenants.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
         </Select>
         <DropdownMenu>
@@ -73,7 +73,7 @@ export function Topbar() {
         </Popover>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-9 gap-2 px-2"><UserCircle2 className="h-5 w-5" /><span className="hidden max-w-[140px] truncate text-xs md:inline">{actor.name}</span></Button>
+            <Button variant="ghost" aria-label="Profile and preview role" className="h-9 gap-2 px-2"><UserCircle2 className="h-5 w-5" /><span className="hidden max-w-[140px] truncate text-xs md:inline">{actor.name}</span></Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64">
             <DropdownMenuLabel>Preview as role (demo)</DropdownMenuLabel>
@@ -85,7 +85,7 @@ export function Topbar() {
             <DropdownMenuSeparator />
             <div className="p-2 lg:hidden">
               <Select value={tenantId} onValueChange={setTenantId}>
-                <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
+                <SelectTrigger aria-label="Choose church" className="h-8"><SelectValue /></SelectTrigger>
                 <SelectContent>{tenants.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
               </Select>
             </div>
