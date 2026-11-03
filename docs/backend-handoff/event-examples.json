@@ -1,0 +1,387 @@
+{
+  "source": "mobilizer",
+  "actions": {
+    "registerVehicle": {
+      "id": "registerVehicle",
+      "label": "Bus registration recorded",
+      "event": "vehicle.registered",
+      "workflow": "transport",
+      "defaultEndpointName": "Register bus",
+      "requiresConfirmation": false
+    },
+    "startMobilization": {
+      "id": "startMobilization",
+      "label": "Start mobilization",
+      "event": "mobilization.started",
+      "workflow": "mobilization",
+      "defaultEndpointName": "Start mobilization",
+      "requiresConfirmation": true
+    },
+    "confirmAttendance": {
+      "id": "confirmAttendance",
+      "label": "Receive attendance response",
+      "event": "attendance.confirmed",
+      "workflow": "mobilization",
+      "defaultEndpointName": "Receive attendance response",
+      "requiresConfirmation": false
+    },
+    "declineAttendance": {
+      "id": "declineAttendance",
+      "label": "Record unavailable",
+      "event": "attendance.declined",
+      "workflow": "mobilization",
+      "defaultEndpointName": "Receive attendance response",
+      "requiresConfirmation": false
+    },
+    "requestTransport": {
+      "id": "requestTransport",
+      "label": "New transport request",
+      "event": "transport.requested",
+      "workflow": "transport",
+      "defaultEndpointName": "New transport request",
+      "requiresConfirmation": false
+    },
+    "approveTransport": {
+      "id": "approveTransport",
+      "label": "Approve transport assistance",
+      "event": "transport.approved",
+      "workflow": "transport",
+      "defaultEndpointName": "Approve transport assistance",
+      "requiresConfirmation": true
+    },
+    "recordDeparture": {
+      "id": "recordDeparture",
+      "label": "Record departure",
+      "event": "transport.departed",
+      "workflow": "transport",
+      "defaultEndpointName": "Record departure",
+      "requiresConfirmation": false
+    },
+    "recordArrival": {
+      "id": "recordArrival",
+      "label": "Record arrival",
+      "event": "transport.arrived",
+      "workflow": "transport",
+      "defaultEndpointName": "Record arrival",
+      "requiresConfirmation": false
+    },
+    "newFirstTimer": {
+      "id": "newFirstTimer",
+      "label": "New first timer",
+      "event": "followup.created",
+      "workflow": "followup",
+      "defaultEndpointName": "New first timer",
+      "requiresConfirmation": false
+    },
+    "completeFollowUp": {
+      "id": "completeFollowUp",
+      "label": "Record call outcome",
+      "event": "followup.completed",
+      "workflow": "followup",
+      "defaultEndpointName": "Record call outcome",
+      "requiresConfirmation": false
+    },
+    "submitReport": {
+      "id": "submitReport",
+      "label": "Receive report submission",
+      "event": "report.submitted",
+      "workflow": "reporting",
+      "defaultEndpointName": "Receive report submission",
+      "requiresConfirmation": false
+    },
+    "reportOverdue": {
+      "id": "reportOverdue",
+      "label": "Send report reminder",
+      "event": "report.overdue",
+      "workflow": "reporting",
+      "defaultEndpointName": "Send report reminder",
+      "requiresConfirmation": false
+    },
+    "createEscalation": {
+      "id": "createEscalation",
+      "label": "Create escalation",
+      "event": "escalation.created",
+      "workflow": "leadership",
+      "defaultEndpointName": "Create escalation",
+      "requiresConfirmation": false
+    },
+    "resolveEscalation": {
+      "id": "resolveEscalation",
+      "label": "Resolve issue",
+      "event": "escalation.resolved",
+      "workflow": "leadership",
+      "defaultEndpointName": "Resolve issue",
+      "requiresConfirmation": true
+    },
+    "createMember": {
+      "id": "createMember",
+      "label": "Member created",
+      "event": "member.created",
+      "workflow": "general",
+      "defaultEndpointName": "Member events",
+      "requiresConfirmation": false
+    },
+    "updateMember": {
+      "id": "updateMember",
+      "label": "Member updated",
+      "event": "member.updated",
+      "workflow": "general",
+      "defaultEndpointName": "Member events",
+      "requiresConfirmation": false
+    }
+  },
+  "events": {
+    "vehicle.registered": {
+      "event": "vehicle.registered",
+      "event_id": "evt_example_vehicle.registered",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "vehicle_id": "veh_demo_01"
+      }
+    },
+    "member.created": {
+      "event": "member.created",
+      "event_id": "evt_example_member.created",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "member_id": "member_demo_001",
+        "group_ids": [
+          "cell_demo_01"
+        ]
+      }
+    },
+    "member.updated": {
+      "event": "member.updated",
+      "event_id": "evt_example_member.updated",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "member_id": "member_demo_001",
+        "fields": [
+          "phone"
+        ]
+      }
+    },
+    "mobilization.started": {
+      "event": "mobilization.started",
+      "event_id": "evt_example_mobilization.started",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "service_id": "service_demo_001",
+        "workflow_id": "wf_sunday",
+        "member_count": 120
+      }
+    },
+    "attendance.confirmed": {
+      "event": "attendance.confirmed",
+      "event_id": "evt_example_attendance.confirmed",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "member_id": "member_demo_001",
+        "service_id": "service_demo_001",
+        "attendance_status": "confirmed"
+      }
+    },
+    "attendance.declined": {
+      "event": "attendance.declined",
+      "event_id": "evt_example_attendance.declined",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "member_id": "member_demo_002",
+        "service_id": "service_demo_001",
+        "attendance_status": "unavailable"
+      }
+    },
+    "transport.requested": {
+      "event": "transport.requested",
+      "event_id": "evt_example_transport.requested",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "request_id": "tr_demo_001",
+        "member_id": "member_demo_001",
+        "service_id": "service_demo_001",
+        "kind": "pickup"
+      }
+    },
+    "transport.approved": {
+      "event": "transport.approved",
+      "event_id": "evt_example_transport.approved",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "request_id": "tr_demo_001",
+        "approved_by": "Church Administrator"
+      }
+    },
+    "transport.departed": {
+      "event": "transport.departed",
+      "event_id": "evt_example_transport.departed",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "request_id": "tr_demo_001",
+        "vehicle_id": "veh_demo_01"
+      }
+    },
+    "transport.arrived": {
+      "event": "transport.arrived",
+      "event_id": "evt_example_transport.arrived",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "request_id": "tr_demo_001",
+        "vehicle_id": "veh_demo_01"
+      }
+    },
+    "followup.created": {
+      "event": "followup.created",
+      "event_id": "evt_example_followup.created",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "followup_id": "fu_demo_001",
+        "kind": "first_timer",
+        "consent": true
+      }
+    },
+    "followup.completed": {
+      "event": "followup.completed",
+      "event_id": "evt_example_followup.completed",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "followup_id": "fu_demo_001",
+        "outcome": "joined_cell"
+      }
+    },
+    "report.submitted": {
+      "event": "report.submitted",
+      "event_id": "evt_example_report.submitted",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "report_id": "rep_demo_001",
+        "template_id": "tpl_cell",
+        "unit_id": "cell_demo_01"
+      }
+    },
+    "report.overdue": {
+      "event": "report.overdue",
+      "event_id": "evt_example_report.overdue",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "report_id": "rep_demo_002",
+        "unit_id": "cell_demo_02",
+        "due_at": "2026-11-01T18:00:00Z"
+      }
+    },
+    "escalation.created": {
+      "event": "escalation.created",
+      "event_id": "evt_example_escalation.created",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "escalation_id": "esc_demo_001",
+        "category": "transport",
+        "priority": "high"
+      }
+    },
+    "escalation.resolved": {
+      "event": "escalation.resolved",
+      "event_id": "evt_example_escalation.resolved",
+      "timestamp": "2026-11-03T20:25:00.000Z",
+      "tenant_id": "tenant_example",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Example administrator"
+      },
+      "data": {
+        "escalation_id": "esc_demo_001",
+        "resolved_by": "Pastor"
+      }
+    }
+  }
+}
