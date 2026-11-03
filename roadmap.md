@@ -1,8 +1,8 @@
 # Mobilizer roadmap
-- [ ] Match daylybread.build.host/event colors and background; improve fonts and appearance
-- [ ] Repair and verify Ask AI navigation and conversation
-- [ ] Audit every page and fix accessibility blockers
-- [ ] Deliver backend, AI, n8n and go-live handoff files
+- [x] Match daylybread.build.host/event colors and background; improve fonts and appearance
+- [x] Repair and verify Ask AI navigation and conversation
+- [x] Audit every page and fix accessibility blockers
+- [x] Deliver backend, AI, n8n and go-live handoff files
 - [x] Bus registration in Transportation, workflow event, and verification
 - [x] Design system, core types, config, event catalogue, action map
 - [x] Data layer (mock + cloud stubs), transport, dispatcher, adapters
