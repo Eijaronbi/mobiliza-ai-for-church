@@ -4,7 +4,7 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { PageHeader, Section, StatCard, StatusBadge } from "@/components/app/kit";
 import { useListData, useRepoMutations } from "@/hooks/use-data";
 import { fmtDateTime, pct } from "@/lib/format";
@@ -60,7 +60,7 @@ function AttendancePage() {
             ))}
           </div>
         </Section>
-        <Section title="Attendance analytics" className="lg:col-span-3" action={<Tabs value={period} onValueChange={setPeriod}><TabsList className="h-8"><TabsTrigger value="weekly" className="text-xs">Weekly</TabsTrigger><TabsTrigger value="monthly" className="text-xs">Monthly</TabsTrigger></TabsList></Tabs>}>
+        <Section title="Attendance analytics" className="lg:col-span-3" action={<div role="group" aria-label="Analytics period" className="flex gap-1"><Button size="sm" variant={period === "weekly" ? "default" : "ghost"} aria-pressed={period === "weekly"} onClick={() => setPeriod("weekly")}>Weekly</Button><Button size="sm" variant={period === "monthly" ? "default" : "ghost"} aria-pressed={period === "monthly"} onClick={() => setPeriod("monthly")}>Monthly</Button></div>}>
           <div className="h-80">
             <ResponsiveContainer>
               <BarChart data={period === "weekly" ? weekly : monthly}>

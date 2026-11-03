@@ -79,7 +79,7 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-8 z-10 mx-auto flex max-w-7xl items-center justify-between px-5">
+        <div className="absolute inset-x-0 bottom-6 z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-1 px-5">
           <div className="flex">
             {slides.map((_, k) => (
               <Button key={k} size="icon" variant="ghost" aria-label={`Slide ${k + 1}`} aria-pressed={k === i} onClick={() => setI(k)}><span className={cn("h-1.5 rounded-full transition-all", k === i ? "w-8 bg-hero-foreground" : "w-3 bg-hero-foreground/40")} /></Button>
@@ -111,7 +111,7 @@ function Landing() {
         <div className="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-2 lg:items-center">
           <div>
             <h2 className="text-3xl font-bold">Plug-and-play by design.</h2>
-            <p className="mt-3 text-primary-foreground/70">Connect n8n workflows, Voicebip voice agents, maps, messaging and your own APIs through configuration. No rebuilding the app.</p>
+            <p className="mt-3 text-primary-foreground">Connect n8n workflows, Voicebip voice agents, maps, messaging and your own APIs through configuration. No rebuilding the app.</p>
             <Button asChild className="mt-6 bg-gradient-brand text-brand-foreground"><Link to="/app/integrations">Open the Integration Hub</Link></Button>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
