@@ -148,7 +148,7 @@ function CommandCentre() {
           <div className="h-52"><ResponsiveContainer><BarChart data={deptPerf} layout="vertical"><XAxis type="number" domain={[0, 100]} hide /><YAxis type="category" dataKey="name" width={80} fontSize={11} stroke="var(--muted-foreground)" /><Tooltip {...tip} /><Bar dataKey="rate" fill="var(--chart-2)" radius={[0, 6, 6, 0]} /></BarChart></ResponsiveContainer></div>
         </Section>
         <Section title="Cell reporting completion">
-          <div className="h-40" aria-hidden="true"><ResponsiveContainer><PieChart><Pie data={cellRep} dataKey="value" innerRadius={40} outerRadius={60} paddingAngle={3} isAnimationActive={false}>{["var(--chart-3)", "var(--chart-4)", "var(--chart-5)"].map((f) => <Cell key={f} fill={f} />)}</Pie><Tooltip {...tip} /></PieChart></ResponsiveContainer></div>
+          <div className="h-40" aria-hidden="true" inert><ResponsiveContainer><PieChart accessibilityLayer={false}><Pie data={cellRep} dataKey="value" innerRadius={40} outerRadius={60} paddingAngle={3} isAnimationActive={false}>{["var(--chart-3)", "var(--chart-4)", "var(--chart-5)"].map((f) => <Cell key={f} fill={f} />)}</Pie><Tooltip {...tip} /></PieChart></ResponsiveContainer></div>
           <dl className="flex flex-wrap justify-center gap-3 text-xs">{cellRep.map((item) => <div key={item.name}><dt className="text-muted-foreground">{item.name}</dt><dd className="font-semibold">{item.value}</dd></div>)}</dl>
         </Section>
         <Section title="Follow-up completion rate">
