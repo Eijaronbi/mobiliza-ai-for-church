@@ -24,8 +24,9 @@ function AppLayout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="min-w-0">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-card focus:p-3">Skip to content</a>
         <Topbar />
-        <main key={pathname} className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-24 pt-6 md:px-6 md:pb-10">
+        <main id="main-content" key={pathname} className="mx-auto w-full max-w-[1400px] flex-1 px-4 pb-24 pt-6 md:px-6 md:pb-10">
           <Outlet />
         </main>
         <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-background/95 backdrop-blur md:hidden">

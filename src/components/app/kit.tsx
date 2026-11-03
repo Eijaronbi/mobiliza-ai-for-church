@@ -55,7 +55,7 @@ export function StatCard({ label, value, icon: Icon, tone = "brand", delta, hint
       </div>
       <div className="mt-3 font-display text-2xl font-bold tabular-nums text-foreground">{v.toLocaleString()}</div>
       <div className="text-xs font-medium text-muted-foreground">{label}</div>
-      {hint && <div className="mt-1 text-[11px] text-muted-foreground/80">{hint}</div>}
+      {hint && <div className="mt-1 text-[11px] text-muted-foreground">{hint}</div>}
     </Card>
   );
 }

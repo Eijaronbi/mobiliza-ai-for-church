@@ -27,7 +27,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import type { AuthType, CustomApiConfig, EventName, HttpMethod, IntegrationConfig, IntegrationKind, WebhookEndpoint } from "@/types";
 
 export const Route = createFileRoute("/app/integrations")({
-  head: () => ({ meta: [{ title: "Integration Hub — Mobilizer" }, { name: "description", content: "Connect n8n, Voicebip, maps, messaging and custom APIs by configuration." }] }),
+  head: () => ({ meta: [{ title: "Integration Hub — Mobilizer" }, { name: "description", content: "Connect n8n, Voicebip, maps, messaging and custom APIs by configuration." }, { property: "og:title", content: "Integration Hub — Mobilizer" }, { property: "og:description", content: "Connect n8n, Voicebip, maps, messaging and custom APIs by configuration." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: IntegrationHub,
 });
 
@@ -41,7 +41,7 @@ function SecretRef({ value, onChange }: { value?: string; onChange: (v: string) 
   return (
     <div className="space-y-1">
       <Label>Secret reference</Label>
-      <Input value={value ?? ""} onChange={(e) => onChange(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, ""))} placeholder="e.g. N8N_WEBHOOK_SECRET" className="font-mono text-xs" />
+      <Input aria-label="Secret reference" value={value ?? ""} onChange={(e) => onChange(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, ""))} placeholder="e.g. N8N_WEBHOOK_SECRET" className="font-mono text-xs" />
       <p className="text-[11px] text-muted-foreground">Only the name is stored here. The real value lives in server-side secrets — never in the browser.</p>
     </div>
   );
@@ -116,10 +116,10 @@ function IntegrationHub() {
         <TabsContent value="n8n" className="space-y-4">
           {n8n && <Section title="n8n connection" action={<StatusBadge status={n8n.status} />}>
             <div className="grid gap-3 md:grid-cols-2">
-              <div className="space-y-1"><Label>Instance URL</Label><Input value={n8n.baseUrl} onChange={(e) => im.update.mutate({ id: n8n.id, patch: { baseUrl: e.target.value } })} /></div>
-              <div className="space-y-1"><Label>Authentication</Label><Select value={n8n.auth.type} onValueChange={(v) => im.update.mutate({ id: n8n.id, patch: { auth: { ...n8n.auth, type: v as AuthType } } })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-1"><Label>Instance URL</Label><Input aria-label="Instance URL" value={n8n.baseUrl} onChange={(e) => im.update.mutate({ id: n8n.id, patch: { baseUrl: e.target.value } })} /></div>
+              <div className="space-y-1"><Label>Authentication</Label><Select value={n8n.auth.type} onValueChange={(v) => im.update.mutate({ id: n8n.id, patch: { auth: { ...n8n.auth, type: v as AuthType } } })}><SelectTrigger aria-label="Authentication"><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
               <SecretRef value={n8n.auth.secretRef} onChange={(v) => im.update.mutate({ id: n8n.id, patch: { auth: { ...n8n.auth, secretRef: v } } })} />
-              <div className="space-y-1"><Label>Optional n8n API key reference</Label><Input className="font-mono text-xs" value={String(n8n.settings.apiKeyRef ?? "")} placeholder="N8N_API_KEY" onChange={(e) => im.update.mutate({ id: n8n.id, patch: { settings: { ...n8n.settings, apiKeyRef: e.target.value.toUpperCase() } } })} /></div>
+              <div className="space-y-1"><Label>Optional n8n API key reference</Label><Input aria-label="Optional n8n API key reference" className="font-mono text-xs" value={String(n8n.settings.apiKeyRef ?? "")} placeholder="N8N_API_KEY" onChange={(e) => im.update.mutate({ id: n8n.id, patch: { settings: { ...n8n.settings, apiKeyRef: e.target.value.toUpperCase() } } })} /></div>
             </div>
             <Button className="mt-4" onClick={() => test(n8n)}><PlugZap className="mr-1 h-4 w-4" />Test connection</Button>
           </Section>}
@@ -131,7 +131,7 @@ function IntegrationHub() {
                     <Badge variant="secondary" className="font-mono text-[10px]">{e.method}</Badge>
                     <div className="min-w-[200px] flex-1"><div className="font-medium">{e.name}</div><div className="truncate font-mono text-[11px] text-muted-foreground">{e.url}</div></div>
                     {e.events.map((ev) => <Badge key={ev} variant="outline" className="font-mono text-[10px]">{ev}</Badge>)}
-                    <Switch checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })} aria-label="Active" />
+                    <Switch aria-label={`Enable ${e.name}`} checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })}  />
                     <Button size="sm" variant="ghost" onClick={() => testEp(e)}>Test</Button>
                     <Button size="sm" variant="outline" onClick={() => setEp(e)}>Edit</Button>
                   </div>
@@ -144,11 +144,11 @@ function IntegrationHub() {
         <TabsContent value="webhooks" className="space-y-4">
           <Section title="Incoming webhook endpoints" action={<Badge variant="outline">Pending backend</Badge>}>
             <p className="mb-3 text-sm text-muted-foreground">External systems post results here. Each request must carry an HMAC-SHA256 signature of the raw body; payloads are validated against the event catalogue and checked for tenant.</p>
-            {endpoints.filter((e) => e.direction === "incoming").map((e) => <div key={e.id} className="flex flex-wrap items-center gap-2 border-t py-2.5 text-sm"><span className="flex-1 font-medium">{e.name}</span><code className="text-xs">{e.method} {e.url}</code><span className="font-mono text-[11px] text-muted-foreground">{e.auth.headerName}</span><Switch checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })} /></div>)}
+            {endpoints.filter((e) => e.direction === "incoming").map((e) => <div key={e.id} className="flex flex-wrap items-center gap-2 border-t py-2.5 text-sm"><span className="flex-1 font-medium">{e.name}</span><code className="text-xs">{e.method} {e.url}</code><span className="font-mono text-[11px] text-muted-foreground">{e.auth.headerName}</span><Switch aria-label={`Enable ${e.name}`} checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })} /></div>)}
           </Section>
           <Section title="Outgoing destinations">
             <div className="overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Name</TableHead><TableHead>Events</TableHead><TableHead>Auth</TableHead><TableHead>Active</TableHead><TableHead /></TableRow></TableHeader><TableBody>
-              {endpoints.filter((e) => e.direction === "outgoing" && e.events.length).map((e) => <TableRow key={e.id}><TableCell className="font-medium">{e.name}</TableCell><TableCell className="font-mono text-[11px]">{e.events.join(", ")}</TableCell><TableCell className="text-xs">{e.auth.type}</TableCell><TableCell><Switch checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })} /></TableCell><TableCell><Button size="sm" variant="ghost" onClick={() => setEp(e)}>Edit</Button></TableCell></TableRow>)}
+              {endpoints.filter((e) => e.direction === "outgoing" && e.events.length).map((e) => <TableRow key={e.id}><TableCell className="font-medium">{e.name}</TableCell><TableCell className="font-mono text-[11px]">{e.events.join(", ")}</TableCell><TableCell className="text-xs">{e.auth.type}</TableCell><TableCell><Switch aria-label={`Enable ${e.name}`} checked={e.active} onCheckedChange={(v) => epm.update.mutate({ id: e.id, patch: { active: v } })} /></TableCell><TableCell><Button size="sm" variant="ghost" onClick={() => setEp(e)}>Edit</Button></TableCell></TableRow>)}
             </TableBody></Table></div>
           </Section>
           <Section title="Event catalogue">
@@ -160,11 +160,11 @@ function IntegrationHub() {
           {vb && <Section title="Voicebip configuration" action={<StatusBadge status={vb.status} />}>
             <div className="grid gap-3 md:grid-cols-2">
               <SecretRef value={vb.auth.secretRef} onChange={(v) => im.update.mutate({ id: vb.id, patch: { auth: { ...vb.auth, secretRef: v } } })} />
-              <div className="space-y-1"><Label>API base URL</Label><Input value={vb.baseUrl} placeholder="https://api.voicebip.example" onChange={(e) => im.update.mutate({ id: vb.id, patch: { baseUrl: e.target.value } })} /></div>
+              <div className="space-y-1"><Label>API base URL</Label><Input aria-label="API base URL" value={vb.baseUrl} placeholder="https://api.voicebip.example" onChange={(e) => im.update.mutate({ id: vb.id, patch: { baseUrl: e.target.value } })} /></div>
               {([["environment", "API environment"], ["phoneNumber", "Phone number"], ["defaultAgent", "Default voice agent"], ["language", "Language preference"], ["maxCallSeconds", "Max call length (s)"], ["retryAttempts", "Retry attempts"], ["smsSender", "SMS sender ID"], ["whatsappNumber", "WhatsApp messaging number"]] as const).map(([k, l]) => (
-                <div key={k} className="space-y-1"><Label>{l}</Label><Input value={String(vb.settings[k] ?? "")} onChange={(e) => im.update.mutate({ id: vb.id, patch: { settings: { ...vb.settings, [k]: e.target.value } } })} /></div>
+                <div key={k} className="space-y-1"><Label>{l}</Label><Input aria-label={l} value={String(vb.settings[k] ?? "")} onChange={(e) => im.update.mutate({ id: vb.id, patch: { settings: { ...vb.settings, [k]: e.target.value } } })} /></div>
               ))}
-              <div className="space-y-1 md:col-span-2"><Label>Callback URL (give this to Voicebip)</Label><Input readOnly value="https://<your-domain>/api/public/webhooks/voicebip" className="font-mono text-xs" /></div>
+              <div className="space-y-1 md:col-span-2"><Label>Callback URL (give this to Voicebip)</Label><Input aria-label="Callback URL (give this to Voicebip)" readOnly value="https://<your-domain>/api/public/webhooks/voicebip" className="font-mono text-xs" /></div>
             </div>
             <p className="mt-3 rounded-lg bg-warning/15 p-3 text-xs text-warning-foreground">WhatsApp messaging and WhatsApp calling are separate capabilities. Enabling messaging does not enable calls.</p>
             <h3 className="mb-2 mt-5 text-sm font-semibold">Event mapping</h3>
@@ -177,15 +177,15 @@ function IntegrationHub() {
 
         <TabsContent value="custom" className="space-y-3">
           <div className="flex justify-end"><Button onClick={() => setApi({ id: `${tenantId}_api${Date.now()}`, tenantId, name: "", baseUrl: "https://", path: "/", method: "GET", auth: { type: "bearer" }, headers: {}, body: "", responseMapping: {}, timeoutMs: 8000, enabled: false })}><Plus className="mr-1 h-4 w-4" />New API</Button></div>
-          {apis.map((a) => <Card key={a.id} className="flex flex-wrap items-center gap-3 p-4 shadow-card"><Code2 className="h-5 w-5 text-brand" /><div className="flex-1"><div className="font-semibold">{a.name}</div><code className="text-xs text-muted-foreground">{a.method} {a.baseUrl}{a.path}</code></div><StatusBadge status={a.enabled ? "active" : "disabled"} /><Button size="sm" variant="outline" onClick={() => { setApi(a); setApiResult(""); }}>Configure & test</Button></Card>)}
+          {apis.map((a) => <Button variant="outline" key={a.id} className="h-auto w-full whitespace-normal block text-left flex flex-wrap items-center gap-3 p-4 shadow-card"><Code2 className="h-auto w-full whitespace-normal block text-left h-5 w-5 text-brand" /><div className="h-auto w-full whitespace-normal block text-left flex-1"><div className="h-auto w-full whitespace-normal block text-left font-semibold">{a.name}</div><code className="h-auto w-full whitespace-normal block text-left text-xs text-muted-foreground">{a.method} {a.baseUrl}{a.path}</code></div><StatusBadge status={a.enabled ? "active" : "disabled"} /><Button size="sm" variant="outline" onClick={() => { setApi(a); setApiResult(""); }}>Configure & test</Button></Button>)}
         </TabsContent>
 
         <TabsContent value="logs">
           <Card className="p-4 shadow-card">
             <div className="mb-3 flex flex-wrap gap-2">
-              <Select value={logFilter.integration} onValueChange={(v) => setLogFilter({ ...logFilter, integration: v })}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All integrations</SelectItem>{[...new Set(logs.map((l) => l.integrationName))].map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent></Select>
-              <Select value={logFilter.event} onValueChange={(v) => setLogFilter({ ...logFilter, event: v })}><SelectTrigger className="w-52"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All events</SelectItem>{[...eventNames, "connection.test"].map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent></Select>
-              <Select value={logFilter.status} onValueChange={(v) => setLogFilter({ ...logFilter, status: v })}><SelectTrigger className="w-44"><SelectValue /></SelectTrigger><SelectContent>{["all", "delivered", "pending_backend", "failed", "retrying"].map((n) => <SelectItem key={n} value={n}>{n === "all" ? "All statuses" : n.replace("_", " ")}</SelectItem>)}</SelectContent></Select>
+              <Select value={logFilter.integration} onValueChange={(v) => setLogFilter({ ...logFilter, integration: v })}><SelectTrigger aria-label="Filter log integration" className="w-44"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All integrations</SelectItem>{[...new Set(logs.map((l) => l.integrationName))].map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent></Select>
+              <Select value={logFilter.event} onValueChange={(v) => setLogFilter({ ...logFilter, event: v })}><SelectTrigger aria-label="Filter log event" className="w-52"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">All events</SelectItem>{[...eventNames, "connection.test"].map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent></Select>
+              <Select value={logFilter.status} onValueChange={(v) => setLogFilter({ ...logFilter, status: v })}><SelectTrigger aria-label="Filter log status" className="w-44"><SelectValue /></SelectTrigger><SelectContent>{["all", "delivered", "pending_backend", "failed", "retrying"].map((n) => <SelectItem key={n} value={n}>{n === "all" ? "All statuses" : n.replace("_", " ")}</SelectItem>)}</SelectContent></Select>
             </div>
             <div className="overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Time</TableHead><TableHead>Integration</TableHead><TableHead>Event</TableHead><TableHead className="hidden lg:table-cell">Endpoint</TableHead><TableHead>Status</TableHead><TableHead>Resp.</TableHead><TableHead>ms</TableHead><TableHead>Retries</TableHead><TableHead /></TableRow></TableHeader><TableBody>
               {filtered.slice(0, 60).map((l) => <TableRow key={l.id}><TableCell className="whitespace-nowrap text-xs">{fmtDateTime(l.at)}</TableCell><TableCell className="text-xs">{l.integrationName}</TableCell><TableCell className="font-mono text-[11px]">{l.event}</TableCell><TableCell className="hidden max-w-[220px] truncate font-mono text-[11px] lg:table-cell">{l.endpoint}</TableCell><TableCell><StatusBadge status={l.requestStatus} /></TableCell><TableCell className="text-xs">{l.responseStatus ?? "—"}</TableCell><TableCell className="text-xs">{l.durationMs}</TableCell><TableCell className="text-xs">{l.retries}</TableCell><TableCell>{l.requestStatus !== "delivered" && l.event !== "connection.test" && <Button size="icon" variant="ghost" aria-label="Retry" onClick={async () => { await retryDelivery(l); qc.invalidateQueries({ queryKey: ["logs"] }); toast("Retry attempted (simulated)"); }}><RotateCw className="h-3.5 w-3.5" /></Button>}</TableCell></TableRow>)}
@@ -228,8 +228,8 @@ Expected n8n response: 2xx with { "accepted": true, "execution_id": "…" }`}</p
           {cfg && <div className="space-y-3">
             {cfg.kind === "maps" && mapsConnected && <p className="rounded-lg bg-success/12 p-3 text-sm text-success">Google Maps is connected through Lovable. Nothing else is needed for map display.</p>}
             {cfg.kind === "database" && <p className="rounded-lg bg-muted p-3 text-sm">Switch the data source from demo to Lovable Cloud once the database is enabled. The app's screens don't change.</p>}
-            <div className="space-y-1"><Label>Base URL</Label><Input value={cfg.baseUrl} onChange={(e) => setCfg({ ...cfg, baseUrl: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Authentication</Label><Select value={cfg.auth.type} onValueChange={(v) => setCfg({ ...cfg, auth: { ...cfg.auth, type: v as AuthType } })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1"><Label>Base URL</Label><Input aria-label="Base URL" value={cfg.baseUrl} onChange={(e) => setCfg({ ...cfg, baseUrl: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Authentication</Label><Select value={cfg.auth.type} onValueChange={(v) => setCfg({ ...cfg, auth: { ...cfg.auth, type: v as AuthType } })}><SelectTrigger aria-label="Authentication"><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
             <SecretRef value={cfg.auth.secretRef} onChange={(v) => setCfg({ ...cfg, auth: { ...cfg.auth, secretRef: v } })} />
             <label className="flex items-center gap-2 text-sm"><Switch checked={cfg.enabled} onCheckedChange={(v) => setCfg({ ...cfg, enabled: v, status: v ? (cfg.status === "disabled" ? "config_required" : cfg.status) : "disabled" })} />Enabled</label>
           </div>}
@@ -241,14 +241,14 @@ Expected n8n response: 2xx with { "accepted": true, "execution_id": "…" }`}</p
         <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
           <DialogHeader><DialogTitle>Webhook endpoint</DialogTitle></DialogHeader>
           {ep && <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1"><Label>Name</Label><Input value={ep.name} onChange={(e) => setEp({ ...ep, name: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Method</Label><Select value={ep.method} onValueChange={(v) => setEp({ ...ep, method: v as HttpMethod })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{methods.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Description</Label><Input value={ep.description} onChange={(e) => setEp({ ...ep, description: e.target.value })} /></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Endpoint URL</Label><Input className="font-mono text-xs" value={ep.url} onChange={(e) => setEp({ ...ep, url: e.target.value.trim() })} /></div>
-            <div className="space-y-1"><Label>Auth type</Label><Select value={ep.auth.type} onValueChange={(v) => setEp({ ...ep, auth: { ...ep.auth, type: v as AuthType } })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1"><Label>Name</Label><Input aria-label="Name" value={ep.name} onChange={(e) => setEp({ ...ep, name: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Method</Label><Select value={ep.method} onValueChange={(v) => setEp({ ...ep, method: v as HttpMethod })}><SelectTrigger aria-label="Method"><SelectValue /></SelectTrigger><SelectContent>{methods.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Description</Label><Input aria-label="Description" value={ep.description} onChange={(e) => setEp({ ...ep, description: e.target.value })} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Endpoint URL</Label><Input aria-label="Endpoint URL" className="font-mono text-xs" value={ep.url} onChange={(e) => setEp({ ...ep, url: e.target.value.trim() })} /></div>
+            <div className="space-y-1"><Label>Auth type</Label><Select value={ep.auth.type} onValueChange={(v) => setEp({ ...ep, auth: { ...ep.auth, type: v as AuthType } })}><SelectTrigger aria-label="Auth type"><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
             <SecretRef value={ep.auth.secretRef} onChange={(v) => setEp({ ...ep, auth: { ...ep.auth, secretRef: v } })} />
-            <div className="space-y-1 sm:col-span-2"><Label>Headers (JSON)</Label><Textarea className="font-mono text-xs" defaultValue={JSON.stringify(ep.headers, null, 2)} onBlur={(e) => { try { setEp({ ...ep, headers: JSON.parse(e.target.value) }); } catch { toast.error("Headers must be valid JSON"); } }} /></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Payload template</Label><Textarea className="font-mono text-xs" value={ep.payloadTemplate} onChange={(e) => setEp({ ...ep, payloadTemplate: e.target.value })} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Headers (JSON)</Label><Textarea aria-label="Headers (JSON)" className="font-mono text-xs" defaultValue={JSON.stringify(ep.headers, null, 2)} onBlur={(e) => { try { setEp({ ...ep, headers: JSON.parse(e.target.value) }); } catch { toast.error("Headers must be valid JSON"); } }} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Payload template</Label><Textarea aria-label="Payload template" className="font-mono text-xs" value={ep.payloadTemplate} onChange={(e) => setEp({ ...ep, payloadTemplate: e.target.value })} /></div>
             <div className="sm:col-span-2"><Label>Events</Label><div className="mt-2 grid grid-cols-2 gap-1">{eventNames.map((ev) => <label key={ev} className="flex items-center gap-1.5 font-mono text-[11px]"><input type="checkbox" checked={ep.events.includes(ev)} onChange={(e) => setEp({ ...ep, events: e.target.checked ? [...ep.events, ev] : ep.events.filter((x) => x !== ev) as EventName[] })} />{ev}</label>)}</div></div>
             <label className="flex items-center gap-2 text-sm"><Switch checked={ep.active} onCheckedChange={(v) => setEp({ ...ep, active: v })} />Active</label>
           </div>}
@@ -260,16 +260,16 @@ Expected n8n response: 2xx with { "accepted": true, "execution_id": "…" }`}</p
         <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
           <DialogHeader><DialogTitle>Custom API connector</DialogTitle></DialogHeader>
           {api && <div className="grid gap-3 sm:grid-cols-2">
-            <div className="space-y-1 sm:col-span-2"><Label>Integration name</Label><Input value={api.name} onChange={(e) => setApi({ ...api, name: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Base URL</Label><Input className="font-mono text-xs" value={api.baseUrl} onChange={(e) => setApi({ ...api, baseUrl: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Endpoint path</Label><Input className="font-mono text-xs" value={api.path} onChange={(e) => setApi({ ...api, path: e.target.value })} /></div>
-            <div className="space-y-1"><Label>Method</Label><Select value={api.method} onValueChange={(v) => setApi({ ...api, method: v as HttpMethod })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{methods.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
-            <div className="space-y-1"><Label>Timeout (ms)</Label><Input type="number" value={api.timeoutMs} onChange={(e) => setApi({ ...api, timeoutMs: Math.max(500, Math.min(60000, Number(e.target.value))) })} /></div>
-            <div className="space-y-1"><Label>Authentication</Label><Select value={api.auth.type} onValueChange={(v) => setApi({ ...api, auth: { ...api.auth, type: v as AuthType } })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Integration name</Label><Input aria-label="Integration name" value={api.name} onChange={(e) => setApi({ ...api, name: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Base URL</Label><Input aria-label="Base URL" className="font-mono text-xs" value={api.baseUrl} onChange={(e) => setApi({ ...api, baseUrl: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Endpoint path</Label><Input aria-label="Endpoint path" className="font-mono text-xs" value={api.path} onChange={(e) => setApi({ ...api, path: e.target.value })} /></div>
+            <div className="space-y-1"><Label>Method</Label><Select value={api.method} onValueChange={(v) => setApi({ ...api, method: v as HttpMethod })}><SelectTrigger aria-label="Method"><SelectValue /></SelectTrigger><SelectContent>{methods.map((m) => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
+            <div className="space-y-1"><Label>Timeout (ms)</Label><Input aria-label="Timeout (ms)" type="number" value={api.timeoutMs} onChange={(e) => setApi({ ...api, timeoutMs: Math.max(500, Math.min(60000, Number(e.target.value))) })} /></div>
+            <div className="space-y-1"><Label>Authentication</Label><Select value={api.auth.type} onValueChange={(v) => setApi({ ...api, auth: { ...api.auth, type: v as AuthType } })}><SelectTrigger aria-label="Authentication"><SelectValue /></SelectTrigger><SelectContent>{authTypes.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent></Select></div>
             <SecretRef value={api.auth.secretRef} onChange={(v) => setApi({ ...api, auth: { ...api.auth, secretRef: v } })} />
-            <div className="space-y-1 sm:col-span-2"><Label>Headers (JSON)</Label><Textarea className="font-mono text-xs" defaultValue={JSON.stringify(api.headers)} onBlur={(e) => { try { setApi({ ...api, headers: JSON.parse(e.target.value || "{}") }); } catch { toast.error("Headers must be valid JSON"); } }} /></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Request body</Label><Textarea className="font-mono text-xs" value={api.body} onChange={(e) => setApi({ ...api, body: e.target.value })} /></div>
-            <div className="space-y-1 sm:col-span-2"><Label>Response mapping (JSON: field → path)</Label><Textarea className="font-mono text-xs" defaultValue={JSON.stringify(api.responseMapping)} onBlur={(e) => { try { setApi({ ...api, responseMapping: JSON.parse(e.target.value || "{}") }); } catch { toast.error("Mapping must be valid JSON"); } }} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Headers (JSON)</Label><Textarea aria-label="Headers (JSON)" className="font-mono text-xs" defaultValue={JSON.stringify(api.headers)} onBlur={(e) => { try { setApi({ ...api, headers: JSON.parse(e.target.value || "{}") }); } catch { toast.error("Headers must be valid JSON"); } }} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Request body</Label><Textarea aria-label="Request body" className="font-mono text-xs" value={api.body} onChange={(e) => setApi({ ...api, body: e.target.value })} /></div>
+            <div className="space-y-1 sm:col-span-2"><Label>Response mapping (JSON: field → path)</Label><Textarea aria-label="Response mapping (JSON: field → path)" className="font-mono text-xs" defaultValue={JSON.stringify(api.responseMapping)} onBlur={(e) => { try { setApi({ ...api, responseMapping: JSON.parse(e.target.value || "{}") }); } catch { toast.error("Mapping must be valid JSON"); } }} /></div>
             <label className="flex items-center gap-2 text-sm"><Switch checked={api.enabled} onCheckedChange={(v) => setApi({ ...api, enabled: v })} />Enabled</label>
             {apiResult && <pre className="overflow-x-auto rounded bg-muted p-2 text-[11px] sm:col-span-2">{apiResult}</pre>}
           </div>}

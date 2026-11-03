@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Church, Megaphone, Bus, HeartHandshake, FileBarChart, ShieldAlert, Bot, Plug, Workflow, Phone, MapPin, Database } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Church, Pause, Play, Megaphone, Bus, HeartHandshake, FileBarChart, ShieldAlert, Bot, Plug, Workflow, Phone, MapPin, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import worship from "@/assets/hero-worship.jpg";
 import welcome from "@/assets/hero-welcome.jpg";
@@ -44,14 +44,14 @@ function Landing() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
-    if (paused) return;
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const t = setInterval(() => setI((x) => (x + 1) % slides.length), 6500);
     return () => clearInterval(t);
   }, [paused]);
   const go = (d: number) => setI((x) => (x + d + slides.length) % slides.length);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="absolute inset-x-0 top-0 z-20">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5">
           <Link to="/" className="flex items-center gap-2 text-hero-foreground">
@@ -62,7 +62,7 @@ function Landing() {
         </div>
       </header>
 
-      <section className="relative h-[88vh] min-h-[560px] overflow-hidden bg-primary" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} aria-roledescription="carousel">
+      <main id="main-content"><section className="relative h-[88dvh] min-h-[560px] overflow-hidden bg-primary"  aria-roledescription="carousel">
         {slides.map((s, k) => (
           <div key={k} className={cn("absolute inset-0 transition-opacity duration-1000", k === i ? "opacity-100" : "opacity-0")} aria-hidden={k !== i}>
             <img src={s.img} alt="" width={1920} height={1088} loading={k === 0 ? "eager" : "lazy"} className={cn("h-full w-full object-cover", k === i && "animate-kenburns")} />
@@ -79,13 +79,14 @@ function Landing() {
             </div>
           </div>
         </div>
-        <div className="absolute inset-x-0 bottom-8 z-10 mx-auto flex max-w-7xl items-center justify-between px-5">
-          <div className="flex gap-2">
+        <div className="absolute inset-x-0 bottom-6 z-10 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-1 px-5">
+          <div className="flex">
             {slides.map((_, k) => (
-              <button key={k} aria-label={`Slide ${k + 1}`} onClick={() => setI(k)} className={cn("h-1.5 rounded-full transition-all", k === i ? "w-8 bg-hero-foreground" : "w-3 bg-hero-foreground/40")} />
+              <Button key={k} size="icon" variant="ghost" aria-label={`Slide ${k + 1}`} aria-pressed={k === i} onClick={() => setI(k)}><span className={cn("h-1.5 rounded-full transition-all", k === i ? "w-8 bg-hero-foreground" : "w-3 bg-hero-foreground/40")} /></Button>
             ))}
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-1">
+            <Button size="icon" variant="secondary" aria-label={paused ? "Play slideshow" : "Pause slideshow"} onClick={() => setPaused((value) => !value)}>{paused ? <Play /> : <Pause />}</Button>
             <Button size="icon" variant="secondary" aria-label="Previous slide" onClick={() => go(-1)}><ChevronLeft className="h-4 w-4" /></Button>
             <Button size="icon" variant="secondary" aria-label="Next slide" onClick={() => go(1)}><ChevronRight className="h-4 w-4" /></Button>
           </div>
@@ -110,7 +111,7 @@ function Landing() {
         <div className="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-2 lg:items-center">
           <div>
             <h2 className="text-3xl font-bold">Plug-and-play by design.</h2>
-            <p className="mt-3 text-primary-foreground/70">Connect n8n workflows, Voicebip voice agents, maps, messaging and your own APIs through configuration. No rebuilding the app.</p>
+            <p className="mt-3 text-primary-foreground">Connect n8n workflows, Voicebip voice agents, maps, messaging and your own APIs through configuration. No rebuilding the app.</p>
             <Button asChild className="mt-6 bg-gradient-brand text-brand-foreground"><Link to="/app/integrations">Open the Integration Hub</Link></Button>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -122,6 +123,7 @@ function Landing() {
         </div>
       </section>
 
+      </main>
       <footer className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row">
         <span>© 2026 Mobilizer. Demonstration product with fictional data.</span>
         <Link to="/app" className="font-medium text-foreground hover:underline">Enter the demo →</Link>

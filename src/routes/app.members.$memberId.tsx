@@ -11,7 +11,7 @@ import { fmtDate, fmtDateTime, initials } from "@/lib/format";
 import { MemberForm } from "./app.members.index";
 
 export const Route = createFileRoute("/app/members/$memberId")({
-  head: () => ({ meta: [{ title: "Member profile — Mobilizer" }, { name: "description", content: "Member operational history." }] }),
+  head: () => ({ meta: [{ title: "Member profile — Mobilizer" }, { name: "description", content: "Member operational history." }, { property: "og:title", content: "Member profile — Mobilizer" }, { property: "og:description", content: "Member operational history." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: MemberProfile,
 });
 

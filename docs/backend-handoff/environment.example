@@ -1,0 +1,8 @@
+# Documentation only. Leave demo until implementation acceptance gates pass.
+VITE_DATA_SOURCE=mock
+VITE_TRANSPORT=simulated
+# Public restricted Maps browser key; do not insert private keys.
+VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY=
+VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_TRACKING_ID=
+# Server-only secret NAMES, never values: N8N_WEBHOOK_SECRET, optional N8N_API_KEY,
+# VOICEBIP_API_KEY, verified provider callback secret; Gateway SDK uses host injection.

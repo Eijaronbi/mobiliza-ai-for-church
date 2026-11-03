@@ -14,7 +14,7 @@ import { CheckCircle2, XCircle, Clock, Users, HeartHandshake } from "lucide-reac
 import type { AttendanceResponse } from "@/types";
 
 export const Route = createFileRoute("/app/mobilization")({
-  head: () => ({ meta: [{ title: "Mobilization — Mobilizer" }, { name: "description", content: "Configurable mobilization workflows for every service." }] }),
+  head: () => ({ meta: [{ title: "Mobilization — Mobilizer" }, { name: "description", content: "Configurable mobilization workflows for every service." }, { property: "og:title", content: "Mobilization — Mobilizer" }, { property: "og:description", content: "Configurable mobilization workflows for every service." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: MobilizationPage,
 });
 
@@ -56,7 +56,7 @@ function MobilizationPage() {
   return (
     <div>
       <PageHeader title="Mobilization" description="Contact members, confirm attendance, identify needs and coordinate pickups." actions={<>
-        <Select value={svc.id} onValueChange={setSid}><SelectTrigger className="w-[260px]"><SelectValue /></SelectTrigger><SelectContent>{upcoming.map((s) => <SelectItem key={s.id} value={s.id}>{s.name} · {fmtDateTime(s.date)}</SelectItem>)}</SelectContent></Select>
+        <Select value={svc.id} onValueChange={setSid}><SelectTrigger aria-label="Select mobilization service" className="w-[260px]"><SelectValue /></SelectTrigger><SelectContent>{upcoming.map((s) => <SelectItem key={s.id} value={s.id}>{s.name} · {fmtDateTime(s.date)}</SelectItem>)}</SelectContent></Select>
         <Confirm title="Start mobilization?" description={`This sends the mobilization.started event for ${svc.name} to the bound n8n workflow (simulated) and begins contacting ${mob.length} members.`} onConfirm={() => run("startMobilization", { service_id: svc.id, workflow_id: svc.workflowId, member_count: mob.length })}
           trigger={<Button className="bg-gradient-brand text-brand-foreground"><Play className="mr-1 h-4 w-4" />Start mobilization</Button>} />
       </>} />
@@ -90,9 +90,9 @@ function MobilizationPage() {
             <>
               <div className="mb-4 flex flex-wrap items-center gap-2 text-sm">
                 Contact window
-                <Input className="h-8 w-24" type="time" value={wf.contactWindow.start} onChange={(e) => wm.update.mutate({ id: wf.id, patch: { contactWindow: { ...wf.contactWindow, start: e.target.value } } })} />
+                <Input aria-label="Contact window start" className="h-8 w-24" type="time" value={wf.contactWindow.start} onChange={(e) => wm.update.mutate({ id: wf.id, patch: { contactWindow: { ...wf.contactWindow, start: e.target.value } } })} />
                 to
-                <Input className="h-8 w-24" type="time" value={wf.contactWindow.end} onChange={(e) => wm.update.mutate({ id: wf.id, patch: { contactWindow: { ...wf.contactWindow, end: e.target.value } } })} />
+                <Input aria-label="Contact window end" className="h-8 w-24" type="time" value={wf.contactWindow.end} onChange={(e) => wm.update.mutate({ id: wf.id, patch: { contactWindow: { ...wf.contactWindow, end: e.target.value } } })} />
               </div>
               <ol className="space-y-2">
                 {wf.stages.map((st, i) => {
@@ -104,7 +104,7 @@ function MobilizationPage() {
                       <span className="min-w-[180px] flex-1 text-sm font-medium">{st.name}</span>
                       <Input className="h-8 w-28 text-xs" value={st.offset} onChange={(e) => upd({ offset: e.target.value })} aria-label="Timing" />
                       <Select value={st.channel} onValueChange={(v) => upd({ channel: v as typeof st.channel })}>
-                        <SelectTrigger className="h-8 w-[120px] text-xs"><Icon className="h-3.5 w-3.5" /><SelectValue /></SelectTrigger>
+                        <SelectTrigger aria-label={`Channel for ${st.name}`} className="h-8 w-[120px] text-xs"><Icon className="h-3.5 w-3.5" /><SelectValue /></SelectTrigger>
                         <SelectContent>{Object.keys(chIcon).map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent>
                       </Select>
                       <Switch checked={st.enabled} onCheckedChange={(v) => upd({ enabled: v })} aria-label="Enabled" />
@@ -118,7 +118,7 @@ function MobilizationPage() {
       </div>
 
       <Section title="Member responses" className="mt-4" action={
-        <Select value={filter} onValueChange={(v) => setFilter(v as typeof filter)}><SelectTrigger className="h-8 w-40"><SelectValue /></SelectTrigger><SelectContent>{[["all", "All"], ["confirmed", "Confirmed"], ["unavailable", "Unavailable"], ["no_response", "No response"], ["pending", "Not contacted"], ["transport", "Needs transport"]].map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>
+        <Select value={filter} onValueChange={(v) => setFilter(v as typeof filter)}><SelectTrigger aria-label="Filter member responses" className="h-8 w-40"><SelectValue /></SelectTrigger><SelectContent>{[["all", "All"], ["confirmed", "Confirmed"], ["unavailable", "Unavailable"], ["no_response", "No response"], ["pending", "Not contacted"], ["transport", "Needs transport"]].map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>
       }>
         <div className="divide-y">
           {rows.map((r) => (

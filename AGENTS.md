@@ -18,3 +18,5 @@
 - Seed data must never mark an integration "connected"; only real connections (e.g. Google Maps browser key present) may show connected. Why: honesty in demos.
 - tsconfig relaxes noUncheckedIndexedAccess/exactOptionalPropertyTypes/noPropertyAccessFromIndexSignature/noImplicitReturns. Why: prototype velocity; keep `strict` on.
 - Contracts and go-live steps live in `docs/n8n-contracts.md` and `docs/database-schema.sql`.
+
+- Content routes own one main landmark; selectable records use native design-system buttons and explicit names for controls. Why: consistent keyboard and assistive-technology access.

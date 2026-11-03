@@ -16,7 +16,7 @@ import { timeAgo } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/agents")({
-  head: () => ({ meta: [{ title: "AI Agents — Mobilizer" }, { name: "description", content: "Specialised AI agents, permissions and execution history." }] }),
+  head: () => ({ meta: [{ title: "AI Agents — Mobilizer" }, { name: "description", content: "Specialised AI agents, permissions and execution history." }, { property: "og:title", content: "AI Agents — Mobilizer" }, { property: "og:description", content: "Specialised AI agents, permissions and execution history." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
   component: AgentsPage,
 });
 
@@ -41,10 +41,10 @@ function AgentsPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-2">
           {agents.map((x) => (
-            <Card key={x.id} onClick={() => setSid(x.id)} className={cn("cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", x.id === a.id && "ring-2 ring-ring")}>
+            <Button variant="outline" key={x.id} aria-pressed={x.id === a.id} onClick={() => setSid(x.id)} className={cn("h-auto w-full whitespace-normal block text-left cursor-pointer p-4 shadow-card transition-all hover:shadow-elegant", x.id === a.id && "ring-2 ring-ring")}>
               <div className="flex items-center gap-2"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-accent-foreground"><Bot className="h-4 w-4" /></span><span className="font-semibold">{x.name}</span><span className="ml-auto"><StatusBadge status={x.status} /></span></div>
               <p className="mt-2 text-xs text-muted-foreground">{x.description}</p>
-            </Card>
+            </Button>
           ))}
         </div>
         <Card className="p-5 shadow-card lg:col-span-2">
@@ -52,12 +52,12 @@ function AgentsPage() {
           <Tabs defaultValue="config" className="mt-4">
             <TabsList><TabsTrigger value="config">Configuration</TabsTrigger><TabsTrigger value="history">Execution history</TabsTrigger></TabsList>
             <TabsContent value="config" className="space-y-4">
-              <div className="space-y-1"><Label>Instructions</Label><Textarea rows={5} value={instr[a.id] ?? a.instructions} onChange={(e) => setInstr({ ...instr, [a.id]: e.target.value })} />
+              <div className="space-y-1"><Label>Instructions</Label><Textarea aria-label="Instructions" rows={5} value={instr[a.id] ?? a.instructions} onChange={(e) => setInstr({ ...instr, [a.id]: e.target.value })} />
                 <Button size="sm" className="mt-2" onClick={() => { upd({ instructions: (instr[a.id] ?? a.instructions).slice(0, 4000) }); toast.success("Instructions saved"); }}><Save className="mr-1 h-3.5 w-3.5" />Save</Button></div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2"><Label>Status</Label><Select value={a.status} onValueChange={(v) => upd({ status: v as typeof a.status })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="simulated">Simulated</SelectItem><SelectItem value="paused">Paused</SelectItem><SelectItem value="active" disabled>Active (needs AI provider)</SelectItem></SelectContent></Select></div>
-                <div className="space-y-2"><Label>Webhook endpoint</Label><Select value={a.webhookEndpointId ?? ""} onValueChange={(v) => upd({ webhookEndpointId: v })}><SelectTrigger><SelectValue placeholder="Not set" /></SelectTrigger><SelectContent>{endpoints.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}</SelectContent></Select></div>
-                <div className="space-y-2"><Label>API integration</Label><Select value={a.apiIntegrationId ?? ""} onValueChange={(v) => upd({ apiIntegrationId: v })}><SelectTrigger><SelectValue placeholder="Not set" /></SelectTrigger><SelectContent>{apis.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}</SelectContent></Select></div>
+                <div className="space-y-2"><Label>Status</Label><Select value={a.status} onValueChange={(v) => upd({ status: v as typeof a.status })}><SelectTrigger aria-label="Status"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="simulated">Simulated</SelectItem><SelectItem value="paused">Paused</SelectItem><SelectItem value="active" disabled>Active (needs AI provider)</SelectItem></SelectContent></Select></div>
+                <div className="space-y-2"><Label>Webhook endpoint</Label><Select value={a.webhookEndpointId ?? ""} onValueChange={(v) => upd({ webhookEndpointId: v })}><SelectTrigger aria-label="Webhook endpoint"><SelectValue placeholder="Not set" /></SelectTrigger><SelectContent>{endpoints.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}</SelectContent></Select></div>
+                <div className="space-y-2"><Label>API integration</Label><Select value={a.apiIntegrationId ?? ""} onValueChange={(v) => upd({ apiIntegrationId: v })}><SelectTrigger aria-label="API integration"><SelectValue placeholder="Not set" /></SelectTrigger><SelectContent>{apis.map((e) => <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>)}</SelectContent></Select></div>
               </div>
               <div><Label>Workflow assignments</Label><div className="mt-2 grid gap-1.5 sm:grid-cols-2">{actionList.map((ac) => <label key={ac.id} className="flex items-center gap-2 text-sm"><Checkbox checked={a.workflows.includes(ac.id)} onCheckedChange={(v) => upd({ workflows: v ? [...a.workflows, ac.id] : a.workflows.filter((w) => w !== ac.id) })} />{ac.label}</label>)}</div></div>
               <div><Label>Tool permissions</Label><div className="mt-2 grid gap-1.5 sm:grid-cols-2">{allTools.map((t) => <label key={t} className="flex items-center gap-2 font-mono text-xs"><Checkbox checked={a.tools.includes(t)} onCheckedChange={(v) => upd({ tools: v ? [...a.tools, t] : a.tools.filter((x) => x !== t) })} />{t}</label>)}</div></div>
