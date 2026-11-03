@@ -15,6 +15,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAttendanceRouteImport } from './routes/app.attendance'
 import { Route as AppMobilizationRouteImport } from './routes/app.mobilization'
 import { Route as AppStructureRouteImport } from './routes/app.structure'
+import { Route as AppTransportRouteImport } from './routes/app.transport'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppMembersMemberIdRouteImport } from './routes/app.members.$memberId'
 
@@ -48,6 +49,11 @@ const AppStructureRoute = AppStructureRouteImport.update({
   path: '/structure',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTransportRoute = AppTransportRouteImport.update({
+  id: '/transport',
+  path: '/transport',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMembersIndexRoute = AppMembersIndexRouteImport.update({
   id: '/members/',
   path: '/members/',
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/app/attendance': typeof AppAttendanceRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/app/attendance': typeof AppAttendanceRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
   '/app': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members': typeof AppMembersIndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/app/attendance': typeof AppAttendanceRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/structure': typeof AppStructureRoute
+  '/app/transport': typeof AppTransportRoute
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/app/attendance'
     | '/app/mobilization'
     | '/app/structure'
+    | '/app/transport'
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/app/attendance'
     | '/app/mobilization'
     | '/app/structure'
+    | '/app/transport'
     | '/app'
     | '/app/members/$memberId'
     | '/app/members'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/app/attendance'
     | '/app/mobilization'
     | '/app/structure'
+    | '/app/transport'
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
@@ -170,6 +182,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppStructureRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/transport': {
+      id: '/app/transport'
+      path: '/transport'
+      fullPath: '/app/transport'
+      preLoaderRoute: typeof AppTransportRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/members/': {
       id: '/app/members/'
       path: '/members'
@@ -191,6 +210,7 @@ interface AppRouteChildren {
   AppAttendanceRoute: typeof AppAttendanceRoute
   AppMobilizationRoute: typeof AppMobilizationRoute
   AppStructureRoute: typeof AppStructureRoute
+  AppTransportRoute: typeof AppTransportRoute
   AppIndexRoute: typeof AppIndexRoute
   AppMembersMemberIdRoute: typeof AppMembersMemberIdRoute
   AppMembersIndexRoute: typeof AppMembersIndexRoute
@@ -200,6 +220,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAttendanceRoute: AppAttendanceRoute,
   AppMobilizationRoute: AppMobilizationRoute,
   AppStructureRoute: AppStructureRoute,
+  AppTransportRoute: AppTransportRoute,
   AppIndexRoute: AppIndexRoute,
   AppMembersMemberIdRoute: AppMembersMemberIdRoute,
   AppMembersIndexRoute: AppMembersIndexRoute,
