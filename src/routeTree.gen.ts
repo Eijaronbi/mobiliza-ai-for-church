@@ -16,6 +16,7 @@ import { Route as AppAgentsRouteImport } from './routes/app.agents'
 import { Route as AppAssistantRouteImport } from './routes/app.assistant'
 import { Route as AppAttendanceRouteImport } from './routes/app.attendance'
 import { Route as AppFollowupRouteImport } from './routes/app.followup'
+import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
 import { Route as AppLeadershipRouteImport } from './routes/app.leadership'
 import { Route as AppMobilizationRouteImport } from './routes/app.mobilization'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
@@ -59,6 +60,11 @@ const AppAttendanceRoute = AppAttendanceRouteImport.update({
 const AppFollowupRoute = AppFollowupRouteImport.update({
   id: '/followup',
   path: '/followup',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => AppRoute,
 } as any)
 const AppLeadershipRoute = AppLeadershipRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
   '/app/followup': typeof AppFollowupRoute
+  '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
   '/app/reports': typeof AppReportsRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/app/assistant'
     | '/app/attendance'
     | '/app/followup'
+    | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
     | '/app/reports'
@@ -271,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/followup'
       fullPath: '/app/followup'
       preLoaderRoute: typeof AppFollowupRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/integrations': {
+      id: '/app/integrations'
+      path: '/integrations'
+      fullPath: '/app/integrations'
+      preLoaderRoute: typeof AppIntegrationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/leadership': {
@@ -344,6 +363,7 @@ interface AppRouteChildren {
   AppAssistantRoute: typeof AppAssistantRoute
   AppAttendanceRoute: typeof AppAttendanceRoute
   AppFollowupRoute: typeof AppFollowupRoute
+  AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppLeadershipRoute: typeof AppLeadershipRoute
   AppMobilizationRoute: typeof AppMobilizationRoute
   AppReportsRoute: typeof AppReportsRoute
@@ -361,6 +381,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAssistantRoute: AppAssistantRoute,
   AppAttendanceRoute: AppAttendanceRoute,
   AppFollowupRoute: AppFollowupRoute,
+  AppIntegrationsRoute: AppIntegrationsRoute,
   AppLeadershipRoute: AppLeadershipRoute,
   AppMobilizationRoute: AppMobilizationRoute,
   AppReportsRoute: AppReportsRoute,
