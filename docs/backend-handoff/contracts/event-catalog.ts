@@ -31,6 +31,11 @@ export const eventSchemas = {
     whatsapp_groups: z.array(z.object({ name: z.string().min(1), groupId: id })),
     recipient_count: z.number().int().min(0), skipped_no_consent: z.number().int().min(0),
   }),
+  "prayer.reminder_scheduled": z.object({ chain_id: id, slot_id: id, member_ids: z.array(id), channels: z.array(z.enum(["email", "sms", "whatsapp"])).min(1), minutes_before: z.number().int().min(0) }),
+  "prayer.signed_in": z.object({ chain_id: id, slot_id: id, member_id: id, method: z.enum(["whatsapp", "app", "sms", "phone"]), signed_in_at: z.string() }),
+  "prayer.missed": z.object({ chain_id: id, slot_id: id, member_id: id, grace_minutes: z.number().int().min(0) }),
+  "prayer.call_attempted": z.object({ chain_id: id, slot_id: id, member_id: id, channel: z.enum(["voice", "whatsapp_call"]), attempt: z.number().int().min(1), fallback_channels: z.array(z.enum(["voice", "whatsapp_call"])), message: z.string().min(5) }),
+  "prayer.points_sent": z.object({ chain_id: id, channels: z.array(z.enum(["email", "sms", "whatsapp"])).min(1), message: z.string().min(5).max(2000), member_ids: z.array(id), recipient_count: z.number().int().min(0), skipped_no_consent: z.number().int().min(0) }),
 } satisfies Record<EventName, z.ZodTypeAny>;
 
 export const eventDescriptions: Record<EventName, string> = {
@@ -51,6 +56,11 @@ export const eventDescriptions: Record<EventName, string> = {
   "escalation.created": "An issue was escalated to leadership.",
   "escalation.resolved": "An escalated issue was resolved.",
   "service.broadcast": "A service schedule was broadcast by SMS and/or WhatsApp to people and groups.",
+  "prayer.reminder_scheduled": "Prayer chain reminders were scheduled for a slot.",
+  "prayer.signed_in": "A member signed in for their prayer chain hour (e.g. via WhatsApp).",
+  "prayer.missed": "A member did not sign in before the grace period ended.",
+  "prayer.call_attempted": "The agent called a member to say it's time for prayer chain; on failure, the next call channel is tried.",
+  "prayer.points_sent": "Prayer points or a prayer broadcast were sent by email, SMS and/or WhatsApp.",
 };
 
 export const eventNames = Object.keys(eventSchemas) as EventName[];
@@ -74,6 +84,11 @@ export function samplePayload(event: EventName): Record<string, unknown> {
     "escalation.created": { escalation_id: "esc_demo_001", category: "transport", priority: "high" },
     "escalation.resolved": { escalation_id: "esc_demo_001", resolved_by: "Pastor" },
     "service.broadcast": { broadcast_id: "bc_demo_001", service_id: "service_demo_001", channels: ["sms", "whatsapp"], message: "You're invited to Sunday Service at 9:00 AM.", member_ids: ["member_demo_001"], unit_ids: ["cell_demo_01"], external_recipients: [{ name: "Guest Speaker", phone: "+2348000000000" }], whatsapp_groups: [{ name: "Youth Fellowship", groupId: "wa_group_demo_01" }], recipient_count: 2, skipped_no_consent: 0 },
+    "prayer.reminder_scheduled": { chain_id: "chain_demo_01", slot_id: "slot_0300", member_ids: ["member_demo_001"], channels: ["whatsapp", "sms"], minutes_before: 15 },
+    "prayer.signed_in": { chain_id: "chain_demo_01", slot_id: "slot_0300", member_id: "member_demo_001", method: "whatsapp", signed_in_at: "2026-11-05T03:02:00+01:00" },
+    "prayer.missed": { chain_id: "chain_demo_01", slot_id: "slot_0400", member_id: "member_demo_002", grace_minutes: 10 },
+    "prayer.call_attempted": { chain_id: "chain_demo_01", slot_id: "slot_0400", member_id: "member_demo_002", channel: "voice", attempt: 1, fallback_channels: ["whatsapp_call"], message: "It's time for prayer chain. Your hour is 04:00–05:00." },
+    "prayer.points_sent": { chain_id: "chain_demo_01", channels: ["whatsapp", "email"], message: "Prayer points: 1. Revival in our city 2. Our families", member_ids: ["member_demo_001"], recipient_count: 1, skipped_no_consent: 0 },
   };
   return samples[event];
 }
