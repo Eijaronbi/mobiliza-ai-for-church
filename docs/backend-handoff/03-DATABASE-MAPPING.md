@@ -27,6 +27,13 @@ The included database-schema.DRAFT.sql is the existing incomplete draft, NOT a d
 
 Additional live-only tables: user_roles, tenant_settings, consent_records, event_outbox, webhook_receipts, integration_secret_bindings (names only), assistant_threads/messages, durable_jobs, file metadata if uploads are needed.
 
+## New modules outside the existing repository collections
+These are required additions, not implemented tables or repository exports:
+- Service broadcasts: `broadcasts`, `broadcast_recipients`, provider webhook receipts, consent provenance and deduplication keys; see 09.
+- Prayer Chain: `prayer_chains`, `prayer_slot_assignments`, `prayer_occurrences`, `prayer_sign_ins`, `prayer_call_attempts`, `prayer_broadcasts` and per-recipient delivery records; see 10.
+- Every child includes tenant scope and same-tenant references. One sign-in per tenant/occurrence/member; unique provider message receipts per tenant/integration; one scheduled contact per occurrence/member/channel/purpose. Store timezone plus UTC occurrence timestamps to handle midnight and timezone changes.
+- Current `slot_id` values repeat daily and `chain_id` is demo-derived: neither is a sufficient live deduplication key. Prayer configuration and assignment mutations need server authorization and new registered action/event coverage.
+
 ## Requirements for each migration
 - CREATE TABLE public.<table>, immediately GRANT only permitted authenticated operations and service_role privileges, ENABLE ROW LEVEL SECURITY, then CREATE POLICY in the same migration. No anonymous access to private church records.
 - Roles are separate from profile; ordinary users can read their authorized membership but cannot assign themselves roles. Server-authorized role management only. Non-recursive role helper with fixed search_path and restricted inputs/permissions.

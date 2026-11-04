@@ -34,5 +34,12 @@ Internal operations use createServerFn, NOT Supabase Edge Functions. Protected f
 ## 6. AI, tracking and communications
 Implement 05-AI-IMPLEMENTATION.md. Replace simulated coordinate conversion and interval movement with real lat/lng/timestamp/accuracy feeds, authorized drivers and tenant-scoped subscriptions. Registering a bus without GPS creates no map marker. Support stop-sharing, denied permissions, stale/offline locations, retention and driver consent. Device geolocation alone is not fleet tracking and browser tracking may stop in background.
 
+## 7. Service broadcasts and Prayer Chain
+- Implement 09-BROADCASTS-SMS-WHATSAPP.md and 10-PRAYER-CHAIN.md after identities, consent, outbox and callbacks exist. Prayer Chain currently bypasses repositories for page-local state: add repository DTOs/hooks for settings, assignments, occurrences, sign-ins and call attempts before enabling live mode.
+- Persist every watch occurrence with an absolute start/end and church timezone, not just a repeating slot ID. Recheck assignment, sign-in and contact consent when each durable job runs.
+- Verify inbound WhatsApp signatures and identify the member from the trusted sender and tenant integration binding. Do not accept browser-generated signed-in events as proof of a received WhatsApp message.
+- Start with phone calling, use WhatsApp calling only after a verified failure/no-answer and confirmed capability, and suppress queued attempts immediately on sign-in. Never infer a failed call from a timeout alone.
+- Resolve recipients and per-channel consent server-side for both broadcast types. Persist provider delivery outcomes and expose honest pending/unsupported/error states.
+
 ## Acceptance gates
 For every persisted entity: create, reload, read back, edit, reload, read back; access from another tenant must fail. For every consequential action: authorized success, forbidden role, forged tenant, duplicate request, delivery failure, retry and audit read-back. Verify all provider flows with controlled real accounts in staging before enabling production.

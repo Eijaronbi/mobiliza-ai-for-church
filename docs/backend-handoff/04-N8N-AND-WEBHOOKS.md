@@ -1,7 +1,7 @@
 # n8n and webhook implementation contract
 
 ## Current code, not assumptions
-src/config/action-map.ts registers 17 actions; event-catalog.ts validates 17 event payloads (incl. service.broadcast — see 09-BROADCASTS-SMS-WHATSAPP.md). Current eventEnvelope source is "mobilizer". Both files are included under contracts/. Keep this identifier stable despite display branding.
+src/config/action-map.ts registers 22 actions; event-catalog.ts validates 22 event payloads (including service.broadcast and five prayer events; see guides 09 and 10). Current eventEnvelope source is "mobilizer". Both files are included under contracts/. Keep this identifier stable despite display branding.
 Dispatcher uses retries:0. Tests, logs and deliveries are simulated. No inbound n8n/Voicebip routes exist; no importable n8n workflow JSON is delivered. The prior contract's backoff sequence is an intended design, not current behavior.
 
 ## Outbound wire format
@@ -27,9 +27,14 @@ Proposed routes /api/public/webhooks/n8n and /api/public/webhooks/voicebip do no
 | Transport | requested → leader review/admin approval → assign capacity-safe vehicle → departure/arrival callbacks; separate financial support workflow |
 | Follow-up | followup.created → consent gate → assign leader/location → schedule contact → record outcome → sensitive issue human escalation |
 | Reports | submitted/overdue → validate template/version and deadline → review/remind → department/cell roll-up |
+| Service broadcasts | service.broadcast → resolve and consent-check recipients → fan out SMS/WhatsApp → signed per-recipient status callback; groups require verified capability |
+| Prayer | reminder_scheduled/points_sent → durable consented contacts; verified inbound sign-in → signed_in; missed → call_attempted → provider outcome → allowed fallback; suppress after sign-in |
 | Leadership | escalation.created/resolved → notify authorized owner → track acknowledgement → resolution audit |
 
 For each workflow store exact production webhook URL, allowed events, auth binding and test execution. Do not put provider credentials in incoming envelope or response. n8n reads/writes private records only through narrow signed server endpoints, not a browser role claim or universal service key.
 
 ## Contract gaps to close before enabling
-Calls/transcripts/message delivery, GPS positions, workflow jobs and report approval need explicit versioned schemas/actions. Existing followup.completed represents a follow-up outcome and does not fully define a voice-provider callback. Use a provider adapter to translate verified callbacks to domain events. Add a contract version through a coordinated sender/receiver change; never silently break the 16 existing shapes.
+Calls/transcripts/message delivery, GPS positions, workflow jobs and report approval need explicit versioned schemas/actions. Existing followup.completed represents a follow-up outcome and does not fully define a voice-provider callback. Use a provider adapter to translate verified callbacks to domain events. Add a contract version through a coordinated sender/receiver change; never silently break existing shapes.
+
+## Prayer and WhatsApp contract limitations
+The five prayer payloads are current demo contracts, not complete scheduler/provider contracts. Add occurrence ID, absolute watch timestamps, timezone and callback correlation through a versioned rollout. `prayer.call_attempted` currently requests a simulated call and contains no provider result: never use it as proof of an answered or failed call. `prayer.reminder_scheduled` is not proof of a durable job; `prayer.points_sent` is not proof of delivery. The proposed `/api/public/whatsapp/webhook` needs provider-documented verification challenge handling and raw-body signature validation for inbound POSTs; it does not exist yet. Resolve ambiguous service/prayer replies explicitly rather than guessing which event a message belongs to.
