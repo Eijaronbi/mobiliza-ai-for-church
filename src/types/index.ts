@@ -220,7 +220,7 @@ export interface WebhookEndpoint {
   id: ID;
   tenantId: ID;
   integrationId: ID;
-  workflow: "mobilization" | "transport" | "followup" | "reporting" | "leadership" | "general";
+  workflow: "mobilization" | "transport" | "followup" | "reporting" | "leadership" | "prayer" | "general";
   name: string;
   description: string;
   url: string;
@@ -272,7 +272,8 @@ export type EventName =
   | "followup.created" | "followup.completed"
   | "report.submitted" | "report.overdue"
   | "escalation.created" | "escalation.resolved"
-  | "service.broadcast";
+  | "service.broadcast"
+  | "prayer.reminder_scheduled" | "prayer.signed_in" | "prayer.missed" | "prayer.call_attempted" | "prayer.points_sent";
 
 export interface EventEnvelope<T = Record<string, unknown>> {
   event: EventName;
