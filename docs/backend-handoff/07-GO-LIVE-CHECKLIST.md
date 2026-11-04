@@ -24,6 +24,15 @@
 - [ ] Google Maps renders on authorized deployed origin with no key/billing errors.
 - [ ] Real authorized driver GPS moves on a second device; stop/denied/offline/stale cases work; unlocated buses remain marker-free.
 
+## Gate C2: schedules and Prayer Chain
+- [ ] Schedule broadcast to members, units and external contacts: consent, deduplication, per-channel statuses and reload/read-back verified.
+- [ ] WhatsApp group sending confirmed for the actual provider/number or explicitly unsupported; no fabricated success.
+- [ ] Prayer settings and assignments persist; default watches are 03:00–04:00, 04:00–05:00 and 05:00–06:00 in Africa/Lagos for the pilot.
+- [ ] Real WhatsApp sign-in updates the authorized dashboard; duplicate, unknown-sender, wrong-watch and cross-tenant messages are handled safely.
+- [ ] Unsigned-in member receives phone call, then WhatsApp call only after verified no-answer/failure; sign-in cancels queued attempts and callback races cannot send twice.
+- [ ] WhatsApp calling capability and required permission verified; unavailable channel reported and authorized leader notified rather than claimed delivered.
+- [ ] Email/SMS/WhatsApp prayer points and reminders respect channel consent; restart recovery, midnight/timezone and disabled-chain behavior pass staging.
+
 ## Gate D: public launch and operations
 - [ ] Owner supplies correct profile/content, domain, privacy/terms/contact policies; no fictional members/phone numbers presented as real.
 - [ ] Security scan, dependency checks, accessibility/manual keyboard and mobile zoom/screen-reader checks pass.

@@ -28,3 +28,6 @@ See verification.json and accessibility-results.json for final observations. Rea
 
 ## Final automated result
 Zero axe WCAG A/AA violations were reported on all 15 top-level pages and five opened creation dialogs after animations settled. The 16th view (member profile) was smoke-tested, not axe-scanned. All 16 views showed one main landmark and no browser page errors. This does not establish full WCAG conformance or real backend readiness.
+
+## Scope note — 4 November handoff refresh
+The earlier browser/axe results predate Prayer Chain and the broadcast dialog. They are historical demo evidence, not a new accessibility audit of these additions or a hosted-provider verification. Existing prayer/broadcast rules tests are rerun for this refresh; production sign-in, scheduling, delivery and call outcomes remain unverified.

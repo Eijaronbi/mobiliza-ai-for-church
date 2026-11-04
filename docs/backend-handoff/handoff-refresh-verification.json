@@ -1,0 +1,11 @@
+{
+  "refreshed_at": "2026-11-04",
+  "tests": {
+    "command": "bunx vitest run src/test/prayer.test.ts src/test/broadcast.test.ts src/test/plug-and-play.test.ts",
+    "files_passed": 3,
+    "tests_passed": 15
+  },
+  "contract_snapshots": "Copied from current source; domain types now include prayer workflow and events.",
+  "production_status": "Not verified; no backend or provider integration enabled by this documentation refresh.",
+  "historical_browser_and_accessibility_results": "Predate Prayer Chain and broadcast dialog; not re-audited in this task."
+}
