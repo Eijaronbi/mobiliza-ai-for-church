@@ -1,5 +1,6 @@
 {
   "source": "mobilizer",
+  "note": "Fictional examples, not real delivery receipts. Broadcast recipient_count excludes groups and channel fan-out. Prayer events need versioned occurrence/provider extensions before production.",
   "actions": {
     "registerVehicle": {
       "id": "registerVehicle",
@@ -113,6 +114,54 @@
       "defaultEndpointName": "Resolve issue",
       "requiresConfirmation": true
     },
+    "broadcastService": {
+      "id": "broadcastService",
+      "label": "Schedule broadcast sent",
+      "event": "service.broadcast",
+      "workflow": "mobilization",
+      "defaultEndpointName": "Broadcast service schedule",
+      "requiresConfirmation": false
+    },
+    "schedulePrayerReminder": {
+      "id": "schedulePrayerReminder",
+      "label": "Prayer reminders scheduled",
+      "event": "prayer.reminder_scheduled",
+      "workflow": "prayer",
+      "defaultEndpointName": "Prayer chain reminders",
+      "requiresConfirmation": false
+    },
+    "recordPrayerSignIn": {
+      "id": "recordPrayerSignIn",
+      "label": "Prayer sign-in recorded",
+      "event": "prayer.signed_in",
+      "workflow": "prayer",
+      "defaultEndpointName": "Prayer chain sign-in",
+      "requiresConfirmation": false
+    },
+    "recordPrayerMissed": {
+      "id": "recordPrayerMissed",
+      "label": "Missed prayer slot recorded",
+      "event": "prayer.missed",
+      "workflow": "prayer",
+      "defaultEndpointName": "Prayer chain escalation",
+      "requiresConfirmation": false
+    },
+    "callPrayerMember": {
+      "id": "callPrayerMember",
+      "label": "Prayer call placed",
+      "event": "prayer.call_attempted",
+      "workflow": "prayer",
+      "defaultEndpointName": "Prayer chain call",
+      "requiresConfirmation": false
+    },
+    "sendPrayerPoints": {
+      "id": "sendPrayerPoints",
+      "label": "Prayer points sent",
+      "event": "prayer.points_sent",
+      "workflow": "prayer",
+      "defaultEndpointName": "Prayer points broadcast",
+      "requiresConfirmation": false
+    },
     "createMember": {
       "id": "createMember",
       "label": "Member created",
@@ -130,30 +179,30 @@
       "requiresConfirmation": false
     }
   },
-  "events": {
-    "vehicle.registered": {
+  "events": [
+    {
       "event": "vehicle.registered",
-      "event_id": "evt_example_vehicle.registered",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_001",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "vehicle_id": "veh_demo_01"
       }
     },
-    "member.created": {
+    {
       "event": "member.created",
-      "event_id": "evt_example_member.created",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_002",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "member_id": "member_demo_001",
@@ -162,15 +211,15 @@
         ]
       }
     },
-    "member.updated": {
+    {
       "event": "member.updated",
-      "event_id": "evt_example_member.updated",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_003",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "member_id": "member_demo_001",
@@ -179,15 +228,15 @@
         ]
       }
     },
-    "mobilization.started": {
+    {
       "event": "mobilization.started",
-      "event_id": "evt_example_mobilization.started",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_004",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "service_id": "service_demo_001",
@@ -195,15 +244,15 @@
         "member_count": 120
       }
     },
-    "attendance.confirmed": {
+    {
       "event": "attendance.confirmed",
-      "event_id": "evt_example_attendance.confirmed",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_005",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "member_id": "member_demo_001",
@@ -211,15 +260,15 @@
         "attendance_status": "confirmed"
       }
     },
-    "attendance.declined": {
+    {
       "event": "attendance.declined",
-      "event_id": "evt_example_attendance.declined",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_006",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "member_id": "member_demo_002",
@@ -227,15 +276,15 @@
         "attendance_status": "unavailable"
       }
     },
-    "transport.requested": {
+    {
       "event": "transport.requested",
-      "event_id": "evt_example_transport.requested",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_007",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "request_id": "tr_demo_001",
@@ -244,60 +293,60 @@
         "kind": "pickup"
       }
     },
-    "transport.approved": {
+    {
       "event": "transport.approved",
-      "event_id": "evt_example_transport.approved",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_008",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "request_id": "tr_demo_001",
         "approved_by": "Church Administrator"
       }
     },
-    "transport.departed": {
+    {
       "event": "transport.departed",
-      "event_id": "evt_example_transport.departed",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_009",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "request_id": "tr_demo_001",
         "vehicle_id": "veh_demo_01"
       }
     },
-    "transport.arrived": {
+    {
       "event": "transport.arrived",
-      "event_id": "evt_example_transport.arrived",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_010",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "request_id": "tr_demo_001",
         "vehicle_id": "veh_demo_01"
       }
     },
-    "followup.created": {
+    {
       "event": "followup.created",
-      "event_id": "evt_example_followup.created",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_011",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "followup_id": "fu_demo_001",
@@ -305,30 +354,30 @@
         "consent": true
       }
     },
-    "followup.completed": {
+    {
       "event": "followup.completed",
-      "event_id": "evt_example_followup.completed",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_012",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "followup_id": "fu_demo_001",
         "outcome": "joined_cell"
       }
     },
-    "report.submitted": {
+    {
       "event": "report.submitted",
-      "event_id": "evt_example_report.submitted",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_013",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "report_id": "rep_demo_001",
@@ -336,15 +385,15 @@
         "unit_id": "cell_demo_01"
       }
     },
-    "report.overdue": {
+    {
       "event": "report.overdue",
-      "event_id": "evt_example_report.overdue",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_014",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "report_id": "rep_demo_002",
@@ -352,15 +401,15 @@
         "due_at": "2026-11-01T18:00:00Z"
       }
     },
-    "escalation.created": {
+    {
       "event": "escalation.created",
-      "event_id": "evt_example_escalation.created",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_015",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "escalation_id": "esc_demo_001",
@@ -368,49 +417,164 @@
         "priority": "high"
       }
     },
-    "escalation.resolved": {
+    {
       "event": "escalation.resolved",
-      "event_id": "evt_example_escalation.resolved",
-      "timestamp": "2026-11-03T20:25:00.000Z",
-      "tenant_id": "tenant_example",
+      "event_id": "evt_demo_016",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
       "source": "mobilizer",
       "actor": {
         "role": "church_admin",
-        "name": "Example administrator"
+        "name": "Demo Administrator"
       },
       "data": {
         "escalation_id": "esc_demo_001",
         "resolved_by": "Pastor"
       }
+    },
+    {
+      "event": "service.broadcast",
+      "event_id": "evt_demo_017",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "broadcast_id": "bc_demo_001",
+        "service_id": "service_demo_001",
+        "channels": [
+          "sms",
+          "whatsapp"
+        ],
+        "message": "You're invited to Sunday Service at 9:00 AM.",
+        "member_ids": [
+          "member_demo_001"
+        ],
+        "unit_ids": [
+          "cell_demo_01"
+        ],
+        "external_recipients": [
+          {
+            "name": "Guest Speaker",
+            "phone": "+2348000000000"
+          }
+        ],
+        "whatsapp_groups": [
+          {
+            "name": "Youth Fellowship",
+            "groupId": "wa_group_demo_01"
+          }
+        ],
+        "recipient_count": 2,
+        "skipped_no_consent": 0
+      }
+    },
+    {
+      "event": "prayer.reminder_scheduled",
+      "event_id": "evt_demo_018",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "chain_id": "chain_demo_01",
+        "slot_id": "slot_0300",
+        "member_ids": [
+          "member_demo_001"
+        ],
+        "channels": [
+          "whatsapp",
+          "sms"
+        ],
+        "minutes_before": 15
+      }
+    },
+    {
+      "event": "prayer.signed_in",
+      "event_id": "evt_demo_019",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "chain_id": "chain_demo_01",
+        "slot_id": "slot_0300",
+        "member_id": "member_demo_001",
+        "method": "whatsapp",
+        "signed_in_at": "2026-11-05T03:02:00+01:00"
+      }
+    },
+    {
+      "event": "prayer.missed",
+      "event_id": "evt_demo_020",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "chain_id": "chain_demo_01",
+        "slot_id": "slot_0400",
+        "member_id": "member_demo_002",
+        "grace_minutes": 10
+      }
+    },
+    {
+      "event": "prayer.call_attempted",
+      "event_id": "evt_demo_021",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "chain_id": "chain_demo_01",
+        "slot_id": "slot_0400",
+        "member_id": "member_demo_002",
+        "channel": "voice",
+        "attempt": 1,
+        "fallback_channels": [
+          "whatsapp_call"
+        ],
+        "message": "It's time for prayer chain. Your hour is 04:00–05:00."
+      }
+    },
+    {
+      "event": "prayer.points_sent",
+      "event_id": "evt_demo_022",
+      "timestamp": "2026-11-04T11:51:00Z",
+      "tenant_id": "tenant_demo_001",
+      "source": "mobilizer",
+      "actor": {
+        "role": "church_admin",
+        "name": "Demo Administrator"
+      },
+      "data": {
+        "chain_id": "chain_demo_01",
+        "channels": [
+          "whatsapp",
+          "email"
+        ],
+        "message": "Prayer points: 1. Revival in our city 2. Our families",
+        "member_ids": [
+          "member_demo_001"
+        ],
+        "recipient_count": 1,
+        "skipped_no_consent": 0
+      }
     }
-  },
-  "service.broadcast": {
-    "broadcast_id": "bc_demo_001",
-    "service_id": "service_demo_001",
-    "channels": [
-      "sms",
-      "whatsapp"
-    ],
-    "message": "You are invited to Sunday Service.",
-    "member_ids": [
-      "member_demo_001"
-    ],
-    "unit_ids": [
-      "cell_demo_01"
-    ],
-    "external_recipients": [
-      {
-        "name": "Guest Speaker",
-        "phone": "+2348000000000"
-      }
-    ],
-    "whatsapp_groups": [
-      {
-        "name": "Youth Fellowship",
-        "groupId": "wa_group_demo_01"
-      }
-    ],
-    "recipient_count": 2,
-    "skipped_no_consent": 0
-  }
+  ]
 }
