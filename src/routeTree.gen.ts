@@ -19,6 +19,7 @@ import { Route as AppFollowupRouteImport } from './routes/app.followup'
 import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
 import { Route as AppLeadershipRouteImport } from './routes/app.leadership'
 import { Route as AppMobilizationRouteImport } from './routes/app.mobilization'
+import { Route as AppPrayerRouteImport } from './routes/app.prayer'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppServicesRouteImport } from './routes/app.services'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
@@ -77,6 +78,11 @@ const AppMobilizationRoute = AppMobilizationRouteImport.update({
   path: '/mobilization',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPrayerRoute = AppPrayerRouteImport.update({
+  id: '/prayer',
+  path: '/prayer',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppReportsRoute = AppReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
+  '/app/prayer': typeof AppPrayerRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
+  '/app/prayer': typeof AppPrayerRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/leadership': typeof AppLeadershipRoute
   '/app/mobilization': typeof AppMobilizationRoute
+  '/app/prayer': typeof AppPrayerRoute
   '/app/reports': typeof AppReportsRoute
   '/app/services': typeof AppServicesRoute
   '/app/settings': typeof AppSettingsRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
+    | '/app/prayer'
     | '/app/reports'
     | '/app/services'
     | '/app/settings'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
+    | '/app/prayer'
     | '/app/reports'
     | '/app/services'
     | '/app/settings'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/app/integrations'
     | '/app/leadership'
     | '/app/mobilization'
+    | '/app/prayer'
     | '/app/reports'
     | '/app/services'
     | '/app/settings'
@@ -306,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMobilizationRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/prayer': {
+      id: '/app/prayer'
+      path: '/prayer'
+      fullPath: '/app/prayer'
+      preLoaderRoute: typeof AppPrayerRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/reports': {
       id: '/app/reports'
       path: '/reports'
@@ -366,6 +385,7 @@ interface AppRouteChildren {
   AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppLeadershipRoute: typeof AppLeadershipRoute
   AppMobilizationRoute: typeof AppMobilizationRoute
+  AppPrayerRoute: typeof AppPrayerRoute
   AppReportsRoute: typeof AppReportsRoute
   AppServicesRoute: typeof AppServicesRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -384,6 +404,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppIntegrationsRoute: AppIntegrationsRoute,
   AppLeadershipRoute: AppLeadershipRoute,
   AppMobilizationRoute: AppMobilizationRoute,
+  AppPrayerRoute: AppPrayerRoute,
   AppReportsRoute: AppReportsRoute,
   AppServicesRoute: AppServicesRoute,
   AppSettingsRoute: AppSettingsRoute,

@@ -27,6 +27,11 @@ export const actions = {
   createEscalation: { id: "createEscalation", label: "Create escalation", event: "escalation.created", workflow: "leadership", defaultEndpointName: "Create escalation", requiresConfirmation: false },
   resolveEscalation: { id: "resolveEscalation", label: "Resolve issue", event: "escalation.resolved", workflow: "leadership", defaultEndpointName: "Resolve issue", requiresConfirmation: true },
   broadcastService: { id: "broadcastService", label: "Schedule broadcast sent", event: "service.broadcast", workflow: "mobilization", defaultEndpointName: "Broadcast service schedule", requiresConfirmation: false },
+  schedulePrayerReminder: { id: "schedulePrayerReminder", label: "Prayer reminders scheduled", event: "prayer.reminder_scheduled", workflow: "prayer", defaultEndpointName: "Prayer chain reminders", requiresConfirmation: false },
+  recordPrayerSignIn: { id: "recordPrayerSignIn", label: "Prayer sign-in recorded", event: "prayer.signed_in", workflow: "prayer", defaultEndpointName: "Prayer chain sign-in", requiresConfirmation: false },
+  recordPrayerMissed: { id: "recordPrayerMissed", label: "Missed prayer slot recorded", event: "prayer.missed", workflow: "prayer", defaultEndpointName: "Prayer chain escalation", requiresConfirmation: false },
+  callPrayerMember: { id: "callPrayerMember", label: "Prayer call placed", event: "prayer.call_attempted", workflow: "prayer", defaultEndpointName: "Prayer chain call", requiresConfirmation: false },
+  sendPrayerPoints: { id: "sendPrayerPoints", label: "Prayer points sent", event: "prayer.points_sent", workflow: "prayer", defaultEndpointName: "Prayer points broadcast", requiresConfirmation: false },
   createMember: { id: "createMember", label: "Member created", event: "member.created", workflow: "general", defaultEndpointName: "Member events", requiresConfirmation: false },
   updateMember: { id: "updateMember", label: "Member updated", event: "member.updated", workflow: "general", defaultEndpointName: "Member events", requiresConfirmation: false },
 } as const satisfies Record<string, ActionDefinition>;

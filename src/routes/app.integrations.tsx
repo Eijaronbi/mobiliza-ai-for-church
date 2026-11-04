@@ -85,7 +85,7 @@ function IntegrationHub() {
   };
 
   const filtered = logs.filter((l) => (logFilter.integration === "all" || l.integrationName === logFilter.integration) && (logFilter.status === "all" || l.requestStatus === logFilter.status) && (logFilter.event === "all" || l.event === logFilter.event)).sort((a, b) => b.at.localeCompare(a.at));
-  const workflows: WebhookEndpoint["workflow"][] = ["mobilization", "transport", "followup", "reporting", "leadership", "general"];
+  const workflows: WebhookEndpoint["workflow"][] = ["mobilization", "transport", "followup", "reporting", "leadership", "prayer", "general"];
 
   return (
     <div>
