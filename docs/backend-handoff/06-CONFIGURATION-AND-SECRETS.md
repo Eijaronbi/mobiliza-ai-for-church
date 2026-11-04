@@ -24,3 +24,6 @@ Actual church name/city/pastor/timezone; administrator invitations and verified 
 
 ## Environment rollout
 Leave demo switches until staging gates pass. Reject unknown config values (current casts do not validate them). Add fail-closed startup/readiness checks for production; never silently seed/reset demo on live routes. Keep demo separate from live tenants. Secret rotation must support a controlled sender/receiver overlap and expiry without exposing values in logs.
+
+## Prayer and broadcast provider readiness
+No new browser credential variables are needed. Configure tenant-bound WhatsApp business identity, approved templates, webhook verification, confirmed calling/group capabilities, voice/SMS/email senders and scheduler identity server-side. Prayer settings and timezone belong in tenant records, not environment switches. Confirm early-morning call consent and leader escalation destination before enabling jobs.
