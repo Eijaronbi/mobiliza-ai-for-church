@@ -13,4 +13,4 @@
 - [x] Google Maps display integration scaffold (live rendering and driver feeds unverified)
 - [x] Docs: n8n contracts, database schema; AGENTS.md; tests
 
-- [ ] Refresh backend handoff for Prayer Chain and schedule broadcasts; verify contracts and deliver versioned package
+- [x] Refresh backend handoff for Prayer Chain and schedule broadcasts; verify contracts and deliver versioned package
