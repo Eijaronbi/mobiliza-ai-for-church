@@ -7,7 +7,7 @@ import type { DemoDB } from "./mock/seed";
 export type Collection = Exclude<keyof DemoDB, "tenants">;
 export const collections: Collection[] = [
   "members","units","services","workflows","mobilization","transport","pickupPoints","vehicles","followups","templates",
-  "reports","escalations","activities","agents","executions","integrations","endpoints","customApis","logs",
+  "reports","escalations","activities","agents","executions","integrations","endpoints","customApis","logs","attendanceSheets",
 ];
 
 type Repo<K extends Collection> = ReturnType<typeof mockRepo<K>>;
@@ -32,7 +32,7 @@ export const repos = {
   mobilization: make("mobilization"), transport: make("transport"), pickupPoints: make("pickupPoints"), vehicles: make("vehicles"),
   followups: make("followups"), templates: make("templates"), reports: make("reports"), escalations: make("escalations"),
   activities: make("activities"), agents: make("agents"), executions: make("executions"), integrations: make("integrations"),
-  endpoints: make("endpoints"), customApis: make("customApis"), logs: make("logs"),
+  endpoints: make("endpoints"), customApis: make("customApis"), logs: make("logs"), attendanceSheets: make("attendanceSheets"),
 };
 export { tenants } from "./mock/seed";
 export { resetDemo } from "./mock/mock-repository";

@@ -331,3 +331,15 @@ export interface WorkflowExecution {
   status: DeliveryStatus;
   at: ISODate;
 }
+
+/** An imported attendance list a church marks present/absent and shares in its own format. */
+export interface AttendanceSheet {
+  id: ID;
+  tenantId: ID;
+  serviceId?: ID;
+  title: string;
+  date: ISODate;
+  format: string;
+  entries: { id: string; name: string; phone?: string; mark: "present" | "absent" | "unmarked" }[];
+  updatedAt: ISODate;
+}
