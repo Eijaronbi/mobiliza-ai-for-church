@@ -23,9 +23,10 @@ export const simulatedTransport: Transport = {
 
 export const serverTransport: Transport = {
   name: "server",
-  async send() {
-    // TODO(backend): call a createServerFn (e.g. dispatchIntegrationRequest) that
-    // loads the secret by secretRef, signs the body (HMAC-SHA256), sends, and logs.
-    throw new Error("Server transport is not connected yet.");
+  async send(req) {
+    const { deliverWebhook } = await import("@/lib/delivery.functions");
+    const body = req.body as { tenant_id?: string } | undefined;
+    const tenantId = body?.tenant_id ?? "";
+    return deliverWebhook({ data: { tenantId, url: req.url, method: req.method, body: req.body } }) as Promise<ApiResponse>;
   },
 };
