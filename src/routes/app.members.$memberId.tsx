@@ -1,3 +1,4 @@
+import { channelLabel } from "@/config/channels";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowLeft, Pencil, Phone, Mail, MapPin } from "lucide-react";
@@ -67,7 +68,7 @@ function MemberProfile() {
         </TabsList>
         <Card className="mt-3 p-5 shadow-card">
           <TabsContent value="overview" className="m-0 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[["Department", u(m.departmentId)?.name], ["Groups", m.groupIds.map((g) => u(g)?.name).join(", ")], ["Assigned leader", leader?.name], ["Contact preference", m.contactPreference], ["Consent", m.consent ? "Given" : "Not given"], ["Member since", fmtDate(m.joinedAt, { month: "short", year: "numeric" })]].map(([l, v]) => (
+            {[["Department", u(m.departmentId)?.name], ["Groups", m.groupIds.map((g) => u(g)?.name).join(", ")], ["Assigned leader", leader?.name], ["Contact preference", channelLabel(m.contactPreference)], ["Consent", m.consent ? "Given" : "Not given"], ["Member since", fmtDate(m.joinedAt, { month: "short", year: "numeric" })]].map(([l, v]) => (
               <div key={l}><div className="text-xs text-muted-foreground">{l}</div><div className="text-sm font-medium capitalize">{v || "—"}</div></div>
             ))}
           </TabsContent>

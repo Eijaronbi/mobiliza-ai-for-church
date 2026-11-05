@@ -1,3 +1,4 @@
+import { channelLabel } from "@/config/channels";
 import { useMemo, useState } from "react";
 import { Plus, Trash2, Send } from "lucide-react";
 import { toast } from "sonner";
@@ -13,7 +14,7 @@ import { useAction, useListData } from "@/hooks/use-data";
 import { fmtDateTime } from "@/lib/format";
 import type { Service } from "@/types";
 
-type Channel = "sms" | "whatsapp";
+type Channel = "sms" | "whatsapp" | "email";
 interface Contact { name: string; phone: string }
 interface WaGroup { name: string; groupId: string }
 
@@ -74,7 +75,7 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
 
   const send = async () => {
     if (!service) return;
-    if (!channels.length) return toast.error("Choose SMS, WhatsApp or both");
+    if (!channels.length) return toast.error("Choose WhatsApp, SMS or Email");
     if (message.trim().length < 5) return toast.error("Write the message to send");
     if (!total && !(channels.includes("whatsapp") && waGroups.length)) return toast.error("Add at least one person, church group or WhatsApp group");
     if (waGroups.length && !channels.includes("whatsapp")) return toast.error("WhatsApp groups need the WhatsApp channel turned on");
@@ -106,10 +107,10 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">Send via</legend>
             <div className="flex gap-4">
-              {(["sms", "whatsapp"] as Channel[]).map((c) => (
+              {(["whatsapp", "sms", "email"] as Channel[]).map((c) => (
                 <label key={c} className="flex items-center gap-2 text-sm">
-                  <Checkbox checked={channels.includes(c)} onCheckedChange={() => toggle(channels, c, setChannels)} aria-label={c === "sms" ? "SMS" : "WhatsApp"} />
-                  {c === "sms" ? "SMS" : "WhatsApp"}
+                  <Checkbox checked={channels.includes(c)} onCheckedChange={() => toggle(channels, c, setChannels)} aria-label={channelLabel(c)} />
+                  {channelLabel(c)}
                 </label>
               ))}
             </div>

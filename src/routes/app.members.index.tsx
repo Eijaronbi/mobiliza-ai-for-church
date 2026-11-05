@@ -1,3 +1,4 @@
+import { CONTACT_CHANNELS } from "@/config/channels";
 import { safeCell } from "@/lib/csv-safe";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
@@ -33,7 +34,7 @@ export const memberSchema = z.object({
   status: z.enum(["active", "new", "inactive", "visitor"]),
   departmentId: z.string().optional(),
   groupId: z.string().optional(),
-  contactPreference: z.enum(["call", "sms", "whatsapp", "email"]),
+  contactPreference: z.enum(["call", "whatsapp_call", "sms", "whatsapp", "email"]),
   consent: z.boolean(),
 });
 type FormV = z.infer<typeof memberSchema>;
@@ -54,7 +55,7 @@ export function MemberForm({ initial, onSubmit, submitLabel }: { initial?: Parti
         <div key={k} className="space-y-1"><Label className="capitalize">{k === "name" ? "Full name" : k}</Label><Input aria-label={k === "name" ? "Full name" : k} {...f.register(k)} />{err[k] && <p className="text-xs text-destructive">{err[k]?.message}</p>}</div>
       ))}
       <div className="space-y-1"><Label>Membership status</Label>{sel("status", [["active", "Active"], ["new", "New"], ["inactive", "Inactive"], ["visitor", "Visitor"]])}</div>
-      <div className="space-y-1"><Label>Contact preference</Label>{sel("contactPreference", [["call", "Call"], ["sms", "SMS"], ["whatsapp", "WhatsApp"], ["email", "Email"]])}</div>
+      <div className="space-y-1"><Label>Contact preference</Label>{sel("contactPreference", CONTACT_CHANNELS.map((c) => [c.id, c.label] as [string, string]))}</div>
       <div className="space-y-1"><Label>Department</Label>{sel("departmentId", units.filter((u) => u.type === "department").map((u) => [u.id, u.name]))}</div>
       <div className="space-y-1"><Label>Cell / group</Label>{sel("groupId", units.filter((u) => u.type === "cell" || u.type === "home_group").map((u) => [u.id, u.name]))}</div>
       <label className="flex items-center gap-2 text-sm sm:col-span-2"><Switch checked={f.watch("consent")} onCheckedChange={(v) => f.setValue("consent", v)} />Member consents to be contacted</label>

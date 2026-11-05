@@ -1,7 +1,8 @@
+import { channelLabel } from "@/config/channels";
 import { csvField } from "@/lib/csv-safe";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Play, Send, BellRing, Bus, FileDown, Phone, MessageCircle, Mail, MessageSquare } from "lucide-react";
+import { Play, Send, BellRing, Bus, FileDown, Phone, PhoneCall, MessageCircle, Mail, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/app/mobilization")({
   component: MobilizationPage,
 });
 
-const chIcon = { call: Phone, whatsapp: MessageCircle, sms: MessageSquare, email: Mail };
+const chIcon = { call: Phone, whatsapp_call: PhoneCall, whatsapp: MessageCircle, sms: MessageSquare, email: Mail };
 
 function MobilizationPage() {
   const services = useListData("services");
@@ -112,7 +113,7 @@ function MobilizationPage() {
                       <Input className="h-8 w-28 text-xs" value={st.offset} onChange={(e) => upd({ offset: e.target.value })} aria-label="Timing" />
                       <Select value={st.channel} onValueChange={(v) => upd({ channel: v as typeof st.channel })}>
                         <SelectTrigger aria-label={`Channel for ${st.name}`} className="h-8 w-[120px] text-xs"><Icon className="h-3.5 w-3.5" /><SelectValue /></SelectTrigger>
-                        <SelectContent>{Object.keys(chIcon).map((c) => <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>)}</SelectContent>
+                        <SelectContent>{Object.keys(chIcon).map((c) => <SelectItem key={c} value={c}>{channelLabel(c)}</SelectItem>)}</SelectContent>
                       </Select>
                       <Switch checked={st.enabled} onCheckedChange={(v) => upd({ enabled: v })} aria-label="Enabled" />
                     </li>
