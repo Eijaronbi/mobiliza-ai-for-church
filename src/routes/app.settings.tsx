@@ -12,6 +12,9 @@ import { useTenant } from "@/hooks/use-app";
 import { useListData } from "@/hooks/use-data";
 import { roles, roleIds, type Permission } from "@/config/roles";
 import { resetDemo } from "@/services/data";
+import { TeamPanel } from "@/components/settings/TeamPanel";
+import { useApp } from "@/hooks/use-app";
+import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { fmtDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -26,6 +29,7 @@ const perms: Permission[] = ["manage_members", "run_mobilization", "approve_tran
 
 function SettingsPage() {
   const t = useTenant();
+  const { mode, reloadChurches } = useApp();
   const logs = useListData("logs");
   const qc = useQueryClient();
   const [s, setS] = useState<(typeof sections)[number]>("Church profile");
@@ -39,14 +43,22 @@ function SettingsPage() {
         <nav aria-label="Settings sections" className="h-fit border-r pr-3">{sections.map((x) => <Button key={x} variant="ghost" aria-pressed={s === x} onClick={() => setS(x)} className={cn("h-auto min-h-11 w-full justify-start whitespace-normal px-3 py-2 text-left text-sm", s === x && "bg-accent font-medium text-accent-foreground")}>{x}</Button>)}</nav>
         <Card className="p-5 shadow-card lg:col-span-3">
           <h2 className="mb-4 text-lg font-bold">{s}</h2>
-          {s === "Church profile" && <form className="grid gap-3 sm:grid-cols-2" onSubmit={(e) => { e.preventDefault(); toast.success("Church profile saved"); }}>
-            <div className="space-y-1"><Label>Church name</Label><Input aria-label="Church name" defaultValue={t.name} required minLength={2} /></div>
-            <div className="space-y-1"><Label>City</Label><Input aria-label="City" defaultValue={t.city} required /></div>
-            <div className="space-y-1"><Label>Senior pastor</Label><Input aria-label="Senior pastor" defaultValue={t.pastor} /></div>
-            <div className="space-y-1"><Label>Time zone</Label><Input aria-label="Time zone" defaultValue={t.timezone} /></div>
+          {s === "Church profile" && <form className="grid gap-3 sm:grid-cols-2" key={t.id} onSubmit={async (e) => {
+            e.preventDefault();
+            if (mode !== "live") return toast.success("Church profile saved (demo)");
+            const f = new FormData(e.currentTarget);
+            const { error } = await supabase.from("tenants").update({ name: String(f.get("name")), city: String(f.get("city")), pastor: String(f.get("pastor")), timezone: String(f.get("timezone")) }).eq("id", t.id);
+            if (error) return toast.error(error.message);
+            await reloadChurches(); toast.success("Church profile saved");
+          }}>
+            <div className="space-y-1"><Label>Church name</Label><Input name="name" aria-label="Church name" defaultValue={t.name} required minLength={2} /></div>
+            <div className="space-y-1"><Label>City</Label><Input name="city" aria-label="City" defaultValue={t.city} required /></div>
+            <div className="space-y-1"><Label>Senior pastor</Label><Input name="pastor" aria-label="Senior pastor" defaultValue={t.pastor} /></div>
+            <div className="space-y-1"><Label>Time zone</Label><Input name="timezone" aria-label="Time zone" defaultValue={t.timezone} /></div>
             <div className="sm:col-span-2"><Button type="submit">Save</Button></div>
           </form>}
           {s === "Organizational configuration" && link("/app/structure", "Open Church Structure")}
+          {s === "Users and permissions" && mode === "live" && <div className="mb-6"><TeamPanel /></div>}
           {s === "Users and permissions" && <div className="overflow-x-auto"><Table><TableHeader><TableRow><TableHead>Role</TableHead>{perms.map((p) => <TableHead key={p} className="text-[11px] capitalize">{p.replace(/_/g, " ")}</TableHead>)}</TableRow></TableHeader><TableBody>{roleIds.map((r) => <TableRow key={r}><TableCell className="font-medium">{roles[r].label}</TableCell>{perms.map((p) => <TableCell key={p}>{roles[r].permissions.includes(p) ? "✓" : "—"}</TableCell>)}</TableRow>)}</TableBody></Table></div>}
           {s === "Services and schedules" && link("/app/services", "Open Services & Events")}
           {s === "Mobilization settings" && <div className="space-y-4">{toggles(["Respect contact window", "Retry non-responders automatically", "Ask about transport during confirmation call"])}{link("/app/mobilization", "Edit workflow stages")}</div>}
@@ -59,7 +71,7 @@ function SettingsPage() {
           {s === "Security and audit logs" && <div className="space-y-4">
             <p className="text-sm text-muted-foreground">Secrets are stored server-side only and referenced by name. Every outbound event is logged with secrets redacted.</p>
             <div className="max-h-80 divide-y overflow-auto rounded-lg border text-sm">{logs.slice(0, 30).map((l) => <div key={l.id} className="flex justify-between gap-2 p-2.5"><span className="font-mono text-xs">{l.event}</span><span className="text-xs text-muted-foreground">{l.integrationName} · {fmtDateTime(l.at)}</span></div>)}</div>
-            <Button variant="outline" onClick={() => { resetDemo(); qc.invalidateQueries(); toast.success("Demo data reset"); }}>Reset demo data</Button>
+            {mode === "demo" && <Button variant="outline" onClick={() => { resetDemo(); qc.invalidateQueries(); toast.success("Demo data reset"); }}>Reset demo data</Button>}
           </div>}
         </Card>
       </div>
