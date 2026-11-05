@@ -30,6 +30,7 @@ import { Route as AppStructureRouteImport } from './routes/app.structure'
 import { Route as AppTransportRouteImport } from './routes/app.transport'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppMembersMemberIdRouteImport } from './routes/app.members.$memberId'
+import { Route as ApiPublicHooksSourceRouteImport } from './routes/api/public/hooks/$source'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -136,6 +137,11 @@ const AppMembersMemberIdRoute = AppMembersMemberIdRouteImport.update({
   path: '/members/$memberId',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicHooksSourceRoute = ApiPublicHooksSourceRouteImport.update({
+  id: '/api/public/hooks/$source',
+  path: '/api/public/hooks/$source',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -181,6 +188,7 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -230,6 +239,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
+    | '/api/public/hooks/$source'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/members/$memberId'
     | '/app/members'
+    | '/api/public/hooks/$source'
   id:
     | '__root__'
     | '/'
@@ -275,6 +286,7 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
+    | '/api/public/hooks/$source'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -283,6 +295,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   OnboardingRoute: typeof OnboardingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicHooksSourceRoute: typeof ApiPublicHooksSourceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -434,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersMemberIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/public/hooks/$source': {
+      id: '/api/public/hooks/$source'
+      path: '/api/public/hooks/$source'
+      fullPath: '/api/public/hooks/$source'
+      preLoaderRoute: typeof ApiPublicHooksSourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -483,6 +503,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   OnboardingRoute: OnboardingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicHooksSourceRoute: ApiPublicHooksSourceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
