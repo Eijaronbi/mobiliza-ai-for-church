@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader, Section, StatCard, StatusBadge } from "@/components/app/kit";
 import { useListData, useRepoMutations } from "@/hooks/use-data";
 import { fmtDateTime, pct } from "@/lib/format";
+import { AttendanceSheets } from "@/components/attendance/AttendanceSheets";
 import { CheckCircle2, UserCheck, UserX, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/app/attendance")({
@@ -74,6 +75,7 @@ function AttendancePage() {
           </div>
         </Section>
       </div>
+      <div className="mt-4"><AttendanceSheets /></div>
     </div>
   );
 }
