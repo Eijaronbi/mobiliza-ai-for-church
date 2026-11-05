@@ -1,7 +1,7 @@
 import type {
   Activity, Agent, AgentExecution, CustomApiConfig, DeliveryLog, Escalation, FollowUp, IntegrationConfig,
   Member, MobilizationRecord, MobilizationWorkflow, OrgUnit, PickupPoint, Report, ReportTemplate, Service,
-  Tenant, TransportRequest, Vehicle, WebhookEndpoint, AttendanceResponse, TransportStatus, FollowUpStatus,
+  Tenant, TransportRequest, Vehicle, WebhookEndpoint, AttendanceResponse, AttendanceSheet, TransportStatus, FollowUpStatus,
 } from "@/types";
 import { appConfig } from "@/config/app.config";
 import { actionList } from "@/config/action-map";
