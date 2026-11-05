@@ -45,7 +45,7 @@ export function useAction() {
       if (!quiet) {
         const n = res.deliveries.length;
         toast.success(actions[id].label, {
-          description: mode === "live" ? (n ? `Event ${res.envelope.event} sent to ${res.deliveries.filter((d) => d.requestStatus === "delivered").length} of ${n} workflow endpoint${n > 1 ? "s" : ""}.` : `Event ${res.envelope.event} saved. Add a webhook in the Integration Hub to send it to n8n.`) : n ? `Simulated · event ${res.envelope.event} queued for ${n} workflow endpoint${n > 1 ? "s" : ""} (pending backend).` : `Simulated · event ${res.envelope.event} recorded. No active endpoint bound.`,
+          description: mode === "live" ? (n ? `Event ${res.envelope.event} sent to ${res.deliveries.filter((d) => d.requestStatus === "delivered").length} of ${n} workflow endpoint${n > 1 ? "s" : ""}.` : `No webhook is set up for ${res.envelope.event} yet. Add one in the Integration Hub to send it to n8n.`) : n ? `Simulated · event ${res.envelope.event} queued for ${n} workflow endpoint${n > 1 ? "s" : ""} (pending backend).` : `Simulated · event ${res.envelope.event} recorded. No active endpoint bound.`,
         });
       }
       return res;
