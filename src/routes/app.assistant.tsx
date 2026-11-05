@@ -80,7 +80,7 @@ export function Assistant() {
 
   return (
     <div className="flex h-[calc(100dvh-12rem)] min-h-[350px] md:h-[calc(100dvh-9rem)] flex-col">
-      <PageHeader title="AI Command Centre" description="Ask questions or give instructions in plain language." actions={{mode === "live" ? <SimBadge label="Live church data" /> : <SimBadge label="Simulated responses" />}} />
+      <PageHeader title="AI Command Centre" description="Ask questions or give instructions in plain language." actions={mode === "live" ? <SimBadge label="Live church data" /> : <SimBadge label="Simulated responses" />} />
       <Card className="flex min-h-0 flex-1 flex-col shadow-card">
         <div role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions text" className="flex-1 space-y-4 overflow-y-auto p-4">
           {msgs.map((m, i) => {
