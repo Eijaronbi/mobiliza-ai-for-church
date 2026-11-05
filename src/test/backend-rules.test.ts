@@ -19,3 +19,13 @@ describe("backend rules", () => {
     expect(rows.filter((r) => r.collection === "integrations").every((r) => (r.data as { status?: string }).status !== "connected")).toBe(true);
   });
 });
+
+import { safeCell, csvField } from "@/lib/csv-safe";
+describe("spreadsheet export safety", () => {
+  it("neutralises formula-looking cells", () => {
+    expect(safeCell("=HYPERLINK(1)")).toBe("'=HYPERLINK(1)");
+    expect(safeCell("+234 803")).toBe("'+234 803");
+    expect(safeCell("Ada Obi")).toBe("Ada Obi");
+    expect(csvField('@x,"y"')).toBe('"\'@x,""y"""');
+  });
+});

@@ -1,3 +1,4 @@
+import { safeCell } from "@/lib/csv-safe";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
 import Papa from "papaparse";
@@ -87,7 +88,7 @@ function MembersPage() {
   };
 
   const exportCsv = () => {
-    const csv = Papa.unparse(rows.map((m) => ({ name: m.name, phone: m.phone, email: m.email, location: m.location, status: m.status, department: unitName(m.departmentId), group: unitName(m.groupIds[0]), contact_preference: m.contactPreference, consent: m.consent })));
+    const csv = Papa.unparse(rows.map((m) => ({ name: safeCell(m.name), phone: safeCell(m.phone), email: safeCell(m.email), location: safeCell(m.location), status: m.status, department: safeCell(unitName(m.departmentId)), group: safeCell(unitName(m.groupIds[0])), contact_preference: m.contactPreference, consent: m.consent })));
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "members.csv"; a.click();
   };
   const importCsv = (file: File) => {

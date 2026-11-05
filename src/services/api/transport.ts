@@ -27,6 +27,7 @@ export const serverTransport: Transport = {
   async send(req) {
     const body = req.body as { tenant_id?: string } | undefined;
     const tenantId = body?.tenant_id ?? "";
-    return deliverWebhook({ data: { tenantId, url: req.url, method: req.method, body: req.body } }) as Promise<ApiResponse>;
+    const method = req.method === "PUT" || req.method === "PATCH" ? req.method : "POST";
+    return deliverWebhook({ data: { tenantId, url: req.url, method, body: req.body as never } }) as Promise<ApiResponse>;
   },
 };
