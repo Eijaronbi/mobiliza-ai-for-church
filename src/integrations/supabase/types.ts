@@ -105,6 +105,44 @@ export type Database = {
           },
         ]
       }
+      tenant_ai_settings: {
+        Row: {
+          api_key_ciphertext: string
+          key_hint: string
+          model: string
+          provider: string
+          tenant_id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          api_key_ciphertext: string
+          key_hint: string
+          model: string
+          provider: string
+          tenant_id: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          api_key_ciphertext?: string
+          key_hint?: string
+          model?: string
+          provider?: string
+          tenant_id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_ai_settings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: true
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenant_invites: {
         Row: {
           accepted_at: string | null
