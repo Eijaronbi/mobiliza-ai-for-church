@@ -8,6 +8,10 @@ vi.mock("@/hooks/use-data", () => ({
   useAction: () => state.run,
 }));
 
+vi.mock("@/hooks/use-app", () => ({ useApp: () => ({ mode: "demo", tenantId: "t1" }) }));
+vi.mock("@tanstack/react-start", () => ({ useServerFn: (f: unknown) => f, createServerFn: () => ({ middleware: () => ({ inputValidator: () => ({ handler: () => vi.fn() }) }) }) }));
+vi.mock("@/lib/ai.functions", () => ({ askMobiliza: vi.fn() }));
+
 afterEach(() => { cleanup(); state.services = []; vi.clearAllMocks(); });
 
 describe("Ask AI regression", () => {

@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppAgentsRouteImport } from './routes/app.agents'
 import { Route as AppAssistantRouteImport } from './routes/app.assistant'
@@ -27,6 +30,7 @@ import { Route as AppStructureRouteImport } from './routes/app.structure'
 import { Route as AppTransportRouteImport } from './routes/app.transport'
 import { Route as AppMembersIndexRouteImport } from './routes/app.members.index'
 import { Route as AppMembersMemberIdRouteImport } from './routes/app.members.$memberId'
+import { Route as ApiPublicHooksSourceRouteImport } from './routes/api/public/hooks/$source'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -36,6 +40,21 @@ const IndexRoute = IndexRouteImport.update({
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -118,10 +137,18 @@ const AppMembersMemberIdRoute = AppMembersMemberIdRouteImport.update({
   path: '/members/$memberId',
   getParentRoute: () => AppRoute,
 } as any)
+const ApiPublicHooksSourceRoute = ApiPublicHooksSourceRouteImport.update({
+  id: '/api/public/hooks/$source',
+  path: '/api/public/hooks/$source',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/app/agents': typeof AppAgentsRoute
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
@@ -138,9 +165,13 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/app/agents': typeof AppAgentsRoute
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
@@ -157,11 +188,15 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/app/agents': typeof AppAgentsRoute
   '/app/assistant': typeof AppAssistantRoute
   '/app/attendance': typeof AppAttendanceRoute
@@ -178,12 +213,16 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/members/$memberId': typeof AppMembersMemberIdRoute
   '/app/members/': typeof AppMembersIndexRoute
+  '/api/public/hooks/$source': typeof ApiPublicHooksSourceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/app'
+    | '/auth'
+    | '/onboarding'
+    | '/reset-password'
     | '/app/agents'
     | '/app/assistant'
     | '/app/attendance'
@@ -200,9 +239,13 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
+    | '/api/public/hooks/$source'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/onboarding'
+    | '/reset-password'
     | '/app/agents'
     | '/app/assistant'
     | '/app/attendance'
@@ -219,10 +262,14 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/members/$memberId'
     | '/app/members'
+    | '/api/public/hooks/$source'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/auth'
+    | '/onboarding'
+    | '/reset-password'
     | '/app/agents'
     | '/app/assistant'
     | '/app/attendance'
@@ -239,11 +286,16 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/members/$memberId'
     | '/app/members/'
+    | '/api/public/hooks/$source'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  OnboardingRoute: typeof OnboardingRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicHooksSourceRoute: typeof ApiPublicHooksSourceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -260,6 +312,27 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -374,6 +447,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMembersMemberIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/api/public/hooks/$source': {
+      id: '/api/public/hooks/$source'
+      path: '/api/public/hooks/$source'
+      fullPath: '/api/public/hooks/$source'
+      preLoaderRoute: typeof ApiPublicHooksSourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -420,6 +500,10 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
+  OnboardingRoute: OnboardingRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicHooksSourceRoute: ApiPublicHooksSourceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

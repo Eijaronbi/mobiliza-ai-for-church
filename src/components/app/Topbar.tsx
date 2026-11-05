@@ -9,14 +9,13 @@ import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, C
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useApp } from "@/hooks/use-app";
 import { useListData } from "@/hooks/use-data";
-import { tenants } from "@/services/data";
 import { roles, roleIds } from "@/config/roles";
 import { nav } from "@/config/nav";
 import { timeAgo } from "@/lib/format";
 import type { RoleId } from "@/types";
 
 export function Topbar() {
-  const { tenantId, setTenantId, role, setRole, actor } = useApp();
+  const { tenantId, setTenantId, role, setRole, actor, tenants, mode, session, useDemo, signOut } = useApp();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const members = useListData("members");
@@ -36,6 +35,7 @@ export function Topbar() {
         <kbd className="ml-auto hidden rounded border bg-muted px-1.5 text-[10px] md:inline">⌘K</kbd>
       </Button>
       <div className="ml-auto flex items-center gap-1">
+        {mode === "demo" && <span className="hidden rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-foreground sm:inline">Demo</span>}
         <Select value={tenantId} onValueChange={setTenantId}>
           <SelectTrigger aria-label="Choose church" className="hidden h-9 w-[200px] lg:flex"><Building2 className="h-4 w-4 text-muted-foreground" /><SelectValue /></SelectTrigger>
           <SelectContent>{tenants.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
@@ -76,12 +76,28 @@ export function Topbar() {
             <Button variant="ghost" aria-label="Profile and preview role" className="h-9 gap-2 px-2"><UserCircle2 className="h-5 w-5" /><span className="hidden max-w-[140px] truncate text-xs md:inline">{actor.name}</span></Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-64">
+            {mode === "live" ? (
+              <>
+                <DropdownMenuLabel><div className="truncate text-sm">{session?.user.email}</div><div className="text-[11px] font-normal text-muted-foreground">{roles[role].label}</div></DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => { useDemo(true); navigate({ to: "/app" }); }}>Explore the demo church</DropdownMenuItem>
+                <DropdownMenuItem onClick={async () => { await signOut(); navigate({ to: "/auth", replace: true }); }}>Sign out</DropdownMenuItem>
+              </>
+            ) : (
+              <>
+            {session ? (
+              <DropdownMenuItem onClick={() => { useDemo(false); navigate({ to: "/app" }); }}>Back to my church</DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem onClick={() => navigate({ to: "/auth" })}>Sign in or create your church</DropdownMenuItem>
+            )}
+            <DropdownMenuSeparator />
             <DropdownMenuLabel>Preview as role (demo)</DropdownMenuLabel>
             {roleIds.map((r) => (
               <DropdownMenuItem key={r} onClick={() => { setRole(r as RoleId); navigate({ to: "/app" }); }} className={r === role ? "bg-accent" : ""}>
                 <div><div className="text-sm font-medium">{roles[r].label}</div><div className="text-[11px] text-muted-foreground">{roles[r].description}</div></div>
               </DropdownMenuItem>
             ))}
+              </>
+            )}
             <DropdownMenuSeparator />
             <div className="p-2 lg:hidden">
               <Select value={tenantId} onValueChange={setTenantId}>
