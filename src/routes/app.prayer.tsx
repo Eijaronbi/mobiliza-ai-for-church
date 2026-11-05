@@ -1,3 +1,6 @@
+import { useApp } from "@/hooks/use-app";
+import { useServerFn } from "@tanstack/react-start";
+import { sendChurchEmails } from "@/lib/gmail.functions";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Bell, CheckCircle2, Phone, PhoneOff, Send, Bot, UserPlus, X } from "lucide-react";
@@ -187,8 +190,10 @@ function ChannelPicks({ value, onChange, prefix }: { value: PrayerMessageChannel
   );
 }
 
-function PrayerPoints({ members, rosterIds, cfg, setCfg }: { members: { id: string; consent: boolean }[]; rosterIds: string[]; cfg: PrayerChainConfig; setCfg: (c: PrayerChainConfig) => void }) {
+function PrayerPoints({ members, rosterIds, cfg, setCfg }: { members: { id: string; consent: boolean; email?: string; name?: string }[]; rosterIds: string[]; cfg: PrayerChainConfig; setCfg: (c: PrayerChainConfig) => void }) {
   const run = useAction();
+  const { mode, tenantId } = useApp();
+  const sendEmails = useServerFn(sendChurchEmails);
   const [channels, setChannels] = useState<PrayerMessageChannel[]>(["whatsapp"]);
   const [audience, setAudience] = useState<"roster" | "all">("roster");
   const [text, setText] = useState("Prayer points for this morning:\n1. Revival in our church and city\n2. Our families and children\n3. Upcoming services and the sick");
@@ -197,6 +202,13 @@ function PrayerPoints({ members, rosterIds, cfg, setCfg }: { members: { id: stri
     const ok = ids.filter((i) => members.find((m) => m.id === i)?.consent);
     if (!channels.length || text.trim().length < 5) return toast.error("Choose a channel and write the prayer points.");
     run("sendPrayerPoints", { chain_id: chainId, channels, message: text.trim(), member_ids: ok, recipient_count: ok.length, skipped_no_consent: ids.length - ok.length });
+    if (channels.includes("email") && mode === "live") {
+      const recipients = ok.map((i) => members.find((m) => m.id === i)).filter((m) => m?.email).map((m) => ({ email: m!.email!, name: m!.name })).slice(0, 100);
+      if (!recipients.length) return toast.error("None of these members has an email address.");
+      sendEmails({ data: { tenantId, subject: "Prayer points", text: text.trim(), recipients } })
+        .then((r) => (r.error && !r.sent ? toast.error(r.error) : toast.success(`Emailed ${r.sent} member${r.sent === 1 ? "" : "s"} from Gmail${r.failed ? ` · ${r.failed} failed` : ""}`)))
+        .catch(() => toast.error("Couldn't send the emails."));
+    }
   };
   return (
     <div className="grid gap-3 lg:grid-cols-2">

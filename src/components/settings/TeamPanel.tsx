@@ -1,3 +1,5 @@
+import { useServerFn } from "@tanstack/react-start";
+import { sendChurchEmails } from "@/lib/gmail.functions";
 import { useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -32,12 +34,17 @@ export function TeamPanel() {
     },
   });
 
+  const sendEmails = useServerFn(sendChurchEmails);
   const invite = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.from("tenant_invites").insert({ tenant_id: tenantId, email: email.trim().toLowerCase(), role: newRole, invited_by: session!.user.id });
       if (error) throw new Error(error.message);
+      const link = `${window.location.origin}/auth`;
+      const r = await sendEmails({ data: { tenantId, subject: "You're invited to join your church on Mobiliza", recipients: [{ email: email.trim() }],
+        text: `Hello,\n\nYou've been invited to join your church on Mobiliza.\n\nSign up here with this email address: ${link}\n\nAfter confirming your email you'll join the church automatically.` } }).catch(() => null);
+      return r?.sent ? "emailed" : "saved";
     },
-    onSuccess: () => { toast.success("Invite saved", { description: `Ask ${email} to sign up at ${window.location.origin}/auth with this email.` }); setEmail(""); qc.invalidateQueries({ queryKey: ["team"] }); },
+    onSuccess: (how) => { toast.success(how === "emailed" ? "Invite emailed" : "Invite saved", { description: how === "emailed" ? `Sent to ${email} from your Gmail.` : `Ask ${email} to sign up at ${window.location.origin}/auth with this email.` }); setEmail(""); qc.invalidateQueries({ queryKey: ["team"] }); },
     onError: (e) => toast.error((e as Error).message),
   });
 
