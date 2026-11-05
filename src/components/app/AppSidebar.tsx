@@ -42,8 +42,8 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <div className="rounded-lg bg-sidebar-accent p-3 text-xs text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-          <div className="font-semibold text-sidebar-accent-foreground">Demo mode</div>
-          Data and AI actions are simulated. No external services are called.
+          <div className="font-semibold text-sidebar-accent-foreground">{mode === "live" ? "Live church" : "Demo mode"}</div>
+          {mode === "live" ? "Changes are saved to your church. Messages go out only through connected services." : "Data and AI actions are simulated. No external services are called."}
         </div>
       </SidebarFooter>
     </Sidebar>

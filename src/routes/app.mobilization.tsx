@@ -22,7 +22,8 @@ const chIcon = { call: Phone, whatsapp: MessageCircle, sms: MessageSquare, email
 
 function MobilizationPage() {
   const services = useListData("services");
-  const upcoming = services.filter((s) => s.date > "2026-11-05").sort((a, b) => a.date.localeCompare(b.date));
+  const today = new Date().toISOString().slice(0, 10);
+  const upcoming = services.filter((s) => s.date >= today).sort((a, b) => a.date.localeCompare(b.date));
   const [sid, setSid] = useState<string>("");
   const svc = upcoming.find((s) => s.id === sid) ?? upcoming[0];
   const mob = useListData("mobilization").filter((r) => r.serviceId === svc?.id);
@@ -52,7 +53,12 @@ function MobilizationPage() {
     toast.success(`Simulated contact sent to ${pend.length} pending members`);
   };
 
-  if (!svc) return null;
+  if (!svc) return (
+    <div>
+      <PageHeader title="Mobilization" description="Contact members, confirm attendance, identify needs and coordinate pickups." />
+      <p className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">No upcoming services yet. Add one in Services &amp; Events, then come back to mobilize members for it.</p>
+    </div>
+  );
   return (
     <div>
       <PageHeader title="Mobilization" description="Contact members, confirm attendance, identify needs and coordinate pickups." actions={<>
