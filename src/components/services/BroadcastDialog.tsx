@@ -1,3 +1,6 @@
+import { useServerFn } from "@tanstack/react-start";
+import { sendChurchEmails } from "@/lib/gmail.functions";
+import { useApp } from "@/hooks/use-app";
 import { channelLabel } from "@/config/channels";
 import { useMemo, useState } from "react";
 import { Plus, Trash2, Send } from "lucide-react";
@@ -30,6 +33,8 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
   const members = useListData("members");
   const units = useListData("units");
   const dispatch = useAction();
+  const { mode, tenantId } = useApp();
+  const sendEmails = useServerFn(sendChurchEmails);
   const [channels, setChannels] = useState<Channel[]>(["sms", "whatsapp"]);
   const [message, setMessage] = useState("");
   const [memberIds, setMemberIds] = useState<string[]>([]);
@@ -92,6 +97,14 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
       recipient_count: total,
       skipped_no_consent: resolved.skipped,
     });
+    if (res && channels.includes("email") && mode === "live") {
+      const recipients = resolved.consented.filter((m) => m.email).map((m) => ({ email: m.email, name: m.name })).slice(0, 100);
+      if (recipients.length) {
+        const r = await sendEmails({ data: { tenantId, subject: service.name, text: message.trim(), recipients } }).catch(() => null);
+        if (r?.sent) toast.success(`Emailed ${r.sent} from Gmail${r.failed ? ` · ${r.failed} failed` : ""}`);
+        else toast.error(r?.error ?? "Couldn't send the emails.");
+      }
+    }
     setSending(false);
     if (res) onClose();
   };
