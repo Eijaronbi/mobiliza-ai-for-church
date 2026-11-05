@@ -26,11 +26,9 @@ export const sendChurchEmails = createServerFn({ method: "POST" })
     if (!roleRows?.length || roleRows.every((r) => r.role === "member")) return { sent: 0, failed: 0, error: "Your role can't send church emails." };
     const lk = process.env["LOVABLE_API_KEY"], gk = process.env["GOOGLE_MAIL_API_KEY"];
     if (!lk || !gk) return { sent: 0, failed: 0, error: "Gmail is not connected." };
-    const { data: church } = await context.supabase.from("tenants").select("name").eq("id", data.tenantId).single();
     let sent = 0, failed = 0, lastError = "";
     for (const r of data.recipients) {
       const msg = [
-        `From: ${hdr(clean(church?.name ?? "Mobiliza"))} <me>`.replace(" <me>", ""),
         `To: ${r.name ? `${hdr(clean(r.name))} ` : ""}<${r.email}>`,
         `Subject: ${hdr(clean(data.subject))}`,
         "MIME-Version: 1.0", 'Content-Type: text/plain; charset="UTF-8"', "Content-Transfer-Encoding: base64", "",
