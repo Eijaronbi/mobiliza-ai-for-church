@@ -58,7 +58,7 @@ function Landing() {
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand shadow-elegant"><Church className="h-4.5 w-4.5" /></span>
             <span className="font-display text-lg font-bold">Mobilizer</span>
           </Link>
-          <Button asChild variant="secondary" size="sm"><Link to="/app">Enter demo</Link></Button>
+          <div className="flex gap-2"><Button asChild variant="ghost" size="sm" className="text-hero-foreground"><Link to="/auth">Sign in</Link></Button><Button asChild variant="secondary" size="sm"><Link to="/app">Enter demo</Link></Button></div>
         </div>
       </header>
 

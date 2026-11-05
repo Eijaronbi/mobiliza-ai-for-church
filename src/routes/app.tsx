@@ -1,4 +1,6 @@
-import { createFileRoute, Link, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useApp } from "@/hooks/use-app";
 import { LayoutDashboard, Megaphone, Bus, HeartHandshake, Sparkles } from "lucide-react";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app/AppSidebar";
@@ -20,6 +22,13 @@ const bottom = [
 
 function AppLayout() {
   const { pathname } = useLocation();
+  const { ready, mode, liveChurches } = useApp();
+  const navigate = useNavigate();
+  const needsChurch = ready && mode === "live" && liveChurches.length === 0;
+  useEffect(() => { if (needsChurch) navigate({ to: "/onboarding", replace: true }); }, [needsChurch, navigate]);
+  if (!ready || needsChurch) {
+    return <main className="flex min-h-dvh items-center justify-center text-sm text-muted-foreground" aria-busy="true">Loading your church…</main>;
+  }
   return (
     <SidebarProvider>
       <AppSidebar />
