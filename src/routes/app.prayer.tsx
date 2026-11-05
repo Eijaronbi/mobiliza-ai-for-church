@@ -1,4 +1,3 @@
-import { useApp } from "@/hooks/use-app";
 import { useServerFn } from "@tanstack/react-start";
 import { sendChurchEmails } from "@/lib/gmail.functions";
 import { createFileRoute } from "@tanstack/react-router";
