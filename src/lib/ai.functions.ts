@@ -19,6 +19,20 @@ export const askMobiliza = createServerFn({ method: "POST" })
     for (const r of rows ?? []) (grouped[r.collection] ??= []).push(r.data);
     const counts = Object.fromEntries(Object.entries(grouped).map(([k, v]) => [k, v.length]));
     const sample = JSON.stringify(Object.fromEntries(Object.entries(grouped).map(([k, v]) => [k, v.slice(0, 40)]))).slice(0, 60000);
+    const system = `You are the Church Intelligence Agent for ${church.name}${church.city ? ` in ${church.city}` : ""}. Answer only from the church data provided. If the data doesn't contain the answer, say so plainly and suggest which Mobiliza page to update. Never invent people, numbers or contact details. Never claim you sent messages or calls. Keep answers short, use bullet points for lists.`;
+    const user = `Record counts: ${JSON.stringify(counts)}\nChurch data (JSON, possibly truncated): ${sample}\n\nQuestion: ${data.question}`;
+    const { loadChurchModel } = await import("./ai-church.server");
+    const own = await loadChurchModel(data.tenantId).catch(() => null);
+    if (own) {
+      try {
+        const { callChurchModel } = await import("./ai-call.server");
+        const text = await callChurchModel({ ...own, system, user });
+        return { text: text || "I couldn't produce an answer.", error: null as string | null };
+      } catch (e) {
+        console.error("church AI provider failed", (e as Error).message);
+        return { text: "", error: "Your church's AI provider rejected the request. Check the key in AI Agents → AI provider." };
+      }
+    }
     try {
       const res = await generateResponse({
         model: "openai/gpt-6-astra",
