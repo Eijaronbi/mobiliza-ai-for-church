@@ -38,7 +38,7 @@ export async function dispatchAction(
       integrationName: integration?.name ?? "Custom", event: action.event, endpoint: ep.url, method: ep.method,
       requestStatus: disabled ? "failed" : res!.ok ? "delivered" : "pending_backend", responseStatus: res?.status,
       durationMs: res?.durationMs ?? 0, error: disabled ? "Integration disabled" : res?.error, retries: 0,
-      payload: JSON.stringify(redact(envelope)), simulated: true,
+      payload: JSON.stringify(redact(envelope)), simulated: res?.simulated ?? true,
     };
     await repos.logs.create(log);
     deliveries.push(log);
@@ -52,7 +52,7 @@ export async function testIntegration(integration: IntegrationConfig): Promise<D
     id: `log_test_${Date.now()}`, tenantId: integration.tenantId, at: new Date().toISOString(), integrationId: integration.id,
     integrationName: integration.name, event: "connection.test", endpoint: integration.baseUrl || "(not set)", method: "GET",
     requestStatus: res.ok ? "delivered" : "failed", responseStatus: res.status, durationMs: res.durationMs, error: res.error,
-    retries: 0, payload: "{}", simulated: true,
+    retries: 0, payload: "{}", simulated: res.simulated,
   };
   await repos.logs.create(log);
   return log;

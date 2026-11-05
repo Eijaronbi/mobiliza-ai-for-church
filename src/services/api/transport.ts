@@ -1,3 +1,4 @@
+import { deliverWebhook } from "@/lib/delivery.functions";
 import type { ApiRequest, ApiResponse } from "@/types";
 
 /** Transport = how a request actually leaves Mobilizer.
@@ -24,7 +25,6 @@ export const simulatedTransport: Transport = {
 export const serverTransport: Transport = {
   name: "server",
   async send(req) {
-    const { deliverWebhook } = await import("@/lib/delivery.functions");
     const body = req.body as { tenant_id?: string } | undefined;
     const tenantId = body?.tenant_id ?? "";
     return deliverWebhook({ data: { tenantId, url: req.url, method: req.method, body: req.body } }) as Promise<ApiResponse>;
