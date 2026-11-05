@@ -18,7 +18,7 @@ export const Route = createFileRoute("/app/assistant")({
 });
 
 type Kind = "info" | "recommendation" | "action";
-interface Msg { role: "user" | "ai"; text: string; kind?: Kind; action?: { id: ActionId; data: Record<string, unknown>; label: string }; done?: boolean }
+interface Msg { role: "user" | "ai"; text: string; kind?: Kind; action?: { id: ActionId; data: Record<string, unknown>; label: string }; done?: boolean; fallback?: boolean }
 const suggestions = ["How many members have confirmed?", "Who needs transportation?", "Which cell leaders have outstanding responsibilities?", "Show first timers awaiting follow-up", "Which reports are overdue?", "Generate the weekly evangelism summary", "Show unresolved member issues", "Start the mobilization workflow"];
 
 /** AgentRuntime contract: today a rule-based matcher over demo data; later an AI Gateway call with tool use. */
