@@ -1,7 +1,7 @@
 import type {
   Activity, Agent, AgentExecution, CustomApiConfig, DeliveryLog, Escalation, FollowUp, IntegrationConfig,
   Member, MobilizationRecord, MobilizationWorkflow, OrgUnit, PickupPoint, Report, ReportTemplate, Service,
-  Tenant, TransportRequest, Vehicle, WebhookEndpoint, AttendanceResponse, TransportStatus, FollowUpStatus,
+  Tenant, TransportRequest, Vehicle, WebhookEndpoint, AttendanceResponse, AttendanceSheet, TransportStatus, FollowUpStatus,
 } from "@/types";
 import { appConfig } from "@/config/app.config";
 import { actionList } from "@/config/action-map";
@@ -28,7 +28,7 @@ export interface DemoDB {
   mobilization: MobilizationRecord[]; transport: TransportRequest[]; pickupPoints: PickupPoint[]; vehicles: Vehicle[];
   followups: FollowUp[]; templates: ReportTemplate[]; reports: Report[]; escalations: Escalation[]; activities: Activity[];
   agents: Agent[]; executions: AgentExecution[]; integrations: IntegrationConfig[]; endpoints: WebhookEndpoint[];
-  customApis: CustomApiConfig[]; logs: DeliveryLog[];
+  customApis: CustomApiConfig[]; logs: DeliveryLog[]; attendanceSheets: AttendanceSheet[];
 }
 
 function forTenant(t: Tenant, size: number, db: DemoDB) {
@@ -283,7 +283,7 @@ function forTenant(t: Tenant, size: number, db: DemoDB) {
 
 export function buildSeed(): DemoDB {
   s = 42;
-  const db: DemoDB = { tenants, members: [], units: [], services: [], workflows: [], mobilization: [], transport: [], pickupPoints: [], vehicles: [], followups: [], templates: [], reports: [], escalations: [], activities: [], agents: [], executions: [], integrations: [], endpoints: [], customApis: [], logs: [] };
+  const db: DemoDB = { tenants, members: [], units: [], services: [], workflows: [], mobilization: [], transport: [], pickupPoints: [], vehicles: [], followups: [], templates: [], reports: [], escalations: [], activities: [], agents: [], executions: [], integrations: [], endpoints: [], customApis: [], logs: [], attendanceSheets: [] };
   forTenant(tenants[0], 120, db);
   forTenant(tenants[1], 48, db);
   return db;

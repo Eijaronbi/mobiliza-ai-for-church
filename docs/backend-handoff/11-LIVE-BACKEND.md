@@ -48,3 +48,6 @@ Ask AI answers built-in questions from data instantly; anything else in live mod
 - `MOBILIZA_WEBHOOK_SECRET` set in Cloud secrets and the same value in n8n.
 - WhatsApp Business / SMS / calling provider accounts behind n8n.
 - Processor for `inbound_events`; invite emails; Google Maps key on the published domain.
+
+## Attendance lists (new)
+Collection `attendanceSheets` in `records`: `{ title, date, serviceId?, format, entries:[{id,name,phone?,mark:"present"|"absent"|"unmarked"}] }`. Names are pasted/imported, marked present/absent, and the report is rendered from the church's own format template (`src/lib/attendance.ts`). Copy and "Send to WhatsApp" (wa.me share link) happen in the browser; no server send. Absent names can feed follow-up later.
