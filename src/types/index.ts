@@ -23,7 +23,7 @@ export interface Tenant {
 
 // ---------- Domain ----------
 export type MembershipStatus = "active" | "new" | "inactive" | "visitor";
-export type ContactChannel = "call" | "sms" | "whatsapp" | "email";
+export type ContactChannel = "call" | "whatsapp_call" | "sms" | "whatsapp" | "email";
 
 export interface Member {
   id: ID;

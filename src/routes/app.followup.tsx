@@ -30,7 +30,7 @@ const schema = z.object({
   location: z.string().trim().min(2, "Enter a location").max(60),
   kind: z.enum(["first_timer", "new_convert"]),
   referrer: z.string().trim().max(80),
-  channel: z.enum(["call", "sms", "whatsapp", "email"]),
+  channel: z.enum(["call", "whatsapp_call", "sms", "whatsapp", "email"]),
   consent: z.boolean(),
 });
 type V = z.infer<typeof schema>;

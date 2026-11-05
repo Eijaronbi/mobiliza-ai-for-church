@@ -21,3 +21,4 @@
 - Contracts and go-live steps live in `docs/n8n-contracts.md` and `docs/database-schema.sql`.
 
 - Content routes own one main landmark; selectable records use native design-system buttons and explicit names for controls. Why: consistent keyboard and assistive-technology access.
+- Church emails (prayer points, invites) send through the linked Gmail via `src/lib/gmail.functions.ts`, only for allow-listed churches and non-member roles; demo and other churches stay simulated. Why: the Gmail belongs to the app owner.

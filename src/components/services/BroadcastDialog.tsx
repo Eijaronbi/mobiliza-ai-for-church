@@ -1,3 +1,7 @@
+import { useServerFn } from "@tanstack/react-start";
+import { sendChurchEmails } from "@/lib/gmail.functions";
+import { useApp } from "@/hooks/use-app";
+import { channelLabel } from "@/config/channels";
 import { useMemo, useState } from "react";
 import { Plus, Trash2, Send } from "lucide-react";
 import { toast } from "sonner";
@@ -13,7 +17,7 @@ import { useAction, useListData } from "@/hooks/use-data";
 import { fmtDateTime } from "@/lib/format";
 import type { Service } from "@/types";
 
-type Channel = "sms" | "whatsapp";
+type Channel = "sms" | "whatsapp" | "email";
 interface Contact { name: string; phone: string }
 interface WaGroup { name: string; groupId: string }
 
@@ -29,6 +33,8 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
   const members = useListData("members");
   const units = useListData("units");
   const dispatch = useAction();
+  const { mode, tenantId } = useApp();
+  const sendEmails = useServerFn(sendChurchEmails);
   const [channels, setChannels] = useState<Channel[]>(["sms", "whatsapp"]);
   const [message, setMessage] = useState("");
   const [memberIds, setMemberIds] = useState<string[]>([]);
@@ -74,7 +80,7 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
 
   const send = async () => {
     if (!service) return;
-    if (!channels.length) return toast.error("Choose SMS, WhatsApp or both");
+    if (!channels.length) return toast.error("Choose WhatsApp, SMS or Email");
     if (message.trim().length < 5) return toast.error("Write the message to send");
     if (!total && !(channels.includes("whatsapp") && waGroups.length)) return toast.error("Add at least one person, church group or WhatsApp group");
     if (waGroups.length && !channels.includes("whatsapp")) return toast.error("WhatsApp groups need the WhatsApp channel turned on");
@@ -91,6 +97,14 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
       recipient_count: total,
       skipped_no_consent: resolved.skipped,
     });
+    if (res && channels.includes("email") && mode === "live") {
+      const recipients = resolved.consented.filter((m) => m.email).map((m) => ({ email: m.email, name: m.name })).slice(0, 100);
+      if (recipients.length) {
+        const r = await sendEmails({ data: { tenantId, subject: service.name, text: message.trim(), recipients } }).catch(() => null);
+        if (r?.sent) toast.success(`Emailed ${r.sent} from Gmail${r.failed ? ` · ${r.failed} failed` : ""}`);
+        else toast.error(r?.error ?? "Couldn't send the emails.");
+      }
+    }
     setSending(false);
     if (res) onClose();
   };
@@ -106,10 +120,10 @@ export function BroadcastDialog({ service, onClose }: { service: Service | null;
           <fieldset className="space-y-2">
             <legend className="text-sm font-medium">Send via</legend>
             <div className="flex gap-4">
-              {(["sms", "whatsapp"] as Channel[]).map((c) => (
+              {(["whatsapp", "sms", "email"] as Channel[]).map((c) => (
                 <label key={c} className="flex items-center gap-2 text-sm">
-                  <Checkbox checked={channels.includes(c)} onCheckedChange={() => toggle(channels, c, setChannels)} aria-label={c === "sms" ? "SMS" : "WhatsApp"} />
-                  {c === "sms" ? "SMS" : "WhatsApp"}
+                  <Checkbox checked={channels.includes(c)} onCheckedChange={() => toggle(channels, c, setChannels)} aria-label={channelLabel(c)} />
+                  {channelLabel(c)}
                 </label>
               ))}
             </div>

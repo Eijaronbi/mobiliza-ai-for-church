@@ -24,7 +24,7 @@ export const eventSchemas = {
   "escalation.resolved": z.object({ escalation_id: id, resolved_by: z.string() }),
   "service.broadcast": z.object({
     broadcast_id: id, service_id: id,
-    channels: z.array(z.enum(["sms", "whatsapp"])).min(1),
+    channels: z.array(z.enum(["sms", "whatsapp", "email"])).min(1),
     message: z.string().min(5).max(1000),
     member_ids: z.array(id), unit_ids: z.array(id),
     external_recipients: z.array(z.object({ name: z.string().min(1), phone: z.string().regex(/^\+?[1-9]\d{7,14}$/) })),
