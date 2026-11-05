@@ -8,7 +8,7 @@ import { nav } from "@/config/nav";
 import { useApp } from "@/hooks/use-app";
 
 export function AppSidebar() {
-  const { can } = useApp();
+  const { can, mode } = useApp();
   const { pathname } = useLocation();
   const { setOpenMobile } = useSidebar();
   return (
