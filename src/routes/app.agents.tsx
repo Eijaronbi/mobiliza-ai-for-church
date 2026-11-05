@@ -14,6 +14,7 @@ import { useListData, useRepoMutations } from "@/hooks/use-data";
 import { actionList } from "@/config/action-map";
 import { timeAgo } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { AiProviderCard } from "@/components/ai/AiProviderCard";
 
 export const Route = createFileRoute("/app/agents")({
   head: () => ({ meta: [{ title: "AI Agents — Mobilizer" }, { name: "description", content: "Specialised AI agents, permissions and execution history." }, { property: "og:title", content: "AI Agents — Mobilizer" }, { property: "og:description", content: "Specialised AI agents, permissions and execution history." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
@@ -38,6 +39,7 @@ function AgentsPage() {
   return (
     <div>
       <PageHeader title="AI Agents" description="Six specialised agents, each with clear duties, tools and boundaries. Agents are simulated in this demo — no real AI calls are made." />
+      <div className="mb-4"><AiProviderCard /></div>
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="space-y-2">
           {agents.map((x) => (
