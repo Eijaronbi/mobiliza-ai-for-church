@@ -14,13 +14,218 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      inbound_events: {
+        Row: {
+          id: string
+          kind: string
+          payload: Json
+          received_at: string
+          source: string
+          tenant_id: string
+        }
+        Insert: {
+          id?: string
+          kind: string
+          payload?: Json
+          received_at?: string
+          source: string
+          tenant_id: string
+        }
+        Update: {
+          id?: string
+          kind?: string
+          payload?: Json
+          received_at?: string
+          source?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbound_events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          email: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          email?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          email?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      records: {
+        Row: {
+          collection: string
+          created_at: string
+          data: Json
+          id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          collection: string
+          created_at?: string
+          data: Json
+          id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          collection?: string
+          created_at?: string
+          data?: Json
+          id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "records_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          id: string
+          invited_by: string
+          role: string
+          tenant_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          invited_by: string
+          role?: string
+          tenant_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          invited_by?: string
+          role?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_invites_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          city: string
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          pastor: string
+          timezone: string
+        }
+        Insert: {
+          city?: string
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          pastor?: string
+          timezone?: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          pastor?: string
+          timezone?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      accept_invites: { Args: never; Returns: number }
+      create_church: {
+        Args: {
+          _city: string
+          _name: string
+          _pastor: string
+          _starter?: Json
+          _timezone: string
+        }
+        Returns: string
+      }
+      has_tenant_role: {
+        Args: { _roles: string[]; _tenant: string }
+        Returns: boolean
+      }
+      is_tenant_member: { Args: { _tenant: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
