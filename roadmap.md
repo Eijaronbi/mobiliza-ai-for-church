@@ -14,3 +14,7 @@
 - [x] Docs: n8n contracts, database schema; AGENTS.md; tests
 
 - [x] Refresh backend handoff for Prayer Chain and schedule broadcasts; verify contracts and deliver versioned package
+
+- [x] Wire live backend: login, church onboarding, invites, tenant-isolated storage, real webhook delivery, inbound hook, AI answers
+- [ ] Set MOBILIZA_WEBHOOK_SECRET (waiting on owner)
+- [ ] Inbound event processor, invite emails, provider accounts (WhatsApp/SMS/calls) — need owner accounts

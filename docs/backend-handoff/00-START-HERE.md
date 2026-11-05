@@ -1,5 +1,7 @@
 # Mobiliza backend and go-live handoff
 
+> **Update:** login and live storage are now wired. Read `11-LIVE-BACKEND.md` first.
+
 Handoff refreshed: 4 November 2026. Earlier browser/accessibility audit: 3 November 2026. Product currently displays the name Mobilizer.
 
 ## Status — read before enabling anything
