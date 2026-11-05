@@ -18,3 +18,4 @@
 - [x] Wire live backend: login, church onboarding, invites, tenant-isolated storage, real webhook delivery, inbound hook, AI answers
 - [x] Set MOBILIZA_WEBHOOK_SECRET
 - [ ] Inbound event processor, invite emails, provider accounts (WhatsApp/SMS/calls) — need owner accounts
+- [ ] Standardize channels everywhere: messages = WhatsApp/SMS/Email; calls = WhatsApp call/phone call (providers connected later)
