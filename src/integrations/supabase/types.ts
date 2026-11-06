@@ -20,6 +20,7 @@ export type Database = {
           kind: string
           payload: Json
           received_at: string
+          signature: string | null
           source: string
           tenant_id: string
         }
@@ -28,6 +29,7 @@ export type Database = {
           kind: string
           payload?: Json
           received_at?: string
+          signature?: string | null
           source: string
           tenant_id: string
         }
@@ -36,6 +38,7 @@ export type Database = {
           kind?: string
           payload?: Json
           received_at?: string
+          signature?: string | null
           source?: string
           tenant_id?: string
         }

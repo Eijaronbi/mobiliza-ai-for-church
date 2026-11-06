@@ -1,6 +1,6 @@
 # Mobiliza backend and go-live handoff
 
-> **Update:** login and live storage are now wired. Read `11-LIVE-BACKEND.md` first.
+> **Update:** login and live storage are wired (`11-LIVE-BACKEND.md`). Latest changes — church AI keys, report lock, webhook replay protection — are in `13-NOV-6-UPDATE.md`.
 
 Handoff refreshed: 4 November 2026. Earlier browser/accessibility audit: 3 November 2026. Product currently displays the name Mobilizer.
 

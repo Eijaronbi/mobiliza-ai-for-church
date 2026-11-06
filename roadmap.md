@@ -19,8 +19,8 @@
 - [x] Set MOBILIZA_WEBHOOK_SECRET
 - [ ] Inbound event processor, invite emails, provider accounts (WhatsApp/SMS/calls) — need owner accounts
 - [x] Standardize channels everywhere: messages = WhatsApp/SMS/Email; calls = WhatsApp call/phone call (providers connected later)
-- [ ] Deep security + hardcoded-secret audit for production readiness
+- [x] Deep security + hardcoded-secret audit (report lock + webhook replay protection)
 - [x] Churches bring their own AI key (OpenAI/Claude/Gemini/OpenRouter/Groq) for Ask AI
 - [ ] Built-in church email — blocked: owner needs a domain set up
 - [ ] MCP server with sign-in so outside AI assistants act within church permissions
-- [ ] Fix security warning: leaders can edit report status/totals directly
+- [x] Fix security warning: leaders can edit report status/totals directly

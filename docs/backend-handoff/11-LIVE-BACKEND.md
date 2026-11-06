@@ -38,7 +38,7 @@ Live actions go through the server function `deliverWebhook`:
 ```json
 { "tenant_id": "<church uuid>", "kind": "prayer.signed_in", "payload": { "member_phone": "+234…", "watch": "03:00" } }
 ```
-Sign with the same HMAC header. Responses: 200 ok, 401 bad signature, 400 bad body, 503 secret not set. Suggested kinds: `delivery.status`, `prayer.signed_in`, `broadcast.reply`, `mobilization.reply`, `call.result`.
+Sign `<timestamp>.<body>` and send `x-mobiliza-timestamp` (see 13-NOV-6-UPDATE.md). Responses: 200 ok, 409 duplicate, 401 bad signature or stale timestamp, 400 bad body, 503 secret not set. Suggested kinds: `delivery.status`, `prayer.signed_in`, `broadcast.reply`, `mobilization.reply`, `call.result`.
 Next step: a small processor that turns `inbound_events` into record updates (e.g. mark a prayer watch signed in).
 
 ## AI

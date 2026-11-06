@@ -36,6 +36,13 @@
       "when": 1793888013876,
       "tag": "0004_tenant_ai_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793955506918,
+      "tag": "0005_lock_reports_and_inbound_replay",
+      "breakpoints": true
     }
   ]
 }

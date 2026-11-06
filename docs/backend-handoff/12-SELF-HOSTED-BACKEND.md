@@ -45,7 +45,7 @@ Keep the UI; replace only the data layer.
    ```
    Collections: `members, units, services, workflows, mobilization, transport, pickupPoints, vehicles, followups, templates, reports, escalations, activities, agents, executions, integrations, endpoints, customApis, logs, attendanceSheets` (shapes in `src/types/index.ts`).
 3. **Frontend changes:** rewrite `cloud-repository.ts` to `fetch` these endpoints (same `list/get/create/update/remove` signature), and in `use-app.tsx` replace `supabase.auth.*` / `fetchChurches` with your auth calls. No page or component changes are needed.
-4. **Webhook rules to keep:** only send to URLs saved in that church's endpoints/integrations; header `x-mobiliza-signature` = hex HMAC-SHA256(raw body, `MOBILIZA_WEBHOOK_SECRET`); log each attempt to `logs`. Inbound: reject when signature mismatches; store the event before processing.
+4. **Webhook rules to keep:** only send to URLs saved in that church's endpoints/integrations; header `x-mobiliza-signature` = hex HMAC-SHA256(raw body, `MOBILIZA_WEBHOOK_SECRET`); log each attempt to `logs`. Inbound: require a timestamp within 5 min, sign `timestamp.body`, reject reused signatures and mismatches; store the event before processing.
 
 ## AI without Lovable
 `src/lib/ai.functions.ts` builds a church summary then calls the model. Replace the gateway call with any chat-completions API (OpenAI, Anthropic, Gemini) using a server-only key. Keep the tenant check before building context.
