@@ -43,6 +43,13 @@
       "when": 1793955506918,
       "tag": "0005_lock_reports_and_inbound_replay",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794413421096,
+      "tag": "0006_harden_report_guard",
+      "breakpoints": true
     }
   ]
 }
