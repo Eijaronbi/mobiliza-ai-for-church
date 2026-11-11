@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Church, Pause, Play, Megaphone, Bus, HeartHandshake, FileBarChart, ShieldAlert, Bot, Plug, Workflow, Phone, MapPin, Database } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Church, Pause, Play, Megaphone, Bus, HeartHandshake, FileBarChart, ShieldAlert, Bot, Heart, ClipboardCheck, CalendarDays, Users, LockKeyhole, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import worship from "@/assets/hero-worship.jpg";
 import welcome from "@/assets/hero-welcome.jpg";
@@ -8,6 +8,7 @@ import prayer from "@/assets/hero-prayer.jpg";
 import leaders from "@/assets/hero-leaders.jpg";
 import outreach from "@/assets/hero-outreach.jpg";
 import { cn } from "@/lib/utils";
+import { LANDING_SLIDE_INTERVAL_MS } from "@/config/landing";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,12 +41,21 @@ const features = [
   { icon: Bot, title: "Specialised AI agents", text: "Six agents with clear duties, permissions and execution history." },
 ];
 
+const churchLife = [
+  { icon: Heart, title: "Prayer Chain", text: "Set your church’s prayer watches, see who has signed in and keep prayer points together." },
+  { icon: ClipboardCheck, title: "Attendance, made personal", text: "Import names, mark present or absent and copy your attendance report to share with your church." },
+  { icon: CalendarDays, title: "Services & events", text: "Bring your weekly services and special gatherings into one schedule, with broadcasts for the people invited." },
+  { icon: Users, title: "A place for every team", text: "Keep cells, departments and their leaders organised, with clear responsibilities across the church." },
+  { icon: MessageCircle, title: "Messages that reach people", text: "Choose email, SMS or WhatsApp for reminders and prayer broadcasts when your church connects its providers." },
+  { icon: LockKeyhole, title: "Your church, your workspace", text: "Keep your church’s records separate, give your team the right access and choose your own providers." },
+];
+
 function Landing() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setI((x) => (x + 1) % slides.length), 6500);
+    const t = setInterval(() => setI((x) => (x + 1) % slides.length), LANDING_SLIDE_INTERVAL_MS);
     return () => clearInterval(t);
   }, [paused]);
   const go = (d: number) => setI((x) => (x + d + slides.length) % slides.length);
@@ -64,8 +74,8 @@ function Landing() {
 
       <main id="main-content"><section className="relative h-[88dvh] min-h-[560px] overflow-hidden bg-primary"  aria-roledescription="carousel">
         {slides.map((s, k) => (
-          <div key={k} className={cn("absolute inset-0 transition-opacity duration-1000", k === i ? "opacity-100" : "opacity-0")} aria-hidden={k !== i}>
-            <img src={s.img} alt="" width={1920} height={1088} loading={k === 0 ? "eager" : "lazy"} className={cn("h-full w-full object-cover", k === i && "animate-kenburns")} />
+          <div key={k} className={cn("absolute inset-0 transition-opacity duration-300", k === i ? "opacity-100" : "opacity-0")} aria-hidden={k !== i}>
+            <img src={s.img} alt="" width={1920} height={1088} loading={k === 0 ? "eager" : "lazy"} className={cn("h-full w-full object-cover", k === i && "animate-kenburns", paused && "animation-paused")} />
             <div className="absolute inset-0 bg-gradient-hero" />
           </div>
         ))}
@@ -107,19 +117,23 @@ function Landing() {
         </div>
       </section>
 
-      <section className="bg-primary py-20 text-primary-foreground">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-2 lg:items-center">
-          <div>
-            <h2 className="text-3xl font-bold">Plug-and-play by design.</h2>
-            <p className="mt-3 text-primary-foreground">Connect n8n workflows, Voicebip voice agents, maps, messaging and your own APIs through configuration. No rebuilding the app.</p>
-            <Button asChild className="mt-6 bg-gradient-brand text-brand-foreground"><Link to="/app/integrations">Open the Integration Hub</Link></Button>
+      <section className="bg-sidebar py-16 text-sidebar-foreground md:py-20" aria-labelledby="church-life-title">
+        <div className="mx-auto max-w-7xl px-5">
+          <div className="max-w-2xl">
+            <p className="mb-3 text-sm font-semibold text-sidebar-primary">Beyond Sunday</p>
+            <h2 id="church-life-title" className="text-3xl font-bold md:text-4xl">Church life doesn’t stop at the service.</h2>
+            <p className="mt-4 text-sidebar-foreground/80">The early-morning prayer watch. The member who couldn’t make it. The team preparing the next gathering. Give the everyday work of caring for people a place of its own.</p>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {[[Workflow, "n8n"], [Phone, "Voicebip"], [MapPin, "Google Maps"], [Database, "Cloud database"], [Plug, "Webhooks"], [Bot, "AI models"]].map(([Icon, l]) => {
-              const I = Icon as typeof Plug;
-              return <div key={l as string} className="flex flex-col items-center gap-2 rounded-xl border border-primary-foreground/10 bg-primary-foreground/5 p-5 text-sm"><I className="h-6 w-6" />{l as string}</div>;
-            })}
+          <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            {churchLife.map(({ icon: Icon, title, text }) => (
+              <div key={title} className="border-t border-sidebar-border pt-5">
+                <Icon className="h-6 w-6 text-sidebar-primary" aria-hidden="true" />
+                <h3 className="mt-4 text-lg font-semibold">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-sidebar-foreground/80">{text}</p>
+              </div>
+            ))}
           </div>
+          <div className="mt-10 flex flex-wrap gap-3"><Button asChild><Link to="/auth">Start your church workspace<ArrowRight className="ml-1 h-4 w-4" /></Link></Button><Button asChild variant="secondary"><Link to="/app">Explore the demo</Link></Button></div>
         </div>
       </section>
 

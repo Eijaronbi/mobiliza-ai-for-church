@@ -16,7 +16,7 @@ async function isMember(ctx: Ctx, tenantId: string) {
   return (data ?? []) as { role: string }[];
 }
 
-/** Returns provider, model and a masked hint — never the key itself. */
+/** Returns provider and model, never any part of the key or a stored hint. */
 export const getChurchAi = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => Tenant.parse(d))
@@ -25,8 +25,8 @@ export const getChurchAi = createServerFn({ method: "POST" })
     if (!roles.length) return { configured: false as const, canEdit: false };
     const canEdit = roles.some((r) => AI_ADMIN_ROLES.includes(r.role));
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: row } = await supabaseAdmin.from("tenant_ai_settings").select("provider, model, key_hint, updated_at").eq("tenant_id", data.tenantId).maybeSingle();
-    return row ? { configured: true as const, canEdit, provider: row.provider, model: row.model, hint: row.key_hint, updatedAt: row.updated_at } : { configured: false as const, canEdit };
+    const { data: row } = await supabaseAdmin.from("tenant_ai_settings").select("provider, model, updated_at").eq("tenant_id", data.tenantId).maybeSingle();
+    return row ? { configured: true as const, canEdit, provider: row.provider, model: row.model, updatedAt: row.updated_at } : { configured: false as const, canEdit };
   });
 
 export const saveChurchAi = createServerFn({ method: "POST" })
@@ -37,8 +37,9 @@ export const saveChurchAi = createServerFn({ method: "POST" })
     if (!roles.some((r) => AI_ADMIN_ROLES.includes(r.role))) return { ok: false, error: "Only church admins and pastors can change the AI provider." };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     if (!data.apiKey) {
-      const { data: existing } = await supabaseAdmin.from("tenant_ai_settings").select("tenant_id").eq("tenant_id", data.tenantId).maybeSingle();
+      const { data: existing } = await supabaseAdmin.from("tenant_ai_settings").select("tenant_id, provider").eq("tenant_id", data.tenantId).maybeSingle();
       if (!existing) return { ok: false, error: "Paste an API key." };
+      if (existing.provider !== data.provider) return { ok: false, error: "Add a new key when changing providers." };
       const { error } = await supabaseAdmin.from("tenant_ai_settings").update({ provider: data.provider, model: data.model, updated_by: context.userId, updated_at: new Date().toISOString() }).eq("tenant_id", data.tenantId);
       return error ? { ok: false, error: "Couldn't save." } : { ok: true };
     }

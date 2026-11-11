@@ -14,7 +14,6 @@ export const AI_PROVIDER_IDS = Object.keys(AI_PROVIDERS) as AiProviderId[];
 /** Roles allowed to change the church's AI provider. */
 export const AI_ADMIN_ROLES = ["church_admin", "super_admin", "pastor"];
 
-export function keyHint(key: string): string {
-  const k = key.trim();
-  return k.length <= 8 ? "••••" : `${k.slice(0, 3)}…${k.slice(-4)}`;
+export function keyHint(_key: string): string {
+  return "Key saved";
 }

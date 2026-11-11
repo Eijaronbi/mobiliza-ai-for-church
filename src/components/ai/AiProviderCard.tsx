@@ -43,7 +43,7 @@ export function AiProviderCard() {
     <Card className="p-5 shadow-card">
       <h2 className="flex items-center gap-2 font-bold"><KeyRound className="h-4 w-4" />AI provider</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        {st?.configured ? `Ask AI uses your ${AI_PROVIDERS[st.provider as AiProviderId]?.label ?? st.provider} key (${st.hint}).` : "Ask AI uses Mobiliza's built-in AI. Add your own key to use any provider and model."}
+        {st?.configured ? `Ask AI uses your church’s ${AI_PROVIDERS[st.provider as AiProviderId]?.label ?? st.provider} connection. Key saved privately.` : "Ask AI uses Mobiliza's built-in AI. Add your own key to use any provider and model."}
       </p>
       {canEdit ? (
         <div className="mt-4 grid gap-3 sm:grid-cols-2">

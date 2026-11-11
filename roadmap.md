@@ -1,4 +1,6 @@
 # Mobilizer roadmap
+- [ ] Replace landing integration section with additional church benefits; set three-second image changes and rapid zoom.
+- [ ] Verify church-specific AI credential privacy and private owner SMS setup (Yournotify).
 - [x] Match daylybread.build.host/event colors and background; improve fonts and appearance
 - [x] Repair and verify Ask AI navigation and conversation
 - [x] Audit every page and fix accessibility blockers
