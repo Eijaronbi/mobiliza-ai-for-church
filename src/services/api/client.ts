@@ -2,6 +2,13 @@ import { appConfig } from "@/config/app.config";
 import type { ApiRequest, ApiResponse } from "@/types";
 import { serverTransport, simulatedTransport, type Transport } from "./transport";
 import { getDataMode } from "@/services/data/mode";
+import { sendPrivateChurchSms } from "@/lib/sms.functions";
+
+/** Owner-only direct SMS is a fallback when no orchestrator endpoint is bound. */
+export async function sendSmsFallback(tenantId: string, event: string, payload: unknown) {
+  if (getDataMode() !== "live" || (event !== "service.broadcast" && event !== "prayer.points_sent")) return null;
+  return sendPrivateChurchSms({ data: { tenantId, event, payload } });
+}
 
 /** The ONE place outbound integration requests go through. Handles timeout + retries. */
 /** Signed-in churches deliver for real through the server; the demo stays simulated. */

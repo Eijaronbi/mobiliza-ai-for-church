@@ -1,6 +1,8 @@
 # Mobilizer roadmap
-- [ ] Replace landing integration section with additional church benefits; set three-second image changes and rapid zoom.
-- [ ] Verify church-specific AI credential privacy and private owner SMS setup (Yournotify).
+- [x] Replace landing integration section with additional church benefits; set three-second image changes and rapid zoom.
+- [x] Remove AI key fragments; verify private owner SMS authorization rules and Yournotify connection credentials.
+- [ ] Activate and verify owner SMS delivery — needs approved Yournotify Sender ID and owner signed-in preview; no SMS sent.
+- [ ] Configure and verify owner Groq — needs key entered in the church’s AI Agents form and owner signed-in preview.
 - [x] Match daylybread.build.host/event colors and background; improve fonts and appearance
 - [x] Repair and verify Ask AI navigation and conversation
 - [x] Audit every page and fix accessibility blockers

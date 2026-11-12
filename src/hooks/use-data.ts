@@ -6,6 +6,7 @@ import type { ActionId } from "@/config/action-map";
 import { actions } from "@/config/action-map";
 import type { DemoDB } from "@/services/data/mock/seed";
 import { useApp } from "./use-app";
+import { sendSmsFallback } from "@/services/api/client";
 
 type Item<K extends Collection> = DemoDB[K][number];
 
@@ -41,6 +42,13 @@ export function useAction() {
   return async (id: ActionId, data: Record<string, unknown>, quiet = false) => {
     try {
       const res = await dispatchAction(id, tenantId, data, actor);
+      if (mode === "live" && !res.deliveries.length && Array.isArray(data.channels) && data.channels.includes("sms")) {
+        const sms = await sendSmsFallback(tenantId, res.envelope.event, data);
+        if (sms?.handled) {
+          if (sms.ok) toast.success(`Yournotify accepted SMS for ${sms.count ?? 0} people.`);
+          else toast.error(sms.error ?? "SMS was not sent.");
+        }
+      }
       qc.invalidateQueries({ queryKey: ["logs"] });
       if (!quiet) {
         const n = res.deliveries.length;

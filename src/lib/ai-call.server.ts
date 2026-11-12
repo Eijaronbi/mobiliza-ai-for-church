@@ -15,7 +15,7 @@ export async function callChurchModel(p: { provider: AiProviderId; model: string
       headers: { "x-api-key": p.apiKey, "anthropic-version": "2023-06-01", "content-type": "application/json" },
       body: JSON.stringify({ model: p.model, max_tokens: 1024, system: p.system, messages: [{ role: "user", content: p.user }] }),
     });
-    if (!res.ok) throw new Error(`Provider answered ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    if (!res.ok) throw new Error(`AI provider rejected the request (${res.status}). Check your provider settings.`);
     const j = (await res.json()) as { content?: { type: string; text?: string }[] };
     return (j.content ?? []).filter((c) => c.type === "text").map((c) => c.text ?? "").join("\n").trim();
   }
@@ -26,7 +26,7 @@ export async function callChurchModel(p: { provider: AiProviderId; model: string
     headers: { Authorization: `Bearer ${p.apiKey}`, "content-type": "application/json" },
     body: JSON.stringify({ model: p.model, messages: [{ role: "system", content: p.system }, { role: "user", content: p.user }] }),
   });
-  if (!res.ok) throw new Error(`Provider answered ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  if (!res.ok) throw new Error(`AI provider rejected the request (${res.status}). Check your provider settings.`);
   const j = (await res.json()) as { choices?: { message?: { content?: string } }[] };
   return (j.choices?.[0]?.message?.content ?? "").trim();
 }
