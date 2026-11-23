@@ -1,6 +1,16 @@
 # Mobiliza Ai For Church
 
-I want you to come with a detailed plan on how to execute this, so the agent building it here can execute with a clear roadmap of how to structure it so it's a plug and play to the backend or orchestrator (n8n and all)
+Every Member Matters.
+
+One church. One connected system. Powered by AI.
+
+Mobilizer is an AI-powered church operations and member engagement platform designed to help churches understand, organize, mobilize and care for every member.
+
+It brings the different arms of church operations into one intelligent workspace, connecting members, departments, cell groups, leaders, services, transportation, attendance, prayer activities and follow-up processes.
+
+Rather than functioning as another church database, Mobilizer acts as a connected operations team that helps identify needs, coordinate responsibilities, automate routine processes and ensure that important activities never disappear unnoticed.
+
+See everyone. Know what's happening. Take action. Keep everyone connected.
 
 This project was built with [Lovable](https://lovable.dev).
 
