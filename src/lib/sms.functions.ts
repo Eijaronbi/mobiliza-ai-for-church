@@ -47,9 +47,3 @@ export const sendPrivateChurchSms = createServerFn({ method: "POST" })
     if (!sent) return { handled: true, ok: false, error: "Brevo did not send the SMS. Check your Sender ID and SMS credits." };
     return { handled: true, ok: true, count: sent };
   });
-      if (!response.ok) return { handled: true, ok: false, error: `Yournotify rejected the request (${response.status}). Check your Sender ID, account balance and recipients.` };
-      const result = await response.json() as { status?: string };
-      if (result.status !== "success") return { handled: true, ok: false, error: "Yournotify did not accept the SMS campaign." };
-      return { handled: true, ok: true, count: recipients.size };
-    } catch { return { handled: true, ok: false, error: "Could not reach Yournotify. Check its campaign history before trying again." }; }
-  });
