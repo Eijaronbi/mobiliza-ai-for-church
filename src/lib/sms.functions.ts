@@ -31,8 +31,21 @@ export const sendPrivateChurchSms = createServerFn({ method: "POST" })
     }
     if ("external_recipients" in payload) for (const recipient of payload.external_recipients) recipients.set(recipient.phone, { name: recipient.name, telephone: recipient.phone });
     if (!recipients.size || recipients.size > 100) return { handled: true, ok: false, error: "Select between 1 and 100 consenting SMS recipients." };
-    // SMS provider removed; wire the replacement provider here.
-    return { handled: true, ok: false, error: "SMS provider is not connected yet." };
+    const key = process.env["BREVO_API_KEY"], auth = process.env["LOVABLE_API_KEY"];
+    if (!key || !auth) return { handled: true, ok: false, error: "Brevo is not connected." };
+    let sent = 0;
+    for (const r of recipients.values()) {
+      try {
+        const response = await fetch("https://connector-gateway.lovable.dev/brevo/transactionalSMS/sms", {
+          method: "POST", signal: AbortSignal.timeout(10000),
+          headers: { Authorization: `Bearer ${auth}`, "X-Connection-Api-Key": key, "Content-Type": "application/json" },
+          body: JSON.stringify({ sender: sender.slice(0, 11), recipient: r.telephone.replace(/^\+/, ""), content: payload.message, type: "transactional" }),
+        });
+        if (response.ok) sent++; else console.error(`Brevo SMS failed [${response.status}]`);
+      } catch { console.error("Brevo SMS unreachable"); }
+    }
+    if (!sent) return { handled: true, ok: false, error: "Brevo did not send the SMS. Check your Sender ID and SMS credits." };
+    return { handled: true, ok: true, count: sent };
   });
       if (!response.ok) return { handled: true, ok: false, error: `Yournotify rejected the request (${response.status}). Check your Sender ID, account balance and recipients.` };
       const result = await response.json() as { status?: string };
