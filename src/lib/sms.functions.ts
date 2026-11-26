@@ -22,7 +22,7 @@ export const sendPrivateChurchSms = createServerFn({ method: "POST" })
     const sms = records?.find((row) => row.collection === "integrations" && (row.data as { kind?: string }).kind === "sms");
     const config = sms?.data as { settings?: { smsSender?: string }; enabled?: boolean } | undefined;
     const sender = config?.settings?.smsSender?.trim();
-    if (!sender || config?.enabled !== true) return { handled: true, ok: false, error: "Enable SMS and add your approved Yournotify Sender ID in the Integration Hub." };
+    if (!sender || config?.enabled !== true) return { handled: true, ok: false, error: "Enable SMS and add your approved SMS Sender ID in the Integration Hub." };
     const recipients = new Map<string, { name: string; telephone: string }>();
     for (const row of records ?? []) {
       if (row.collection !== "members" || !payload.member_ids.includes(row.id)) continue;
@@ -31,14 +31,9 @@ export const sendPrivateChurchSms = createServerFn({ method: "POST" })
     }
     if ("external_recipients" in payload) for (const recipient of payload.external_recipients) recipients.set(recipient.phone, { name: recipient.name, telephone: recipient.phone });
     if (!recipients.size || recipients.size > 100) return { handled: true, ok: false, error: "Select between 1 and 100 consenting SMS recipients." };
-    const key = process.env["UDC_YOURNOTIFY_2_API_KEY"], auth = process.env["LOVABLE_API_KEY"];
-    if (!key || !auth) return { handled: true, ok: false, error: "Yournotify is not connected." };
-    try {
-      const response = await fetch("https://connector-gateway.lovable.dev/udc_yournotify_2/campaigns/sms", {
-        method: "POST", signal: AbortSignal.timeout(10000),
-        headers: { Authorization: `Bearer ${auth}`, "X-Connection-Api-Key": key, "Content-Type": "application/json" },
-        body: JSON.stringify({ name: data.event === "service.broadcast" ? "Mobiliza service broadcast" : "Mobiliza prayer points", from: sender, text: payload.message, status: "running", lists: [...recipients.values()] }),
-      });
+    // SMS provider removed; wire the replacement provider here.
+    return { handled: true, ok: false, error: "SMS provider is not connected yet." };
+  });
       if (!response.ok) return { handled: true, ok: false, error: `Yournotify rejected the request (${response.status}). Check your Sender ID, account balance and recipients.` };
       const result = await response.json() as { status?: string };
       if (result.status !== "success") return { handled: true, ok: false, error: "Yournotify did not accept the SMS campaign." };

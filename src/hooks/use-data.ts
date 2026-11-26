@@ -45,7 +45,7 @@ export function useAction() {
       if (mode === "live" && !res.deliveries.length && Array.isArray(data.channels) && data.channels.includes("sms")) {
         const sms = await sendSmsFallback(tenantId, res.envelope.event, data);
         if (sms?.handled) {
-          if (sms.ok) toast.success(`Yournotify accepted SMS for ${sms.count ?? 0} people.`);
+          if (sms.ok) toast.success(`the SMS provider accepted SMS for ${sms.count ?? 0} people.`);
           else toast.error(sms.error ?? "SMS was not sent.");
         }
       }
