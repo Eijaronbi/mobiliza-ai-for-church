@@ -33,6 +33,13 @@ export const askMobiliza = createServerFn({ method: "POST" })
         return { text: "", error: "Your church's AI provider rejected the request. Check the key in AI Agents → AI provider." };
       }
     }
+    const { sharedGroqFor, callSharedGroq } = await import("./shared-groq.server");
+    if (await sharedGroqFor(data.tenantId).catch(() => false)) {
+      try {
+        const text = await callSharedGroq(system, user);
+        return { text: text || "I couldn't produce an answer.", error: null as string | null };
+      } catch (e) { console.error("shared groq failed", (e as Error).message); }
+    }
     try {
       const res = await generateResponse({
         model: "openai/gpt-6-astra",

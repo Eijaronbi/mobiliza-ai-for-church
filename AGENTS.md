@@ -24,3 +24,4 @@
 - Church emails (prayer points, invites) send through the linked Gmail via `src/lib/gmail.functions.ts`, only for allow-listed churches and non-member roles; demo and other churches stay simulated. Why: the Gmail belongs to the app owner.
 - Owner SMS fallback uses server-verified tenant/admin authorization and the private Brevo gateway through the transport client, only for broadcasts without a bound workflow. Why: owner credentials cannot serve other churches and workflow SMS must not be duplicated.
 - Church AI settings return only provider/model/configured state, never credential fragments or provider error bodies. Why: secret-derived hints and echoed upstream responses can disclose credentials.
+- Shared owner Groq for the first 10 churches lives in `src/lib/shared-groq.server.ts`, used by Ask AI after a church's own key and before built-in AI. Why: usage sharing without exposing the key.
