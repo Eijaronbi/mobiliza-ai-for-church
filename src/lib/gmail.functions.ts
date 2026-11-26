@@ -21,7 +21,8 @@ export const sendChurchEmails = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => Input.parse(d))
   .handler(async ({ data, context }) => {
-    if (!GMAIL_CHURCHES.includes(data.tenantId)) return { sent: 0, failed: 0, error: "Email sending isn't connected for this church." };
+    const { sharedGroqFor } = await import("./shared-groq.server");
+    if (!GMAIL_CHURCHES.includes(data.tenantId) && !(await sharedGroqFor(data.tenantId))) return { sent: 0, failed: 0, error: "Email sending isn't connected for this church." };
     const { data: roleRows } = await context.supabase.from("user_roles").select("role").eq("tenant_id", data.tenantId).eq("user_id", context.userId);
     if (!roleRows?.length || roleRows.every((r) => r.role === "member")) return { sent: 0, failed: 0, error: "Your role can't send church emails." };
     const lk = process.env["LOVABLE_API_KEY"], gk = process.env["GOOGLE_MAIL_API_KEY"];

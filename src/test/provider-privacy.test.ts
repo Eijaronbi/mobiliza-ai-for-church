@@ -5,6 +5,8 @@ import { keyHint } from "@/lib/ai-providers";
 describe("private owner providers", () => {
   it("allows the owner's church admin", () => expect(canUseOwnerProvider(OWNER_PROVIDER_TENANT_ID, ["church_admin"])).toBe(true));
   it("denies another church even with admin roles", () => expect(canUseOwnerProvider("8c5910b2-afee-4b96-9b38-82eed1ed4cca", ["church_admin", "super_admin"])).toBe(false));
+  it("allows an early (first 10) church admin", () => expect(canUseOwnerProvider("8c5910b2-afee-4b96-9b38-82eed1ed4cca", ["pastor"], true)).toBe(true));
+  it("denies an early church member role", () => expect(canUseOwnerProvider("8c5910b2-afee-4b96-9b38-82eed1ed4cca", ["member"], true)).toBe(false));
   it("denies the public demo", () => expect(canUseOwnerProvider("demo_church", ["church_admin"])).toBe(false));
   it("denies ordinary members and missing membership", () => {
     expect(canUseOwnerProvider(OWNER_PROVIDER_TENANT_ID, ["member"])).toBe(false);

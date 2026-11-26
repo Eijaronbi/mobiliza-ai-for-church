@@ -12,7 +12,8 @@ export const sendPrivateChurchSms = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => Input.parse(input))
   .handler(async ({ data, context }) => {
     const { data: rows } = await context.supabase.from("user_roles").select("role").eq("tenant_id", data.tenantId).eq("user_id", context.userId);
-    if (!canUseOwnerProvider(data.tenantId, (rows ?? []).map((row) => row.role))) return { handled: false, ok: false, error: "This private SMS connection is not available to your church or role." };
+    const { sharedGroqFor } = await import("./shared-groq.server");
+    if (!canUseOwnerProvider(data.tenantId, (rows ?? []).map((row) => row.role), await sharedGroqFor(data.tenantId))) return { handled: false, ok: false, error: "This private SMS connection is not available to your church or role." };
     const parsed = eventSchemas[data.event].safeParse(data.payload);
     if (!parsed.success) return { handled: true, ok: false, error: "Invalid SMS broadcast." };
     const payload = parsed.data;
