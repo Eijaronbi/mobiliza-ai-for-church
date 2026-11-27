@@ -41,7 +41,7 @@ function CommandCentre() {
   const overdue = reports.filter((r) => r.status === "overdue");
 
   const attention = [
-    ...transport.filter((t) => t.status === "requested" || t.status === "leader_review").slice(0, 2).map((t) => ({ id: t.id, title: `${members.find((m) => m.id === t.memberId)?.name} requested ${t.kind === "financial" ? "transport support" : "a pickup"}`, priority: "high", owner: "Transport Team Lead", at: t.createdAt, status: t.status, to: "/app/transport" as const })),
+    ...transport.filter((t) => t.status === "requested" || t.status === "leader_review").slice(0, 2).map((t) => ({ id: t.id, title: `${members.find((m) => m.id === t.memberId)?.name} requested ${t.kind === "financial" ? "transport support" : "a pickup"}`, priority: "high", owner: "Transport Team Lead", at: t.createdAt, status: t.status, to: "/app/transport" as const, search: { tab: "requests", request: t.id } })),
     ...followups.filter((f) => f.status === "new").slice(0, 2).map((f) => ({ id: f.id, title: `First timer ${f.name} awaiting initial contact`, priority: "medium", owner: "Follow-up team", at: f.encounteredAt, status: "pending", to: "/app/followup" as const })),
     ...overdue.slice(0, 2).map((r) => ({ id: r.id, title: `${units.find((u) => u.id === r.unitId)?.name} report overdue`, priority: "low", owner: r.submittedBy, at: r.dueAt, status: "overdue", to: "/app/reports" as const })),
     ...openIssues.slice(0, 3).map((e) => ({ id: e.id, title: e.title, priority: e.priority, owner: e.ownerName, at: e.createdAt, status: e.status, to: "/app/leadership" as const })),
@@ -112,7 +112,7 @@ function CommandCentre() {
                   <div className="text-xs text-muted-foreground">{a.owner} · {fmtDate(a.at)}</div>
                 </div>
                 <StatusBadge status={a.status} className="w-fit" />
-                <Button asChild size="sm" variant="outline"><Link to={a.to}>Review</Link></Button>
+                <Button asChild size="sm" variant="outline"><Link to={a.to} search={("search" in a ? a.search : undefined) as never}>Review</Link></Button>
               </div>
             ))}
           </div>

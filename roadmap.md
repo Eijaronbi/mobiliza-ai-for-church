@@ -28,3 +28,6 @@
 - [ ] Built-in church email — blocked: owner needs a domain set up
 - [ ] MCP server with sign-in so outside AI assistants act within church permissions
 - [x] Fix security warning: leaders can edit report status/totals directly
+- [x] Share owner providers with first 10 churches
+- [x] Handoff rewrite + Wapzen finding
+- [x] Demo: transport review opens member request, end-to-end demo check

@@ -85,7 +85,7 @@ function MobilizationPage() {
           <div className="mt-4 grid gap-2">
             <Button variant="outline" onClick={contactPending}><Send className="mr-2 h-4 w-4" />Contact pending members</Button>
             <Button variant="outline" onClick={() => toast.success(`Reminders queued for ${n.none} non-responders`, { description: "Simulated" })}><BellRing className="mr-2 h-4 w-4" />Send reminders</Button>
-            <Button variant="outline" asChild><Link to="/app/transport"><Bus className="mr-2 h-4 w-4" />Review transport requests</Link></Button>
+            <Button variant="outline" asChild><Link to="/app/transport" search={{ tab: "requests" }}><Bus className="mr-2 h-4 w-4" />Review transport requests</Link></Button>
             <Button variant="outline" onClick={() => {
               const csv = ["member,response,transport", ...mob.map((r) => `${csvField(name(r.memberId))},${r.response},${r.transportNeeded}`)].join("\n");
               const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv])); a.download = "mobilization-report.csv"; a.click();

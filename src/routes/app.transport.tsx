@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/transport")({
   head: () => ({ meta: [{ title: "Transportation — Mobilizer" }, { name: "description", content: "Register buses, manage drivers and transport requests, and track journeys." }, { property: "og:title", content: "Transportation — Mobilizer" }, { property: "og:description", content: "Bus registration, drivers, pickup requests and journey tracking." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }] }),
+  validateSearch: (s: Record<string, unknown>): { tab?: string; request?: string } => ({ ...(typeof s.tab === "string" ? { tab: s.tab } : {}), ...(typeof s.request === "string" ? { request: s.request } : {}) }),
   component: TransportPage,
 });
 
@@ -34,7 +35,9 @@ function TransportPage() {
   const [sel, setSel] = useState<string | undefined>();
   const [pos, setPos] = useState<Record<string, { x: number; y: number }>>({});
   const [filter, setFilter] = useState("open");
-  const [tab, setTab] = useState("live");
+  const search = Route.useSearch();
+  const [tab, setTab] = useState(search.tab ?? (search.request ? "requests" : "live"));
+  useEffect(() => { if (search.request) setTimeout(() => document.getElementById(`request-${search.request}`)?.scrollIntoView({ block: "center" }), 150); }, [search.request]);
 
   useEffect(() => { setPos(Object.fromEntries(vehicles.map((v) => [v.id, v.position]))); }, [vehicles]);
   const movingIds = useMemo(() => new Set(requests.filter((r) => r.status === "departed" || r.status === "en_route").map((r) => r.vehicleId)), [requests]);
@@ -107,7 +110,7 @@ function TransportPage() {
             {rows.map((r) => {
               const idx = flow.indexOf(r.status);
               return (
-                <Card key={r.id} className="p-4 shadow-card animate-rise">
+                <Card key={r.id} id={`request-${r.id}`} className={cn("p-4 shadow-card animate-rise", search.request === r.id && "ring-2 ring-primary")}>
                   <div className="flex items-start justify-between gap-2">
                     <div><div className="font-semibold">{name(r.memberId)}</div><div className="text-xs text-muted-foreground">{r.kind === "financial" ? `Financial support · ${naira(r.amount ?? 0)}` : `Pickup · ${points.find((p) => p.id === r.pickupPointId)?.name}`}</div></div>
                     <StatusBadge status={r.status} />

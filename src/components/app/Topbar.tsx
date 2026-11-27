@@ -47,7 +47,7 @@ export function Topbar() {
             <DropdownMenuItem onClick={() => navigate({ to: "/app/members" })}>Add member</DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate({ to: "/app/followup" })}>Record first timer</DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate({ to: "/app/mobilization" })}>Start mobilization</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate({ to: "/app/transport" })}>Review transport</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate({ to: "/app/transport", search: { tab: "requests" } })}>Review transport</DropdownMenuItem>
             <DropdownMenuItem onClick={() => navigate({ to: "/app/assistant" })}>Ask AI Command Centre</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
